@@ -1,6 +1,8 @@
-# Project Auth
-Login authentication using both back-end and front-end. Made as a pair assignment.
+# Final Project – Technigo Bootcamp
+My final project at the Technigo Bootcamp.
+A full MERN Stack web applications.
+
+Currently under development.
 
 ## View it live
-https://technigo-authorize.herokuapp.com/
-https://technigo-authorize.netlify.app/
+TBA
