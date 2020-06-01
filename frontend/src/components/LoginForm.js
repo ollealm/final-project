@@ -2,49 +2,43 @@ import React, { useState } from 'react'
 import { Profile } from './Profile'
 
 import { useDispatch, useSelector } from 'react-redux';
-import { user } from '../reducers/user';
+import { user, login } from '../reducers/user';
 import './loginform.css'
 
-const BASE_URL = "http://localhost:8080"
+const BASE_URL = "http://localhost:8090"
 const USERS_URL = `${BASE_URL}/users`;
 const SESSION_URL = `${BASE_URL}/sessions`;
 
 export const LoginForm = () => {
   const dispatch = useDispatch();
   const accessToken = useSelector((store) => store.user.login.accessToken);
+  const errorMessage = useSelector((store) => store.user.login.errorMessage);
 
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
 
-  const [URL, setURL] = useState(USERS_URL);
+  const handleLogin = (event) => {
+    event.preventDefault();
+    dispatch(login(name, password, SESSION_URL));
+  };
 
-  const [loggedInUser, setLoggedInUser] = useState(null);  //OLD useState
-  const [errorMessage, setErrorMessage] = useState(null);
-
-  const handleLoginSuccess = (json) => {
-    setLoggedInUser(json) //OLD useState
-    dispatch(
-      user.actions.setAccessToken({ accessToken: json.accessToken })
-    );
-  }
-
-  const handleSubmit = (event) => {
+  const handleSignup = (event) => {
     event.preventDefault();
 
-    fetch(URL, {
+    fetch(USERS_URL, {
       method: "POST",
       body: JSON.stringify({ name, password }),
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
-        if (res.ok) {
-          return res.json()
+        if (!res.ok) {
+          throw 'Could not create account. Try a different username.';
         }
+        return res.json();
       })
-      .then((json) => handleLoginSuccess(json)) //setLoggedInUser(json)) -> run dispatch
+      .then((json) => dispatch(login(name, password, SESSION_URL))) //setLoggedInUser(json)) -> run dispatch
       .catch((err) => {
-        console.log("error:", err)
-        setErrorMessage("Failed try again") // Now, same for login and sign up
+        dispatch(user.actions.setErrorMessage({ errorMessage: err }));
       });
   };
 
@@ -52,7 +46,7 @@ export const LoginForm = () => {
     return (
       <div>
         <h1>Login or sign up</h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleLogin}>
           <label>
             Name&nbsp;
             <input
@@ -70,17 +64,38 @@ export const LoginForm = () => {
               onChange={(event) => setPassword(event.target.value)}
             />
           </label>
-          <button type="submit" onClick={() => setURL(SESSION_URL)}>
+          <button type="submit">
             Login
           </button>
-          <button type="submit" onClick={() => setURL(USERS_URL)}>
+        </form>
+
+        <form onSubmit={handleSignup}>
+          <label>
+            Name&nbsp;
+            <input
+              required
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+            />
+          </label>
+          <label>
+            Password&nbsp;
+            <input
+              required
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+          </label>
+          <button type="submit">
             Sign up
           </button>
         </form>
+
         <p>{errorMessage}</p>
       </div>
     );
   } else {
-    return <Profile loggedInUser={loggedInUser} URL={USERS_URL} />
+    return <Profile URL={USERS_URL} />
   }
 }
