@@ -31,7 +31,7 @@ app.use(bodyParser.json())
 const authenticator = async (req, res, next) => {
   try {
     const user = await User.findOne({
-      accessToken: req.header("Authorization")
+      accessToken: req.header("nameization")
     })
     if (user) {
       req.user = user
@@ -56,7 +56,107 @@ app.get('/', (req, res) => {
 
 
 
-// FOOD ID
+
+// ITEMS
+app.get('/items', (req, res) => {
+  const { name, group, language, minpages = 0, maxpages = Infinity, rating, sort, nutrient, ratio, page, test, limit = 20 } = req.query
+
+  console.log(nutrient)
+
+  const filterItems = (array, filter) => {
+    return array.toString().toLowerCase().includes(filter)
+  }
+
+  let filteredItems = items;
+
+  //Filter
+  if (name) {
+    filteredItems = filteredItems.filter(item => filterItems(item.Namn, name))
+  }
+  if (group) {
+    filteredItems = filteredItems.filter(item => filterItems(item.Huvudgrupp, group))
+  }
+  if (test) {
+    filteredItems = filteredItems.filter(item => item.Naringsvarden.Naringsvarde.length < test)
+  }
+  // if (language) {
+  //   filteredItems = filteredItems.filter(item => filterItems(item.language_code, language))
+  // }
+  // if (maxpages || minpages) {
+  //   filteredItems = filteredItems.filter(item => item.num_pages < +maxpages && item.num_pages > +minpages)
+  // }
+  // if (rating) {
+  //   filteredItems = filteredItems.filter(item => Math.round(item.average_rating) === +rating)
+  // }
+
+  //Sort
+  //sorting on name and group was a lot more complicated that I assumed 
+  if (sort) {
+    if (sort === 'name') {
+      filteredItems = filteredItems.sort((a, b) => {
+        const nameA = a.Namn.toLowerCase()
+        const nameB = b.Namn.toLowerCase()
+        if (nameA < nameB) return -1;
+        if (nameA > nameB) return 1;
+        return 0;
+      });
+    } else if (sort === 'group') {
+      filteredItems = filteredItems.sort((a, b) => {
+        const groupA = a.Huvudgrupp.toLowerCase()
+        const groupB = b.Huvudgrupp.toLowerCase()
+        if (groupA < groupB) return -1;
+        if (groupA > groupB) return 1;
+        return 0;
+      });
+    } else if (sort === 'nutrient') {
+      filteredItems = filteredItems.sort((a, b) => {
+        const valueA = parseFloat(a.Naringsvarden.Naringsvarde[nutrient].Varde.replace(',', '.'))
+        const valueB = parseFloat(b.Naringsvarden.Naringsvarde[nutrient].Varde.replace(',', '.'))
+        return valueB - valueA
+        // if (valueA < valueB) return 1;
+        // if (valueA > valueB) return -1;
+        // return 0;
+      })
+    } else if (sort === 'ratio') {
+      filteredItems = filteredItems.sort((a, b) => {
+        const nutrientA = parseFloat(a.Naringsvarden.Naringsvarde[nutrient].Varde.replace(',', '.'))
+        const denominatorA = parseFloat(a.Naringsvarden.Naringsvarde[ratio].Varde.replace(',', '.'))
+        const nutrientB = parseFloat(b.Naringsvarden.Naringsvarde[nutrient].Varde.replace(',', '.'))
+        const denominatorB = parseFloat(b.Naringsvarden.Naringsvarde[ratio].Varde.replace(',', '.'))
+        const ratioA = nutrientA / denominatorA || 0
+        const ratioB = nutrientB / denominatorB || 0
+        return ratioB - ratioA
+        if (ratioA < ratioB) return 1;
+        if (ratioA > ratioB) return -1;
+        return 0;
+      })
+      /*
+            filteredItems = filteredItems.map(item => {
+              // console.log(item.Naringsvarden.Naringsvarde[nutrient].Varde)
+              const nutrientValue = parseFloat(item.Naringsvarden.Naringsvarde[nutrient].Varde.replace(',', '.'))
+              const denominatorValue = parseFloat(item.Naringsvarden.Naringsvarde[ratio].Varde.replace(',', '.'))
+              const ratioValue = nutrientValue / denominatorValue
+              return ratioValue
+            })
+      */
+    }
+  }
+  let results = filteredItems.length
+  let pages = Math.ceil(results / limit)
+  //Pagination
+  if (page) {
+    filteredItems = filteredItems.slice((page - 1) * limit, limit * page)
+  }
+  //Returning results 
+  console.log("filtered return " + filteredItems.length)
+  if (filteredItems.length > 0) res.json({ results, pages, filteredItems })
+  else res.status(404).json({ message: 'No Items found' })
+})
+
+
+
+
+// ITEM ID
 app.get('/items/:id', (req, res) => {
   const { id } = req.params
   const itemFromId = items.find(item => item.Nummer === id)
@@ -65,6 +165,12 @@ app.get('/items/:id', (req, res) => {
   else res.status(404).json({ message: `Item id ${id} not found` })
 })
 
+
+
+
+
+
+///// USER ROUTES /////
 
 ///// Create User /////
 
