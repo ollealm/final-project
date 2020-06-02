@@ -5,7 +5,7 @@ import mongoose from 'mongoose'
 import bcrypt from "bcrypt-nodejs"
 
 import foodData from './data/livsmedel_mini.json'
-const data = foodData.LivsmedelDataset.LivsmedelsLista.Livsmedel
+const items = foodData.LivsmedelDataset.LivsmedelsLista.Livsmedel
 
 import User from './models/users'
 
@@ -57,13 +57,12 @@ app.get('/', (req, res) => {
 
 
 // FOOD ID
-app.get('/food/:id', (req, res) => {
-  console.log(typeof (data))
+app.get('/items/:id', (req, res) => {
   const { id } = req.params
-  const foodFromId = data.find(food => food.Nummer === id)
+  const itemFromId = items.find(item => item.Nummer === id)
 
-  if (foodFromId) res.json(foodFromId)
-  else res.status(404).json({ message: `Id ${id} not found` })
+  if (itemFromId) res.json(itemFromId)
+  else res.status(404).json({ message: `Item id ${id} not found` })
 })
 
 
