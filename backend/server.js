@@ -2,8 +2,10 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
-
 import bcrypt from "bcrypt-nodejs"
+
+import foodData from './data/livsmedel_mini.json'
+const data = foodData.LivsmedelDataset.LivsmedelsLista.Livsmedel
 
 import User from './models/users'
 
@@ -50,6 +52,18 @@ const authenticator = async (req, res, next) => {
 ///// Routes /////
 app.get('/', (req, res) => {
   res.send('Hello world')
+})
+
+
+
+// FOOD ID
+app.get('/food/:id', (req, res) => {
+  console.log(typeof (data))
+  const { id } = req.params
+  const foodFromId = data.find(food => food.Nummer === id)
+
+  if (foodFromId) res.json(foodFromId)
+  else res.status(404).json({ message: `Id ${id} not found` })
 })
 
 
