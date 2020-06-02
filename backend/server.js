@@ -31,7 +31,7 @@ app.use(bodyParser.json())
 const authenticator = async (req, res, next) => {
   try {
     const user = await User.findOne({
-      accessToken: req.header("nameization")
+      accessToken: req.header("Authorization")
     })
     if (user) {
       req.user = user
