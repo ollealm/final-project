@@ -5,16 +5,21 @@ const User = mongoose.model("User", {
   name: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   accessToken: {
     type: String,
-    default: () => crypto.randomBytes(128).toString("hex")
-  }
+    default: () => crypto.randomBytes(128).toString("hex"),
+  },
+  savedItems: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Item',
+    price: Number,
+  }]
 })
 
 export default User
