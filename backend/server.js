@@ -30,6 +30,7 @@ app.use(bodyParser.json())
 
 if (process.env.RESET_DB) {
   console.log('Database reset')
+
   const seedDatabase = async () => {
     await Item.deleteMany({})
 
@@ -51,9 +52,6 @@ if (process.env.RESET_DB) {
   }
   seedDatabase()
 }
-
-
-
 
 
 
@@ -84,11 +82,100 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
+app.get('/test', async (req, res) => {
 
+  // let items = await Item.aggregate([{ $match: { name: "Kokosfett" } }])
+  // let items = await Item.aggregate([
+  //   { $group: { _id: "$group" } }
+  // ])
+  let items = await Item.aggregate([
+    {
+      $project: {
+        _id: "$name",
+        ratio: {
+          $divide: ["$nutrients.Mfet.value", 10]
+        }
+      }
+    }
+  ]).limit(10)
+
+
+
+  // aggregate.project({ salary_k: { $divide: ["$salary", 1000] } });
+
+  res.json(items)
+
+  //   .then((items) => {
+  //     res.json(items);
+  //   });
+})
+
+//db.mutrientsAPI.count({ name: "Avokado" })
 
 
 // ITEMS
-app.get('/items', (req, res) => {
+app.get('/items', async (req, res) => {
+  const { name, group, sort, nutrient, ratio, page = 1, limit = 20 } = req.query
+
+
+
+  console.log(req.query)
+  const nameRegex = new RegExp(`\\b${name}\\b`, 'i')
+  const groupRegex = new RegExp(`\\b${group}\\b`, 'i')
+  console.log(nameRegex + groupRegex)
+
+  const sortQuery = (sort) => {
+    if (sort === 'name') return { name: 1 }
+    if (sort === 'group') return { group: 1 }
+    if (sort === 'nutrient') {
+      return {
+        [`nutrients.${nutrient}.value`]: -1
+      }
+    }
+    // if (sort === 'ratio') {
+    //   return {
+    //     nutrients[nutrient]: 1
+    //   }
+  }
+
+  let databaseQuery = Item.find();
+
+  if (name) {
+    databaseQuery = databaseQuery.find({
+      name: nameRegex
+    });
+  }
+  if (group) {
+    databaseQuery = databaseQuery.find({
+      group: groupRegex
+    });
+  }
+
+
+  databaseQuery = databaseQuery.sort(sortQuery(sort));
+  /*
+    databaseQuery = databaseQuery.sort({
+      [sort]: order
+    });
+  */
+  const results = (await databaseQuery).length
+  const pages = Math.ceil(results / limit)
+
+  databaseQuery = databaseQuery.limit(limit).skip(limit * (page - 1))
+  const items = await databaseQuery
+
+  if (items.length > 0) {
+    res.json({ pages, results, items })
+  } else {
+    res.status(400).json({ error: "No items found" })
+  }
+
+})
+
+
+
+// ITEMS OLD
+app.get('/itemsOLD', (req, res) => {
   const { name, group, language, minpages = 0, maxpages = Infinity, rating, sort, nutrient, ratio, page, test, limit = 20 } = req.query
 
   console.log(nutrient)
