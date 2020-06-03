@@ -8,9 +8,10 @@ import foodData from './data/livsmedel_mini.json'
 const items = foodData.LivsmedelDataset.LivsmedelsLista.Livsmedel
 
 import User from './models/users'
+import Item from './models/items'
 
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/authAPI"
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/mutrientsAPI"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 mongoose.set('useCreateIndex', true)
@@ -25,6 +26,35 @@ const app = express()
 // Add middlewares to enable cors and json body parsing
 app.use(cors())
 app.use(bodyParser.json())
+
+
+if (process.env.RESET_DB) {
+  console.log('Database reset')
+  const seedDatabase = async () => {
+    await Item.deleteMany({})
+
+    await items.forEach((item) => new Item({
+      number: item.Nummer,
+      name: item.Namn,
+      group: item.Huvudgrupp,
+      nutrients: {
+        Mfet: {
+          name: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'Mfet').Namn, //Don't work if undefined.
+          short: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'Mfet').Forkortning,
+          value: +item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'Mfet').Varde.replace(',', '.'),
+          unit: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'Mfet').Enhet,
+        },
+        Jod: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'I'), //Can't change name or convert to number.
+      }
+    }).save());
+
+  }
+  seedDatabase()
+}
+
+
+
+
 
 
 
