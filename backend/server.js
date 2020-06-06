@@ -5,7 +5,9 @@ import mongoose from 'mongoose'
 import bcrypt from "bcrypt-nodejs"
 
 import foodData from './data/livsmedel_mini.json'
-const items = foodData.LivsmedelDataset.LivsmedelsLista.Livsmedel
+// foodData = foodData.replace('/(?<=\d),(?=\d)/gm', '.')
+let items = foodData.LivsmedelDataset.LivsmedelsLista.Livsmedel
+
 
 import User from './models/users'
 import Item from './models/items'
@@ -34,20 +36,94 @@ if (process.env.RESET_DB) {
   const seedDatabase = async () => {
     await Item.deleteMany({})
 
+    const convertArrayToObject = (array, key) => {
+      const initialValue = {};
+      return array.reduce((obj, item) => {
+        return {
+          ...obj,
+          [item[key]]: item,
+        };
+      }, initialValue);
+    };
+
+    // Change Varde from ie 5 000,0 to 5000.0
+    items = items.map((item) => {
+      item.Naringsvarden.Naringsvarde = item.Naringsvarden.Naringsvarde.map(item => {
+        item.Varde = item.Varde.replace(/(?<=\d),(?=\d)/gm, '.')
+        item.Varde = item.Varde.replace(/(?<=\d)\s(?=\d)/gm, '')
+        // item.Varde = item.Varde.replace(',', '.')
+        // item.Varde = item.Varde.replace(' ', '')
+        item.Forkortning = item.Forkortning.replace(/\:/g, '_')
+        item.Forkortning = item.Forkortning.replace("\-", '_')
+        item.Forkortning = item.Forkortning.replace("\/", '_')
+        return item
+      })
+      item.Naringsvarden.Naringsvarde = convertArrayToObject(item.Naringsvarden.Naringsvarde, "Forkortning")
+
+      return item
+    })
+
+    // const convertArrayToObject = (array, key) => {
+    //   const initialValue = {};
+    //   return array.reduce((obj, item) => {
+    //     return {
+    //       ...obj,
+    //       [item[key]]: item,
+    //     };
+    //   }, initialValue);
+    // };
+
+    console.log(items[0].Naringsvarden.Naringsvarde)
+
+    // await items.forEach((item) => new Item({
+    //   number: item.Nummer,
+    //   name: item.Namn,
+    //   group: item.Huvudgrupp,
+    //   nutrients: {
+    //     Mfet: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'Mfet'),
+    //     Mone: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'Mone'),
+    //     Pole: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'Pole'),
+    //     C40C100: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'C40C100'),
+    //     C120: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'C120'),
+    //     C140: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'C140'),
+    //     C160: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'C160'),
+    //     C180: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'C180'),
+    //     C200: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'C200'),
+    //     C161: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'C161'),
+    //     I: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'I'),
+    //     EnerKcal: item.Naringsvarden.Naringsvarde.find(({ Forkortning, Enhet }) => Forkortning === 'Ener' && Enhet === 'kcal'),
+    //     EnerKJ: item.Naringsvarden.Naringsvarde.find(({ Forkortning, Enhet }) => Forkortning === 'Ener' && Enhet === 'kJ'),
+    //     VitC: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'VitC'),
+    //   }
+    // }).save());
+
     await items.forEach((item) => new Item({
       number: item.Nummer,
       name: item.Namn,
       group: item.Huvudgrupp,
-      nutrients: {
-        Mfet: {
-          name: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'Mfet').Namn, //Don't work if undefined.
-          short: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'Mfet').Forkortning,
-          value: +item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'Mfet').Varde.replace(',', '.'),
-          unit: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'Mfet').Enhet,
-        },
-        Jod: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'I'), //Can't change name or convert to number.
-      }
+      nutrients: item.Naringsvarden.Naringsvarde,
     }).save());
+
+
+    userSchema.pre('save', function (next) {
+      this.screenname = this.get('_id'); // considering _id is input by client
+      next();
+    });
+
+
+    // await items.forEach((item) => new Item({
+    //   number: item.Nummer,
+    //   name: item.Namn,
+    //   group: item.Huvudgrupp,
+    //   nutrients: item.Naringsvarden.Naringsvarde,
+    // }).save());
+
+    // preprossing.js
+    // run in node 
+    // node ./preprossing.js
+    // use arrays
+
+    //
 
   }
   seedDatabase()
@@ -82,35 +158,63 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
+
+///// Aggregate Test /////
+
 app.get('/test', async (req, res) => {
 
   // let items = await Item.aggregate([{ $match: { name: "Kokosfett" } }])
   // let items = await Item.aggregate([
   //   { $group: { _id: "$group" } }
   // ])
-  let items = await Item.aggregate([
+
+
+  const nutrient = "VitC"
+  const ratio = "Ener"
+  // nutrients.${nutrient}.Varde
+  let items = Item.aggregate([
+    //filter out nutrient 0 $match
+    // { $match: { [`$nutrients.${nutrient}.Varde`]: 0 } },
+
+    // {
+    //   $project: {
+    //     _id: "$name",
+    //     nutrient: {
+    //       $filter: { input: "$nutrients", as: "nutrient", cond: { $or: [{ $eq: ["$$nutrient.Forkortning", "I"] }, { $eq: ["$$nutrient.Forkortning", "Mfet"] }] } }
+    //     }
+    //   }
+    // },
+    // { $unwind: "$nutrient" },
     {
       $project: {
         _id: "$name",
         ratio: {
-          $divide: ["$nutrients.Mfet.value", 10]
-        }
-      }
-    }
-  ]).limit(10)
+          // $divide: [`$nutrients.${nutrient}.Varde`, `$nutrients.${ratio}.Varde`]
+          $cond: [{ $eq: [`$nutrients.${ratio}.Varde`, 0] }, `Infinite`, { $divide: [`$nutrients.${nutrient}.Varde`, `$nutrients.${ratio}.Varde`] }]
+        },
+        unit_ratio: { $concat: [`$nutrients.${nutrient}.Enhet`, "/", `$nutrients.${ratio}.Enhet`] },
+        nutrient: `$nutrients.${nutrient}.Forkortning`,
+        nutrient_value: `$nutrients.${nutrient}.Varde`,
+        nutrient_unit: `$nutrients.${nutrient}.Enhet`,
+        denominator: `$nutrients.${ratio}.Forkortning`,
+        denominator_value: `$nutrients.${ratio}.Varde`,
+        denominator_unit: `$nutrients.${ratio}.Enhet`,
+      },
+    },
+    {
+      $sort: { ratio: -1, nutrient_value: -1, denominator_value: 1 }
+    },
+  ]).limit(200)
 
+  const results = await items
 
-
-  // aggregate.project({ salary_k: { $divide: ["$salary", 1000] } });
-
-  res.json(items)
+  res.json(results)
 
   //   .then((items) => {
   //     res.json(items);
   //   });
 })
 
-//db.mutrientsAPI.count({ name: "Avokado" })
 
 
 // ITEMS
@@ -152,6 +256,7 @@ app.get('/items', async (req, res) => {
   }
 
 
+
   databaseQuery = databaseQuery.sort(sortQuery(sort));
   /*
     databaseQuery = databaseQuery.sort({
@@ -165,7 +270,7 @@ app.get('/items', async (req, res) => {
   const items = await databaseQuery
 
   if (items.length > 0) {
-    res.json({ pages, results, items })
+    res.json({ page, pages, results, items })
   } else {
     res.status(400).json({ error: "No items found" })
   }
@@ -176,9 +281,9 @@ app.get('/items', async (req, res) => {
 
 // ITEMS OLD
 app.get('/itemsOLD', (req, res) => {
-  const { name, group, language, minpages = 0, maxpages = Infinity, rating, sort, nutrient, ratio, page, test, limit = 20 } = req.query
+  const { name, group, language, minpages = 0, maxpages = Infinity, rating, sort, nutrient, ratio, page, test, test2, limit = 20 } = req.query
 
-  console.log(nutrient)
+  console.log(req.query)
 
   const filterItems = (array, filter) => {
     return array.toString().toLowerCase().includes(filter)
@@ -194,7 +299,10 @@ app.get('/itemsOLD', (req, res) => {
     filteredItems = filteredItems.filter(item => filterItems(item.Huvudgrupp, group))
   }
   if (test) {
-    filteredItems = filteredItems.filter(item => item.Naringsvarden.Naringsvarde.length < test)
+    filteredItems = filteredItems.filter(item => item.Naringsvarden.Naringsvarde.length > +test)
+  }
+  if (test2) {
+    filteredItems = filteredItems.filter(item => item.Naringsvarden.Naringsvarde.includes())
   }
   // if (language) {
   //   filteredItems = filteredItems.filter(item => filterItems(item.language_code, language))

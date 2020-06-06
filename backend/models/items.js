@@ -15,44 +15,345 @@ const Item = mongoose.model("Item", {
   },
   nutrients: {
     Mfet: {
-      name: {
-        type: String,
-        default: "Mfet"
-      },
-      short: String,
-      value: Number,
-      unit: String,
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
     },
-    Jod: {
-      Namn: {
-        type: String,
-        default: "Jod"
-      },
+    Mone: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Pole: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    C4_0_C10_0: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    C12_0: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    C14_0: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    C16_0: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    C18_0: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    C20_0: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    C16_1: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    C18_1: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    C18_2: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    C18_3: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    C20_4: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    C20_5: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    C22_5: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    C22_6: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Kole: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Msac: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Dsac: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Sack: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    EnerKJ: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Ener: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Aska: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Vatt: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Avfa: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Kolh: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Prot: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Alko: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Fibe: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Fett: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    P: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    I: {
+      Namn: String,
       Forkortning: String,
       Varde: {
-        type: String,
-        default: "0"
+        type: Number,
+        default: null,
       },
+      Enhet: String,
+    },
+    Fe: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Ca: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    K: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Mg: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Na: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Se: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Zn: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    VitA: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Reti: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    VitD: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    VitE: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    b_Kar: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Tiam: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Ribo: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    VitC: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Niac: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Niek: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    VitB12: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    VitB6: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Folat: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Mono_disack: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    Fullk_tot: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
+      Enhet: String,
+    },
+    NaCl: {
+      Namn: String,
+      Forkortning: String,
+      Varde: Number,
       Enhet: String,
     },
   },
 })
-
-/*
-const Nutrient = mongoose.model("Nutrient", {
-  name: {
-    type: String,
-    required: true,
-  },
-  short: {
-    type: String,
-    required: true,
-  },
-  value: {
-    type: Number,
-    default: null,
-  },
-})
-*/
 
 export default Item
