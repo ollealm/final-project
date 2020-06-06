@@ -226,7 +226,6 @@ app.get('/items', async (req, res) => {
   console.log(req.query)
   const nameRegex = new RegExp(`\\b${name}\\b`, 'i')
   const groupRegex = new RegExp(`\\b${group}\\b`, 'i')
-  console.log(nameRegex + groupRegex)
 
   const sortQuery = (sort) => {
     if (sort === 'name') return { name: 1 }
