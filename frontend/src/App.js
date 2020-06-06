@@ -1,5 +1,6 @@
 import React from 'react'
 import { LoginForm } from "./components/LoginForm"
+import { ListItems } from "./components/ListItems"
 import { user } from "./reducers/user";
 
 import { Provider } from "react-redux";
@@ -12,6 +13,7 @@ export const App = () => {
   return (
     <Provider store={store}>
       <LoginForm />
+      <ListItems />
     </Provider>
   )
 }
