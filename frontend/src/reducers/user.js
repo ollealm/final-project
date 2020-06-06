@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit"
+import { ui } from './ui'
 
 const initialState = {
   login: {
@@ -7,34 +8,31 @@ const initialState = {
     userData: null,
     errorMessage: null,
   },
-};
+  savedItems: [],
+}
 
 export const user = createSlice({
   name: "user",
   initialState: initialState,
   reducers: {
     setAccessToken: (state, action) => {
-      const { accessToken } = action.payload;
-      console.log(`Access Token: ${accessToken}`);
-      state.login.accessToken = accessToken;
+      const { accessToken } = action.payload
+      state.login.accessToken = accessToken
     },
     setUserId: (state, action) => {
-      const { userId } = action.payload;
-      console.log(`User Id: ${userId}`);
-      state.login.userId = userId;
+      const { userId } = action.payload
+      state.login.userId = userId
     },
     setUserData: (state, action) => {
-      const { userData } = action.payload;
-      console.log(`User Data: ${userData}`);
-      state.login.userData = userData;
+      const { userData } = action.payload
+      state.login.userData = userData
     },
     setErrorMessage: (state, action) => {
-      const { errorMessage } = action.payload;
-      console.log(`Error Message: ${errorMessage}`);
-      state.login.errorMessage = errorMessage;
+      const { errorMessage } = action.payload
+      state.login.errorMessage = errorMessage
     },
   }
-});
+})
 
 
 // Thunks
@@ -48,22 +46,22 @@ export const login = (name, password, URL) => {
     })
       .then((res) => {
         if (res.ok) {
-          return res.json();
+          return res.json()
         }
-        throw 'Login failed. Check username and password';
+        throw 'Login failed. Check username and password'
       })
       .then((json) => {
         dispatch(
           user.actions.setAccessToken({ accessToken: json.accessToken })
-        );
-        dispatch(user.actions.setUserId({ userId: json.userId }));
+        )
+        dispatch(user.actions.setUserId({ userId: json.userId }))
       })
       .catch((err) => {
         dispatch(logout());
-        dispatch(user.actions.setErrorMessage({ errorMessage: err }));
-      });
-  };
-};
+        dispatch(user.actions.setErrorMessage({ errorMessage: err }))
+      })
+  }
+}
 
 
 // useEffect(() => {
@@ -92,20 +90,20 @@ export const getUserData = (URL) => {
     })
       .then((res) => {
         if (res.ok) {
-          return res.json();
+          return res.json()
         }
-        throw 'Could not get information. Make sure you are logged in and try again.';
+        throw 'Could not get information. Make sure you are logged in and try again.'
       })
       .then((json) => {
         dispatch(
           user.actions.setUserData({ userData: JSON.stringify(json) })
-        );
+        )
       })
       .catch((err) => {
-        dispatch(user.actions.setErrorMessage({ errorMessage: err }));
-      }); //401
-  };
-};
+        dispatch(user.actions.setErrorMessage({ errorMessage: err }))
+      }) //401
+  }
+}
 
 
 
@@ -114,9 +112,9 @@ export const getUserData = (URL) => {
 
 export const logout = () => {
   return (dispatch) => {
-    dispatch(user.actions.setUserData({ userData: null }));
-    dispatch(user.actions.setErrorMessage({ errorMessage: null }));
-    dispatch(user.actions.setAccessToken({ accessToken: null }));
-    dispatch(user.actions.setUserId({ userId: 0 }));
-  };
-};
+    dispatch(user.actions.setUserData({ userData: null }))
+    dispatch(user.actions.setErrorMessage({ errorMessage: null }))
+    dispatch(user.actions.setAccessToken({ accessToken: null }))
+    dispatch(user.actions.setUserId({ userId: 0 }))
+  }
+}
