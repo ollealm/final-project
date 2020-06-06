@@ -19,6 +19,7 @@ const User = mongoose.model("User", {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Item',
     price: Number,
+    itemNumber: Number,
   }]
 })
 

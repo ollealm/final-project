@@ -4,7 +4,7 @@ const initialState = {
   login: {
     accessToken: null,
     userId: 0,
-    userMessage: null,
+    userData: null,
     errorMessage: null,
   },
 };
@@ -23,10 +23,10 @@ export const user = createSlice({
       console.log(`User Id: ${userId}`);
       state.login.userId = userId;
     },
-    setUserMessage: (state, action) => {
-      const { userMessage } = action.payload;
-      console.log(`User Message: ${userMessage}`);
-      state.login.userMessage = userMessage;
+    setUserData: (state, action) => {
+      const { userData } = action.payload;
+      console.log(`User Data: ${userData}`);
+      state.login.userData = userData;
     },
     setErrorMessage: (state, action) => {
       const { errorMessage } = action.payload;
@@ -66,7 +66,46 @@ export const login = (name, password, URL) => {
 };
 
 
+// useEffect(() => {
+//   fetch(`${URL}/${userId}`, {
+//     method: "GET",
+//     headers: { Authorization: accessToken },
+//   })
+//     .then((res) => res.json())
+//     .then((json) => setUserInfo(json))
+//     .catch((err) => console.log("error:", err));
+// }, [accessToken]);
+
+
+
+
 /// User message
+export const getUserData = (URL) => {
+  return (dispatch, getState) => {
+
+    const accessToken = getState().user.login.accessToken;
+    const userId = getState().user.login.userId;
+
+    fetch(`${URL}/${userId}`, { //path to user data
+      method: 'GET',
+      headers: { Authorization: accessToken },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw 'Could not get information. Make sure you are logged in and try again.';
+      })
+      .then((json) => {
+        dispatch(
+          user.actions.setUserData({ userData: JSON.stringify(json) })
+        );
+      })
+      .catch((err) => {
+        dispatch(user.actions.setErrorMessage({ errorMessage: err }));
+      }); //401
+  };
+};
 
 
 
@@ -75,7 +114,7 @@ export const login = (name, password, URL) => {
 
 export const logout = () => {
   return (dispatch) => {
-    dispatch(user.actions.setUserMessage({ userMessage: null }));
+    dispatch(user.actions.setUserData({ userData: null }));
     dispatch(user.actions.setErrorMessage({ errorMessage: null }));
     dispatch(user.actions.setAccessToken({ accessToken: null }));
     dispatch(user.actions.setUserId({ userId: 0 }));
