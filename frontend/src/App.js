@@ -1,12 +1,19 @@
 import React from 'react'
-import { LoginForm } from "./components/LoginForm"
-import { ListItems } from "./components/ListItems"
+
+import { BrowserRouter, Switch, Route } from "react-router-dom"
+
+import { Login } from "./pages/Login"
+import { ListItems } from "./pages/ListItems"
+import { About } from "./pages/About"
+import { Nav } from "./components/Nav"
+
+import { Provider } from "react-redux"
+import { configureStore, combineReducers } from "@reduxjs/toolkit"
+
 import { user } from "./reducers/user"
 import { ui } from "./reducers/ui"
 import { items } from "./reducers/items"
 
-import { Provider } from "react-redux"
-import { configureStore, combineReducers } from "@reduxjs/toolkit"
 
 const reducer = combineReducers({
   user: user.reducer,
@@ -19,8 +26,20 @@ const store = configureStore({ reducer })
 export const App = () => {
   return (
     <Provider store={store}>
-      <LoginForm />
-      <ListItems />
+      <BrowserRouter>
+        <Nav />
+        <Switch>
+          <Route path="/about" exact>
+            <About />
+          </Route>
+          <Route path="/items" exact>
+            <ListItems />
+          </Route>
+          <Route path="/login" exact>
+            <Login />
+          </Route>
+        </Switch>
+      </BrowserRouter>
     </Provider>
   )
 }
