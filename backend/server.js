@@ -59,43 +59,10 @@ if (process.env.RESET_DB) {
         return item
       })
       item.Naringsvarden.Naringsvarde = convertArrayToObject(item.Naringsvarden.Naringsvarde, "Forkortning")
-
       return item
     })
 
-    // const convertArrayToObject = (array, key) => {
-    //   const initialValue = {};
-    //   return array.reduce((obj, item) => {
-    //     return {
-    //       ...obj,
-    //       [item[key]]: item,
-    //     };
-    //   }, initialValue);
-    // };
-
     console.log(items[0].Naringsvarden.Naringsvarde)
-
-    // await items.forEach((item) => new Item({
-    //   number: item.Nummer,
-    //   name: item.Namn,
-    //   group: item.Huvudgrupp,
-    //   nutrients: {
-    //     Mfet: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'Mfet'),
-    //     Mone: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'Mone'),
-    //     Pole: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'Pole'),
-    //     C40C100: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'C40C100'),
-    //     C120: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'C120'),
-    //     C140: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'C140'),
-    //     C160: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'C160'),
-    //     C180: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'C180'),
-    //     C200: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'C200'),
-    //     C161: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'C161'),
-    //     I: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'I'),
-    //     EnerKcal: item.Naringsvarden.Naringsvarde.find(({ Forkortning, Enhet }) => Forkortning === 'Ener' && Enhet === 'kcal'),
-    //     EnerKJ: item.Naringsvarden.Naringsvarde.find(({ Forkortning, Enhet }) => Forkortning === 'Ener' && Enhet === 'kJ'),
-    //     VitC: item.Naringsvarden.Naringsvarde.find(({ Forkortning }) => Forkortning === 'VitC'),
-    //   }
-    // }).save());
 
     await items.forEach((item) => new Item({
       number: item.Nummer,
@@ -104,26 +71,10 @@ if (process.env.RESET_DB) {
       nutrients: item.Naringsvarden.Naringsvarde,
     }).save());
 
-
-    userSchema.pre('save', function (next) {
-      this.screenname = this.get('_id'); // considering _id is input by client
-      next();
-    });
-
-
-    // await items.forEach((item) => new Item({
-    //   number: item.Nummer,
-    //   name: item.Namn,
-    //   group: item.Huvudgrupp,
-    //   nutrients: item.Naringsvarden.Naringsvarde,
-    // }).save());
-
-    // preprossing.js
-    // run in node 
-    // node ./preprossing.js
-    // use arrays
-
-    //
+    // userSchema.pre('save', function (next) {
+    //   this.screenname = this.get('_id'); // considering _id is input by client
+    //   next();
+    // });
 
   }
   seedDatabase()
@@ -151,8 +102,6 @@ const authenticator = async (req, res, next) => {
 }
 
 
-
-
 ///// Routes /////
 app.get('/', (req, res) => {
   res.send('Hello world')
@@ -172,6 +121,7 @@ app.get('/test', async (req, res) => {
   const nutrient = "VitC"
   const ratio = "Ener"
   // nutrients.${nutrient}.Varde
+  console.log("starting aggregate")
   let items = Item.aggregate([
     //filter out nutrient 0 $match
     // { $match: { [`$nutrients.${nutrient}.Varde`]: 0 } },
@@ -205,6 +155,7 @@ app.get('/test', async (req, res) => {
       $sort: { ratio: -1, nutrient_value: -1, denominator_value: 1 }
     },
   ]).limit(200)
+  console.log("finished aggregate")
 
   const results = await items
 
@@ -221,7 +172,8 @@ app.get('/test', async (req, res) => {
 app.get('/items', async (req, res) => {
   const { name, group, sort, nutrient, ratio, page = 1, limit = 20 } = req.query
 
-
+  console.log("Start")
+  console.time("get")
 
   console.log(req.query)
   const nameRegex = new RegExp(`\\b${name}\\b`, 'i')
@@ -241,39 +193,66 @@ app.get('/items', async (req, res) => {
     //   }
   }
 
+  console.count("1")
+  console.timeLog("get")
+
   let databaseQuery = Item.find();
+  let databaseQueryCount = Item.find();
 
   if (name) {
-    databaseQuery = databaseQuery.find({
+    databaseQuery.find({
+      name: nameRegex
+    });
+    databaseQueryCount.find({
       name: nameRegex
     });
   }
   if (group) {
-    databaseQuery = databaseQuery.find({
+    databaseQuery.find({
+      group: groupRegex
+    });
+    databaseQueryCount.find({
       group: groupRegex
     });
   }
 
-
-
-  databaseQuery = databaseQuery.sort(sortQuery(sort));
+  databaseQuery.sort(sortQuery(sort));
   /*
     databaseQuery = databaseQuery.sort({
       [sort]: order
     });
   */
-  const results = (await databaseQuery).length
+
+  console.log("2")
+  console.timeLog("get")
+
+  const items = await databaseQuery.limit(limit).skip(limit * (page - 1))
+
+  const results = await databaseQueryCount.countDocuments()
   const pages = Math.ceil(results / limit)
 
-  databaseQuery = databaseQuery.limit(limit).skip(limit * (page - 1))
-  const items = await databaseQuery
+  console.log("Results: ", results)
+  console.log("3")
+  console.timeLog("get")
 
   if (items.length > 0) {
     res.json({ page, pages, results, items })
   } else {
     res.status(400).json({ error: "No items found" })
   }
+  console.log("Completed")
+  console.timeEnd("get")
 
+})
+
+
+// ITEM ID
+app.get('/items/:id', async (req, res) => {
+  const { id } = req.params
+  const itemFromId = await Item.findOne({ "number": id });
+
+  if (itemFromId) res.json(itemFromId)
+  else res.status(404).json({ message: `Item id ${id} not found` })
 })
 
 
@@ -303,15 +282,6 @@ app.get('/itemsOLD', (req, res) => {
   if (test2) {
     filteredItems = filteredItems.filter(item => item.Naringsvarden.Naringsvarde.includes())
   }
-  // if (language) {
-  //   filteredItems = filteredItems.filter(item => filterItems(item.language_code, language))
-  // }
-  // if (maxpages || minpages) {
-  //   filteredItems = filteredItems.filter(item => item.num_pages < +maxpages && item.num_pages > +minpages)
-  // }
-  // if (rating) {
-  //   filteredItems = filteredItems.filter(item => Math.round(item.average_rating) === +rating)
-  // }
 
   //Sort
   //sorting on name and group was a lot more complicated that I assumed 
@@ -350,9 +320,6 @@ app.get('/itemsOLD', (req, res) => {
         const ratioA = nutrientA / denominatorA || 0
         const ratioB = nutrientB / denominatorB || 0
         return ratioB - ratioA
-        if (ratioA < ratioB) return 1;
-        if (ratioA > ratioB) return -1;
-        return 0;
       })
       /*
             filteredItems = filteredItems.map(item => {
@@ -375,18 +342,6 @@ app.get('/itemsOLD', (req, res) => {
   console.log("filtered return " + filteredItems.length)
   if (filteredItems.length > 0) res.json({ results, pages, filteredItems })
   else res.status(404).json({ message: 'No Items found' })
-})
-
-
-
-
-// ITEM ID
-app.get('/items/:id', (req, res) => {
-  const { id } = req.params
-  const itemFromId = items.find(item => item.Nummer === id)
-
-  if (itemFromId) res.json(itemFromId)
-  else res.status(404).json({ message: `Item id ${id} not found` })
 })
 
 
