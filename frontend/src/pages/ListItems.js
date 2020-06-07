@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Item } from "./Item"
+import { useParams, Link } from "react-router-dom";
+
+import { Item } from "../components/Item"
+import { LoadingIndicator } from '../lib/LoadingIndicator';
+//import { Loading } from '../components/Loading';
 
 export const ListItems = () => {
   const [items, setItems] = useState([]);
@@ -8,8 +12,12 @@ export const ListItems = () => {
   const [loading, setLoading] = useState(true)
   const url = "http://localhost:8090/items";
 
+  const { itemNumber } = useParams();
+
+
   useEffect(() => {
-    setLoading(true);
+    setLoading(true); //change to dispach
+    console.log("getting data")
     fetch(url)
       .then((res) => {
         return res.json();
@@ -25,13 +33,17 @@ export const ListItems = () => {
 
   return (
     <div>
+      {loading ? "Loading..." : ""}
+      {/* <LoadingIndicator /> */}
       <h2>List</h2>
       <p>Pages: {pages.pages}</p>
       <p>Total results: {pages.total}</p>
       {
         items.map(item => (
           <div key={item._id}>
-            <h3>{item.number} {item.name}</h3>
+            <Link to={`/items/${item.number}`}>
+              <h3>{item.number} {item.name}</h3>
+            </Link>
             <p>{item.group}</p>
           </div>
           // <Item
