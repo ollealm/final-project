@@ -31,10 +31,14 @@ app.use(bodyParser.json())
 
 
 if (process.env.RESET_DB) {
-  console.log('Database reset')
+  console.log("Database reset")
+  console.time("Reset")
 
   const seedDatabase = async () => {
     await Item.deleteMany({})
+
+    console.log("Documents deleted")
+    console.timeLog("Reset")
 
     const convertArrayToObject = (array, key) => {
       const initialValue = {};
@@ -45,7 +49,6 @@ if (process.env.RESET_DB) {
         };
       }, initialValue);
     };
-
     // Change Varde from ie 5 000,0 to 5000.0
     items = items.map((item) => {
       item.Naringsvarden.Naringsvarde = item.Naringsvarden.Naringsvarde.map(item => {
@@ -61,15 +64,24 @@ if (process.env.RESET_DB) {
       item.Naringsvarden.Naringsvarde = convertArrayToObject(item.Naringsvarden.Naringsvarde, "Forkortning")
       return item
     })
+    console.log("Pre-processing")
+    console.timeLog("Reset")
+    // console.log(items[0])
 
-    console.log(items[0].Naringsvarden.Naringsvarde)
-
-    await items.forEach((item) => new Item({
-      number: item.Nummer,
-      name: item.Namn,
-      group: item.Huvudgrupp,
-      nutrients: item.Naringsvarden.Naringsvarde,
-    }).save());
+    await items.forEach((item, index) => {
+      new Item({
+        number: item.Nummer,
+        name: item.Namn,
+        group: item.Huvudgrupp,
+        nutrients: item.Naringsvarden.Naringsvarde,
+      }).save()
+      if (index % 100 === 0) {
+        console.log(`Item: ${index}`)
+        console.timeLog("Reset")
+      }
+    })
+    console.log("Database re-seeded")
+    console.timeEnd("Reset")
 
     // userSchema.pre('save', function (next) {
     //   this.screenname = this.get('_id'); // considering _id is input by client
