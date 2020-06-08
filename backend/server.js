@@ -122,51 +122,102 @@ app.get('/', (req, res) => {
 
 ///// Aggregate Test /////
 
-app.get('/test', async (req, res) => {
+app.get('/nutrients', async (req, res) => {
+  const { name, group, sort, nutrient, nut, ratio, page = 1, limit = Infinity } = req.query
 
-  // let items = await Item.aggregate([{ $match: { name: "Kokosfett" } }])
-  // let items = await Item.aggregate([
-  //   { $group: { _id: "$group" } }
-  // ])
+  let items = []
 
-
-  const nutrient = "VitC"
-  const ratio = "Ener"
-  // nutrients.${nutrient}.Varde
-  console.log("starting aggregate")
-  let items = Item.aggregate([
-    //filter out nutrient 0 $match
-    // { $match: { [`$nutrients.${nutrient}.Varde`]: 0 } },
-
-    // {
-    //   $project: {
-    //     _id: "$name",
-    //     nutrient: {
-    //       $filter: { input: "$nutrients", as: "nutrient", cond: { $or: [{ $eq: ["$$nutrient.Forkortning", "I"] }, { $eq: ["$$nutrient.Forkortning", "Mfet"] }] } }
-    //     }
-    //   }
-    // },
-    // { $unwind: "$nutrient" },
-    {
-      $project: {
-        _id: "$name",
-        ratio: {
-          // $divide: [`$nutrients.${nutrient}.Varde`, `$nutrients.${ratio}.Varde`]
-          $cond: [{ $eq: [`$nutrients.${ratio}.Varde`, 0] }, `Infinite`, { $divide: [`$nutrients.${nutrient}.Varde`, `$nutrients.${ratio}.Varde`] }]
-        },
-        unit_ratio: { $concat: [`$nutrients.${nutrient}.Enhet`, "/", `$nutrients.${ratio}.Enhet`] },
-        nutrient: `$nutrients.${nutrient}.Forkortning`,
-        nutrient_value: `$nutrients.${nutrient}.Varde`,
-        nutrient_unit: `$nutrients.${nutrient}.Enhet`,
-        denominator: `$nutrients.${ratio}.Forkortning`,
-        denominator_value: `$nutrients.${ratio}.Varde`,
-        denominator_unit: `$nutrients.${ratio}.Enhet`,
+  if (name) {
+    items = await Item.aggregate([{ $match: { name: name } }])
+  }
+  if (group) {
+    items = await Item.aggregate([
+      { $group: { _id: "$group", numberOfItems: { $sum: 1 } } },
+    ])
+  }
+  if (nut) {
+    items = await Item.aggregate([
+      {
+        $project: {
+          item: 1,
+          name: "$name",
+          nutrients: { $objectToArray: "$nutrients" }
+        }
       },
-    },
-    {
-      $sort: { ratio: -1, nutrient_value: -1, denominator_value: 1 }
-    },
-  ]).limit(200)
+      { $unwind: "$nutrients" },
+      {
+        $project: {
+          name: "$name",
+          nutrients: "$nutrients.k"
+        }
+      },
+      {
+        $group:
+        {
+          _id: "$nutrients",
+          numberOfItems: { $sum: 1 },
+          Items: { $addToSet: "$name" }
+        }
+      },
+      // {
+      //   $group:
+      //   {
+      //     _id: "$name",
+      //     numberOfItems: { $sum: 1 },
+      //     Nutrients: { $addToSet: "$nutrients" }
+      //   }
+      // },
+      // { $project: { A: 1, B: 1, inBOnly: { $setDifference: [ "$B", "$A" ] }, _id: 0 } }
+      // { $group: { _id: "$dimensions.k", numberOfItems: { $sum: 1 } } },
+
+      // { $group: { _id: "$name", mergedSales: { $mergeObjects: "$nutrients" } } }
+
+      // { $mergeObjects: ["$nutrients"] }
+      // {
+      //   $project: {
+      //     _id: "$name",
+      //     nutrient: {
+      //       $filter: { input: "$nutrients", as: "nutrient", cond: { $or: [{ $eq: ["$$nutrient.Forkortning", "I"] }, { $eq: ["$$nutrient.Forkortning", "Mfet"] }] } }
+      //     }
+      //   }
+      // },
+      // { $unwind: "$nutrient" },
+    ])
+      // .limit(20)
+      .sort({ numberOfItems: 1 })
+  }
+
+  // const nutrient = "VitC"
+  // const ratio = "Ener"
+
+  console.log("starting aggregate")
+
+  if (ratio) {
+    items = Item.aggregate([
+      //filter out nutrient 0 $match
+      { $match: { [`nutrients.${nutrient}.Varde`]: { $ne: 0 } } },
+      {
+        $project: {
+          _id: "$name",
+          ratio: {
+            // $divide: [`$nutrients.${nutrient}.Varde`, `$nutrients.${ratio}.Varde`]
+
+            $cond: [{ $eq: [`$nutrients.${ratio}.Varde`, 0] }, `Infinite`, { $round: [{ $divide: [`$nutrients.${nutrient}.Varde`, `$nutrients.${ratio}.Varde`] }, 4] }]
+          },
+          unit_ratio: { $concat: [`$nutrients.${nutrient}.Enhet`, "/", `$nutrients.${ratio}.Enhet`] },
+          nutrient: `$nutrients.${nutrient}.Forkortning`,
+          nutrient_value: `$nutrients.${nutrient}.Varde`,
+          nutrient_unit: `$nutrients.${nutrient}.Enhet`,
+          denominator: `$nutrients.${ratio}.Forkortning`,
+          denominator_value: `$nutrients.${ratio}.Varde`,
+          denominator_unit: `$nutrients.${ratio}.Enhet`,
+        },
+      },
+      {
+        $sort: { ratio: -1, nutrient_value: -1, denominator_value: 1 }
+      },
+    ]).limit(200)
+  }
   console.log("finished aggregate")
 
   const results = await items
@@ -182,7 +233,7 @@ app.get('/test', async (req, res) => {
 
 // ITEMS
 app.get('/items', async (req, res) => {
-  const { name, group, sort, nutrient, ratio, page = 1, limit = 20 } = req.query
+  const { name, group, sort, nutrient, page = 1, limit = 20 } = req.query
 
   console.log("Start")
   console.time("get")
@@ -191,21 +242,7 @@ app.get('/items', async (req, res) => {
   const nameRegex = new RegExp(`\\b${name}\\b`, 'i')
   const groupRegex = new RegExp(`\\b${group}\\b`, 'i')
 
-  const sortQuery = (sort) => {
-    if (sort === 'name') return { name: 1 }
-    if (sort === 'group') return { group: 1 }
-    if (sort === 'nutrient') {
-      return {
-        [`nutrients.${nutrient}.value`]: -1
-      }
-    }
-    // if (sort === 'ratio') {
-    //   return {
-    //     nutrients[nutrient]: 1
-    //   }
-  }
-
-  console.count("1")
+  console.log("1")
   console.timeLog("get")
 
   let databaseQuery = Item.find();
@@ -227,7 +264,11 @@ app.get('/items', async (req, res) => {
       group: groupRegex
     });
   }
-
+  const sortQuery = (sort) => {
+    if (sort === 'name') return { name: 1 }
+    if (sort === 'group') return { group: 1 }
+    if (sort === 'nutrient') return { [`nutrients.${nutrient}.Varde`]: -1 }
+  }
   databaseQuery.sort(sortQuery(sort));
   /*
     databaseQuery = databaseQuery.sort({
@@ -238,16 +279,17 @@ app.get('/items', async (req, res) => {
   console.log("2")
   console.timeLog("get")
 
-  const items = await databaseQuery.limit(limit).skip(limit * (page - 1))
-
+  const items = await databaseQuery.limit(+limit).skip(+limit * (page - 1))
   const results = await databaseQueryCount.countDocuments()
-  const pages = Math.ceil(results / limit)
+
+  const pages = Math.ceil(results / +limit)
 
   console.log("Results: ", results)
   console.log("3")
   console.timeLog("get")
 
   if (items.length > 0) {
+    // res.json({ page, pages, results, items })
     res.json({ page, pages, results, items })
   } else {
     res.status(400).json({ error: "No items found" })
