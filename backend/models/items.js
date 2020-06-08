@@ -167,7 +167,10 @@ const Item = mongoose.model("Item", {
     Avfa: {
       Namn: String,
       Forkortning: String,
-      Varde: Number,
+      Varde: {
+        type: Number,
+        default: 0,
+      },
       Enhet: String,
     },
     Kolh: {
