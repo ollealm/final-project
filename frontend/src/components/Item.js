@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { items as itemsReducer } from "../reducers/items"
 import { user } from "../reducers/user"
+import { PieChart } from "./PieChart"
+
 
 
 export const Item = ({ itemProps }) => {
@@ -17,6 +19,7 @@ export const Item = ({ itemProps }) => {
   const dispatch = useDispatch();
   const saveCurrent = () => {
     dispatch(user.actions.saveItem(item))
+    //Thunk to save to database
   }
 
   if (itemsArray.length > 0 && !item) {
@@ -73,6 +76,7 @@ export const Item = ({ itemProps }) => {
         <button type="button" onClick={() => saveCurrent()}>
           Save
         </button>
+        <PieChart test={item.number} />
         {
           Object.values(item.nutrients).map(nutrient => (
             <p key={nutrient.Namn}>

@@ -6,6 +6,8 @@ import { LoadingIndicator } from '../lib/LoadingIndicator';
 //import { Loading } from '../components/Loading';
 import { useDispatch, useSelector } from 'react-redux';
 import { items as itemsReducer } from "../reducers/items"
+import { PieChart } from "../components/PieChart"
+
 
 export const ListItems = () => {
   const [items, setItems] = useState([]);
@@ -52,6 +54,7 @@ export const ListItems = () => {
           <div key={item._id}>
             <Link to={`/items/${item.number}`}>
               <h3>{item.number} {item.name}</h3>
+              <PieChart test={3} />
             </Link>
             <p>{item.group}</p>
           </div>
