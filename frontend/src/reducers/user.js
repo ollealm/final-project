@@ -31,6 +31,12 @@ export const user = createSlice({
       const { errorMessage } = action.payload
       state.login.errorMessage = errorMessage
     },
+    saveItem: (state, action) => {
+      state.savedItems.push(action.payload);
+    },
+    removeItem: (state, action) => {
+      state.savedItems.splice(action.payload, 1)
+    },
   }
 })
 
