@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { items as itemsReducer } from "../reducers/items"
+import { user } from "../reducers/user"
 
 
 export const Item = ({ itemProps }) => {
@@ -12,6 +13,11 @@ export const Item = ({ itemProps }) => {
   console.log("itemsArray from store")
   console.log(itemsArray)
   console.log(itemsArray.length)
+
+  const dispatch = useDispatch();
+  const saveCurrent = () => {
+    dispatch(user.actions.saveItem(item))
+  }
 
   if (itemsArray.length > 0 && !item) {
     let singleItem = itemsArray.find(({ number }) => number === +itemNumber)
@@ -54,10 +60,6 @@ export const Item = ({ itemProps }) => {
     } else console.log("Item already in store")
   }, []);
 
-  // const saveProduct = () => {
-  //   dispatch(itemsReducer.actions.saveItem(product))
-  // }
-
   return (
     <div>
       Item {itemNumber}
@@ -68,6 +70,9 @@ export const Item = ({ itemProps }) => {
         <h2>Singel item</h2>
         <h3>{item.number} {item.name}</h3>
         <p>{item.group}</p>
+        <button type="button" onClick={() => saveCurrent()}>
+          Save
+        </button>
         {
           Object.values(item.nutrients).map(nutrient => (
             <p key={nutrient.Namn}>
