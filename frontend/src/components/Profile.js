@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import { useParams, Link } from "react-router-dom";
+
 import { useDispatch, useSelector } from 'react-redux';
 import { user, getUserData, logout } from '../reducers/user';
 import './profile.css'
@@ -25,25 +27,33 @@ export const Profile = ({ URL }) => {
   //     .catch((err) => console.log("error:", err));
   // }, [accessToken]);
 
-
+  console.log(userData)
   return (
     <div className="profilepage">
-      <h2>User are logged in with token</h2>
+      {/* <h2>User are logged in with token</h2>
       Token:
       <p>{accessToken}</p>
-      <p>{userId}</p>
+      <p>{userId}</p> */}
 
       {/* <h2>Profile page fetched</h2>
       <p>{userInfo.name}</p>
       <p>{userInfo.userId}</p> */}
 
       {errorMessage && <h4>Error Message : {`${errorMessage}`}</h4>}
-      {userData && <h4>User Data : {`${userData}`}</h4>}
-
+      {userData &&
+        <div><p>User: {`${userData.name}`}</p>
+          {userData.savedItems.map(item => (
+            <div div key={item._id} >
+              <Link to={`/items/${item.itemNumber}`}>
+                <h3>{item.itemNumber} {item.item}</h3>
+              </Link>
+            </div>
+          ))}
+        </div>}
       <input
         type="submit"
         onClick={(e) => dispatch(getUserData(URL))}
-        value="User Data"
+        value="Saved Items"
       />
 
       <input

@@ -39,7 +39,7 @@ export const Nav = () => {
           <li>Items</li>
         </StyledLink>
         <StyledLink to="/login">
-          <li>Login</li>
+          <li>User</li>
         </StyledLink>
       </NavLinks>
     </Navigation>
