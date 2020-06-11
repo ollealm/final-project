@@ -21,10 +21,12 @@ const User = mongoose.model("User", {
     default: () => crypto.randomBytes(128).toString("hex"),
   },
   savedItems: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Item',
-    price: Number,
+    item: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Item',
+    },
     itemNumber: Number,
+    price: Number,
   }]
 })
 

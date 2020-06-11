@@ -120,7 +120,7 @@ app.get('/', (req, res) => {
 })
 
 
-///// Aggregate Test /////
+///// Aggregate /////
 
 app.get('/nutrients', async (req, res) => {
   const { name, group, sort, nutrient, nut, ratio, page = 1, limit = Infinity } = req.query
@@ -442,10 +442,28 @@ app.post("/sessions", async (req, res) => {
 
 app.get("/users/:id", authenticator)
 app.get("/users/:id", (req, res) => {
-  res.status(201).json({ name: req.user.name, userId: req.user._id }); //response to frontend
+  res.status(201).json({ name: req.user.name, email: req.user.email, userId: req.user._id, savedItems: req.user.savedItems }); //response to frontend
 })
 
+app.post("/users/:id", authenticator)
+app.post("/users/:id", async (req, res) => {
+  const { id } = req.params
+  const { itemNumber, price } = req.body
+  console.log(itemNumber)
+  try {
+    const item = await Item.findOne({ number: itemNumber })
 
+    const user = await User.findByIdAndUpdate(
+      id,
+      { $push: { savedItems: { item, itemNumber, price } } },
+      { useFindAndModify: false },
+    )
+    res.status(201)
+      .json(user.savedItems) // returns before incremented, I could not fix this.
+  } catch (err) {
+    res.status(400).json({ message: 'Could add item', error: err })
+  }
+})
 
 
 // Start the server
