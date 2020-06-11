@@ -83,7 +83,7 @@ export const login = (name, password, URL) => {
 
 
 
-/// User message
+/// User Data
 export const getUserData = (URL) => {
   return (dispatch, getState) => {
 
@@ -102,7 +102,7 @@ export const getUserData = (URL) => {
       })
       .then((json) => {
         dispatch(
-          user.actions.setUserData({ userData: JSON.stringify(json) })
+          user.actions.setUserData({ userData: json })
         )
       })
       .catch((err) => {
