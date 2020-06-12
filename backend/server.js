@@ -93,7 +93,7 @@ const authenticator = async (req, res, next) => {
   try {
     const user = await User.findOne({
       accessToken: req.header("Authorization")
-    })
+    }).populate("savedItems.item")
     if (user) {
       req.user = user
       next()
@@ -119,16 +119,38 @@ app.get('/', (req, res) => {
 
 ///// Aggregate /////
 app.get('/nutrients', async (req, res) => {
-  const { name, group, sort, nutrient, nut, ratio, page = 1, limit = Infinity } = req.query
+  const { name, group, sort, nutrient, nut, ratio, page = 1, limit = 20 } = req.query
   let items = []
 
+  const nameRegex = new RegExp(`${name}`, 'i')
+  const groupRegex = new RegExp(`${group}`, 'i')
+  console.log(nameRegex)
+
   if (name) {
-    items = await Item.aggregate([{ $match: { name: name } }])
+    items = await Item.aggregate([
+      { $match: { name: nameRegex } },
+      {
+        $project: {
+          name: "$name",
+          number: "$number",
+        }
+      },
+    ])
   }
   if (group) {
     items = await Item.aggregate([
-      { $group: { _id: "$group", numberOfItems: { $sum: 1 } } },
+      { $match: { group: groupRegex } },
+      {
+        $group: {
+          _id: "$group",
+          numberOfItems: { $sum: 1 },
+          Items: { $addToSet: "$name" }
+        }
+      },
     ])
+      .sort({ "_id": 1 })
+      .limit(+limit)
+      .skip(+limit * (page - 1))
   }
   if (nut) {
     items = await Item.aggregate([
@@ -301,9 +323,10 @@ app.get('/items/:id', async (req, res) => {
 ///// Create User /////
 
 app.post("/users", async (req, res) => {
+  console.log(req.body)
   try {
-    const { name, password } = req.body
-    const user = new User({ name, password: bcrypt.hashSync(password) }) // stores password encrypted
+    const { name, email, password } = req.body
+    const user = new User({ name, email, password: bcrypt.hashSync(password) }) // stores password encrypted
     const saved = await user.save()
     res.status(201).json({ userId: saved._id, accessToken: saved.accessToken });
   } catch (err) {
@@ -334,29 +357,72 @@ app.post("/sessions", async (req, res) => {
 
 app.get("/users/:id", authenticator)
 app.get("/users/:id", (req, res) => {
-  res.status(201).json({ name: req.user.name, email: req.user.email, userId: req.user._id, savedItems: req.user.savedItems }); //response to frontend
+  res.status(201).json({ name: req.user.name, email: req.user.email, savedItems: req.user.savedItems }); //response to frontend
 })
+
+// Add item
 
 app.post("/users/:id", authenticator)
 app.post("/users/:id", async (req, res) => {
   const { id } = req.params
   const { itemNumber, price } = req.body
-  console.log(itemNumber)
+  console.log(req.body)
   try {
     const item = await Item.findOne({ number: itemNumber })
 
     const user = await User.findByIdAndUpdate(
       id,
       { $push: { savedItems: { item, itemNumber, price } } },
-      { useFindAndModify: false },
-    )
-    // .populate('savedItems') populate items
+      { useFindAndModify: false, new: true }, //return uppdated
+    ).populate('savedItems.item')
+    const newItem = await user.savedItems[user.savedItems.length - 1]
     res.status(201)
-      .json(user.savedItems) // returns before incremented, I could not fix this.
+      .json({ message: 'Item added', item: newItem }) // return added item.
+    // .json({ message: 'Item added', savedItems: user.savedItems }) // return saved items.
   } catch (err) {
-    res.status(400).json({ message: 'Could add item', error: err })
+    res.status(400).json({ message: 'Could not add item', error: err })
   }
 })
+
+app.put("/users/:id/:itemId", authenticator)
+app.put("/users/:id/:itemId", async (req, res) => {
+  const { id, itemId } = req.params
+  const { price } = req.body
+
+  try {
+    const user = await User.findOneAndUpdate(
+      { _id: id, 'savedItems._id': itemId },
+      { $set: { 'savedItems.$.price': price } }, //using $[<identifier>]
+      { useFindAndModify: false, new: true }, //return uppdated
+    )
+    const newSavedItemsArray = await user.savedItems
+    res.status(201)
+      .json({ message: 'Price set', item: newSavedItemsArray }) // return new array item.
+  } catch (err) {
+    res.status(400).json({ message: 'Could not set price', error: err })
+  }
+})
+
+
+
+
+app.delete("/users/:id/:itemId", authenticator)
+app.delete("/users/:id/:itemId", async (req, res) => {
+  const { id, itemId } = req.params
+  try {
+    const user = await User.findByIdAndUpdate(
+      id,
+      { $pull: { savedItems: { '_id': itemId } } },
+      { useFindAndModify: false, new: true }, //return uppdated
+    )
+    const newSavedItemsArray = await user.savedItems
+    res.status(201)
+      .json({ message: 'Item removed', item: newSavedItemsArray }) // return new array item.
+  } catch (err) {
+    res.status(400).json({ message: 'Could not remove item', error: err })
+  }
+})
+
 
 
 // Start the server
