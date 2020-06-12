@@ -15,7 +15,7 @@ const PieChartStyle = styled.div`
   height: ${props => props.size};
   margin: 50px 20px;
   box-shadow: 
-  10px 10px 20px rgba(150,150,150,0.8),
+  10px 10px 20px rgba(0,0,0,0.2),
   -10px -10px 20px rgba(255,255,255,0.8);
   /* box-shadow: inset 0px 0px 80px 0px rgba(0,0,0,0.2); */
   transition: .2s;
@@ -36,7 +36,7 @@ const PieChartStyle = styled.div`
   &::after {
     content: "";
     z-index: 1;
-    background: linear-gradient(145deg, rgba(255,255,255,0), rgba(0,0,0,0.3));
+    background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(0,0,0,0.2));
     position: absolute;
     border-radius: 50%;
     left: 50%;
@@ -45,11 +45,12 @@ const PieChartStyle = styled.div`
     width: calc(${props => props.size});
     height: calc(${props => props.size});
     opacity: 1;
+    /* mix-blend-mode: overlay; */
   }
   &:hover {
     transform: scale(1.02);
     box-shadow: 
-  11px 11px 23px rgba(140,140,140,0.8),
+  11px 11px 23px rgba(0,0,0,0.22),
   -15px -15px 20px rgba(255,255,255,0.8);
   }
 `;
@@ -75,7 +76,7 @@ const Square = styled.div`
 
 //Change to object with, value, color, text instead o arrays?
 export const PieChart = ({ valuesArr = [], colorsArr = [], textArr = [], hue = 260, sat = 80, size = "200px", test = 0 }) => {
-  console.log(valuesArr)
+  // console.log(valuesArr)
   //For testing purpose 
   // textArr = ["Fett", "Protein", "Socker"]
   for (let index = 0; index < test; index++) {

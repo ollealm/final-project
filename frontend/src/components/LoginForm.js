@@ -16,6 +16,7 @@ export const LoginForm = () => {
 
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -27,7 +28,7 @@ export const LoginForm = () => {
 
     fetch(USERS_URL, {
       method: "POST",
-      body: JSON.stringify({ name, password }),
+      body: JSON.stringify({ name, email, password }),
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => {
@@ -76,6 +77,15 @@ export const LoginForm = () => {
               required
               value={name}
               onChange={(event) => setName(event.target.value)}
+            />
+          </label>
+          <label>
+            email&nbsp;
+            <input
+              required
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
             />
           </label>
           <label>

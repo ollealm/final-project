@@ -5,10 +5,13 @@ const initialState = {
   login: {
     accessToken: null,
     userId: 0,
-    userData: null,
-    errorMessage: null,
+    errorMessage: null, // move to ui
   },
-  savedItems: [],
+  userData: {
+    name: null,
+    email: null,
+    savedItems: [],
+  },
 }
 
 export const user = createSlice({
@@ -25,14 +28,14 @@ export const user = createSlice({
     },
     setUserData: (state, action) => {
       const { userData } = action.payload
-      state.login.userData = userData
+      state.userData = userData
     },
     setErrorMessage: (state, action) => {
       const { errorMessage } = action.payload
       state.login.errorMessage = errorMessage
     },
     saveItem: (state, action) => {
-      state.savedItems.push(action.payload);
+      state.userData.savedItems.push(action.payload);
     },
     removeItem: (state, action) => {
       state.savedItems.splice(action.payload, 1)
@@ -43,6 +46,9 @@ export const user = createSlice({
 
 // Thunks
 
+
+
+//Login
 export const login = (name, password, URL) => {
   return (dispatch) => {
     fetch(URL, {
@@ -86,7 +92,6 @@ export const login = (name, password, URL) => {
 /// User Data
 export const getUserData = (URL) => {
   return (dispatch, getState) => {
-
     const accessToken = getState().user.login.accessToken;
     const userId = getState().user.login.userId;
 
@@ -103,6 +108,42 @@ export const getUserData = (URL) => {
       .then((json) => {
         dispatch(
           user.actions.setUserData({ userData: json })
+        )
+      })
+      .catch((err) => {
+        dispatch(user.actions.setErrorMessage({ errorMessage: err }))
+      }) //401
+  }
+}
+
+//Add to list
+
+export const saveItem = (itemNumber, price = null) => {
+  const URL = "http://localhost:8090/users"
+  return (dispatch, getState) => {
+    const accessToken = getState().user.login.accessToken;
+    const userId = getState().user.login.userId;
+
+    fetch(`${URL}/${userId}`, { //path to user data
+      method: 'POST',
+      headers: {
+        Authorization: accessToken,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        itemNumber: itemNumber,
+        price: price,
+      })
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json()
+        }
+        throw 'Could not save item. Make sure you are logged in and try again.'
+      })
+      .then((json) => {
+        dispatch(
+          user.actions.saveItem(json.item)
         )
       })
       .catch((err) => {
