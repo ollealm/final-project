@@ -7,6 +7,9 @@ import { items as itemsReducer } from "../reducers/items"
 import { user } from "../reducers/user"
 import { PieChart } from "./PieChart"
 
+import { saveItem } from '../reducers/user';
+
+
 const ItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -53,21 +56,31 @@ export const Item = ({ itemProps }) => {
   const history = useHistory();
 
   const itemsArray = useSelector(store => store.items.itemsArray)
+  const savedItems = useSelector(store => store.user.userData.savedItems)
+
   console.log("itemsArray from store")
   console.log(itemsArray)
   console.log(itemsArray.length)
 
   const dispatch = useDispatch();
+
   const saveCurrent = () => {
-    dispatch(user.actions.saveItem(item))
+    // dispatch(user.actions.saveItem(item))
     //Thunk to save to database
+    dispatch(saveItem(itemNumber))
   }
 
   if (itemsArray.length > 0 && !item) {
-    let singleItem = itemsArray.find(({ number }) => number === +itemNumber)
-    console.log("find")
-    console.log(singleItem)
-    setItem(singleItem)
+    let findItem = itemsArray.find(({ number }) => number === +itemNumber)
+    // let findItem = itemsArray.find((item) => item.number === +itemNumber)
+    console.log("find in redux")
+    console.log(findItem)
+    findItem && setItem(findItem)
+  } else if (savedItems.length > 0 && !item) {
+    let findItem = savedItems.find(({ item }) => item.number === +itemNumber).item
+    console.log("find in Saved items redux")
+    console.log(findItem)
+    findItem && setItem(findItem)
   }
 
 
@@ -81,11 +94,12 @@ export const Item = ({ itemProps }) => {
   const url = `http://localhost:8090/items/${itemNumber}`;
   console.log(itemNumber)
 
+  console.log("item before useEffect ", item)
   useEffect(() => {
     // setLoading(true); //change to dispach
     console.log("useEffect")
     console.log(itemsArray.length)
-    if (itemsArray.length === 0) {
+    if (!item) {
       console.log("fetching")
       fetch(url)
         .then((res) => {
@@ -104,7 +118,7 @@ export const Item = ({ itemProps }) => {
           // }, 50)
         })
         .catch(error => {
-          console.log(error);
+          console.log("Error: ", error);
         });
     } else console.log("Item already in store")
   }, []);
@@ -159,9 +173,9 @@ export const Item = ({ itemProps }) => {
     <div>
       Item {itemNumber}
       {console.log("loading component")}
-      {console.log("Item: ", item)}
+      {console.log("Item in return: ", item)}
       {item && <ItemWrapper>
-        {console.log("loading item")}
+        {console.log("loading item in return")}
         <h2>Singel item</h2>
         <h3>{item.number} {item.name}</h3>
         <p>{item.group}</p>
