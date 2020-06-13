@@ -7,6 +7,7 @@ import { LoadingIndicator } from '../lib/LoadingIndicator';
 //import { Loading } from '../components/Loading';
 import { useDispatch, useSelector } from 'react-redux';
 import { items as itemsReducer } from "../reducers/items"
+import { ui } from "../reducers/ui"
 import { PieChart } from "../components/PieChart"
 
 const ItemsWrapper = styled.div`
@@ -22,14 +23,23 @@ export const ListItems = () => {
   const [pagination, setPagination] = useState({});
   const [loading, setLoading] = useState(true)
 
-  const [searchTerm, setSearchTerm] = useState("")
+  const [searchName, setSearchName] = useState("")
+  const [searchGroup, setSearchGroup] = useState("")
+  const [sort, setSort] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
-  const handleChange = e => {
-    setSearchTerm(e.target.value)
+
+  const handleChangeName = e => {
+    setSearchName(e.target.value)
   };
+
+  const handleChangeGroup = e => {
+    setSearchGroup(e.target.value)
+  };
+
   const nextPage = () => {
     setCurrentPage((currentPage) => Math.min(currentPage + 1, pagination.pages))
   }
+
   const prevPage = () => {
     setCurrentPage((currentPage) => Math.max(currentPage - 1, 1))
   }
@@ -38,13 +48,14 @@ export const ListItems = () => {
   const dispatch = useDispatch();
   const { itemNumber } = useParams();
 
-  const url = `http://localhost:8090/items?name=${searchTerm}&page=${currentPage}`;
+  const url = `http://localhost:8090/items?name=${searchName}&group=${searchGroup}&sort=${sort}&page=${currentPage}`;
 
 
   // Move to Thunk
   useEffect(() => {
     setLoading(true); //change to dispach
     console.log("getting data")
+    console.log(url)
     // if ui new query 
     fetch(url)
       .then((res) => {
@@ -54,6 +65,7 @@ export const ListItems = () => {
         setItems(data.items);
         //dispach data.items to Store
         dispatch(itemsReducer.actions.saveItem(data.items))
+        dispatch(ui.actions.setCurrentQuery(url))
         console.log("payload:", data.items)
 
         console.log("dispatching items")
@@ -66,16 +78,33 @@ export const ListItems = () => {
       .catch((err) => {
         setItems(null);
       })
-  }, [searchTerm, currentPage]);
+  }, [url]);
 
   return (
     <ItemsWrapper>
       <input
         type="text"
         placeholder="Search"
-        value={searchTerm}
-        onChange={handleChange}
+        value={searchName}
+        onChange={handleChangeName}
       />
+      <input
+        type="text"
+        placeholder="Group"
+        value={searchGroup}
+        onChange={handleChangeGroup}
+      />
+      <label>
+        <select
+          onChange={event => setSort(event.target.value)}
+        >
+
+          <option key="number" value="">number</option>
+          <option key="name" value="name">name</option>
+          <option key="group" value="group">group</option>
+
+        </select>
+      </label>
       <button
         type="button"
         onClick={nextPage}>
