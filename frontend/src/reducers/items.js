@@ -15,7 +15,14 @@ export const items = createSlice({
       state.item = action.payload;
     },
     saveItem: (state, action) => {
-      state.itemsArray.push(...action.payload)
+      // state.itemsArray.push(...action.payload)
+      // Only save new items to store
+      action.payload.forEach(item => {
+        const exists = state.itemsArray.some(element => element.number === item.number)
+        if (!exists) {
+          state.itemsArray.push(item)
+        }
+      });
     },
     removeProduct: (state, action) => {
       state.itemsArray.splice(action.payload, 1)
