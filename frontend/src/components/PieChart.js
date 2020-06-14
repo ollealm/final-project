@@ -107,7 +107,7 @@ export const PieChart = ({ valuesArr = [], colorsArr = [], textArr = [], hue = 2
     <div>
       <PieChartStyle size={size} perc={getPercentage()} />
       {textArr.map((value, index) => (
-        <Catergory color={colorsArr[index]}>{value} {valuesArr[index]} %</Catergory>
+        <Catergory key={index} color={colorsArr[index]}>{value} {valuesArr[index]} %</Catergory>
       ))}
     </div>
   )

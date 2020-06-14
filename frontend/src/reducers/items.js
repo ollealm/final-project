@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { user, logout } from './user'
+import { ui } from './ui'
 
 export const items = createSlice({
   name: 'items',
@@ -7,7 +7,7 @@ export const items = createSlice({
     currentItem: null,
     itemsArray: [],
     currentResult: [],
-    currentPagination: { page: 1, pages: 99, total: null },
+    currentPagination: { page: null, pages: null, total: null },
     // nutrient: null,
     // ratio: null,
     // queries: null,
@@ -40,30 +40,35 @@ export const items = createSlice({
 // itemSearch, query, group, nutrient
 // getItem
 
-/*
-export const getItem = (name, password, URL) => {
+
+export const searchItems = (url) => {
   return (dispatch) => {
-    fetch(URL, {
-      method: 'POST',
-      body: JSON.stringify({ name, password }),
-      headers: { 'Content-Type': 'application/json' },
-    })
+    dispatch(ui.actions.setLoading(true))
+    fetch(url)
       .then((res) => {
+        //setStatusCode(res.status) //dispach        
+        return res.json();
+        /*
         if (res.ok) {
           return res.json()
         }
         throw 'Login failed. Check username and password'
+        */
       })
-      .then((json) => {
-        dispatch(
-          user.actions.setAccessToken({ accessToken: json.accessToken })
-        )
-        dispatch(user.actions.setUserId({ userId: json.userId }))
+      .then(data => {
+        dispatch(items.actions.saveItem(data.items)) // OLD adding all results
+        dispatch(items.actions.setCurrentResult(data.items)) // saving results
+        dispatch(ui.actions.setCurrentQuery(url)) //saving search query
+        // console.log("payload:", data.items)
+        // console.log("dispatching items")
+        dispatch(items.actions.setCurrentPagination({ page: data.page, pages: data.pages, total: data.results }))
+        dispatch(ui.actions.setLoading(false))
       })
       .catch((err) => {
-        dispatch(logout());
-        dispatch(user.actions.setErrorMessage({ errorMessage: err }))
+        // dispatch error message. no results
+        dispatch(ui.actions.setErrorMessage({ errorMessage: err }))
+        dispatch(ui.actions.setLoading(false))
       })
   }
 }
-*/
+
