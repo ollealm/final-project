@@ -55,13 +55,14 @@ const PieChartStyle = styled.div`
   }
 `;
 
-const Square = styled.div`
+const Catergory = styled.div`
   margin: 5px 0 0 65px;
   width: 150px;
   &::before {
     content: "";
     background-color: ${props => props.color};
     position: absolute;
+    border-radius: 50%;
     width: 20px;
     height: 20px;
     margin-left: -25px;
@@ -106,7 +107,7 @@ export const PieChart = ({ valuesArr = [], colorsArr = [], textArr = [], hue = 2
     <div>
       <PieChartStyle size={size} perc={getPercentage()} />
       {textArr.map((value, index) => (
-        <Square color={colorsArr[index]}>{value}</Square>
+        <Catergory color={colorsArr[index]}>{value} {valuesArr[index]} %</Catergory>
       ))}
     </div>
   )
