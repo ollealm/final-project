@@ -1,16 +1,15 @@
 import React from 'react'
-
 import { BrowserRouter, Switch, Route } from "react-router-dom"
-
-import { Login } from "./pages/Login"
-import { ListItems } from "./pages/ListItems"
-import { Item } from "./components/Item"
-import { About } from "./pages/About"
-import { Nav } from "./components/Nav"
-import { ScrollToTop } from "./components/ScrollToTop"
-
 import { Provider } from "react-redux"
 import { configureStore, combineReducers } from "@reduxjs/toolkit"
+
+import { Login } from "./pages/Login"
+import { Items } from "./pages/Items"
+import { About } from "./pages/About"
+import { Item } from "./pages/Item"
+
+import { Nav } from "./components/Nav"
+import { ScrollToTop } from "./components/ScrollToTop"
 
 import { user } from "./reducers/user"
 import { ui } from "./reducers/ui"
@@ -37,7 +36,7 @@ export const App = () => {
             <About />
           </Route>
           <Route path="/items" exact>
-            <ListItems />
+            <Items />
           </Route>
           <Route path="/items/:itemNumber">
             <Item />

@@ -5,7 +5,7 @@ import { useParams, useHistory, Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { items as itemsReducer } from "../reducers/items"
 import { user } from "../reducers/user"
-import { PieChart } from "./PieChart"
+import { PieChart } from "../components/PieChart"
 
 import { saveItem } from '../reducers/user';
 

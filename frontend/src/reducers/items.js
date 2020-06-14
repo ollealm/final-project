@@ -6,13 +6,15 @@ export const items = createSlice({
   initialState: {
     currentItem: null,
     itemsArray: [],
+    currentResult: [],
+    currentPagination: { page: 1, pages: 99, total: null },
     // nutrient: null,
     // ratio: null,
     // queries: null,
   },
   reducers: {
     setItem: (state, action) => {
-      state.item = action.payload;
+      state.item = action.payload
     },
     saveItem: (state, action) => {
       // state.itemsArray.push(...action.payload)
@@ -24,15 +26,21 @@ export const items = createSlice({
         }
       });
     },
-    removeProduct: (state, action) => {
-      state.itemsArray.splice(action.payload, 1)
+    setCurrentPagination: (state, action) => {
+      state.currentPagination = action.payload
+    },
+    setCurrentResult: (state, action) => {
+      state.currentResult = action.payload
     },
   }
 })
 
 
 // Thunks
+// itemSearch, query, group, nutrient
+// getItem
 
+/*
 export const getItem = (name, password, URL) => {
   return (dispatch) => {
     fetch(URL, {
@@ -58,3 +66,4 @@ export const getItem = (name, password, URL) => {
       })
   }
 }
+*/
