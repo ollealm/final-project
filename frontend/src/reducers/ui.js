@@ -4,20 +4,25 @@ export const ui = createSlice({
   name: 'ui',
   initialState: {
     isLoading: false,
+    NotFound: false,
+    // LoginFailed: ,
+    errorMessage: "",
     currentQuery: "",
     queryName: "",
     queryGroup: "",
     querySort: "",
     queryPage: "",
     queryLimit: "",
-    // isNotFound: false,
-    // isLoginFailed: false,
-    // errorMessage: false,
-    // page: 1,  
   },
   reducers: {
     setLoading: (state, action) => {
       state.isLoading = action.payload
+    },
+    setNotFound: (state, action) => {
+      state.NotFound = action.payload
+    },
+    setErrorMessage: (state, action) => {
+      state.errorMessage = action.payload
     },
     setCurrentQuery: (state, action) => {
       state.currentQuery = action.payload

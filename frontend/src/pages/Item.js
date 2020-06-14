@@ -3,10 +3,13 @@ import styled from 'styled-components';
 
 import { useParams, useHistory, Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
+
+import { PieChart } from "../components/PieChart"
+import { LoadingIndicator } from '../lib/LoadingIndicator';
+
 import { items as itemsReducer } from "../reducers/items"
 import { user } from "../reducers/user"
-import { PieChart } from "../components/PieChart"
-
+import { ui } from "../reducers/ui"
 import { saveItem } from '../reducers/user';
 
 
@@ -101,6 +104,7 @@ export const Item = ({ itemProps }) => {
     console.log(itemsArray.length)
     if (!item) {
       console.log("fetching")
+      dispatch(ui.actions.setLoading(true))
       fetch(url)
         .then((res) => {
           console.log("Res: ", res)
@@ -116,9 +120,11 @@ export const Item = ({ itemProps }) => {
           // setPages({ pages: data.pages, total: data.results })
           // setLoading(false)
           // }, 50)
+          dispatch(ui.actions.setLoading(false))
         })
         .catch(error => {
           console.log("Error: ", error);
+          dispatch(ui.actions.setLoading(false))
         });
     } else console.log("Item already in store")
   }, []);
@@ -171,6 +177,7 @@ export const Item = ({ itemProps }) => {
 
   return (
     <div>
+      <LoadingIndicator />
       Item {itemNumber}
       {console.log("loading component")}
       {console.log("Item in return: ", item)}
