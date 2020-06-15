@@ -246,7 +246,10 @@ app.get('/nutrients', async (req, res) => {
 
 // ITEMS
 app.get('/items', async (req, res) => {
-  const { name, group, sort, nutrient, page = 1, limit = 20 } = req.query
+  const { name, group, sort, nutrient } = req.query
+  let { page = 1, limit = 20 } = req.query
+  page = Math.max(page, 1)
+  limit = Math.max(limit, 1)
 
   console.log("Start")
   console.time("get")
@@ -279,17 +282,19 @@ app.get('/items', async (req, res) => {
   }
   const sortQuery = (sort) => {
     if (sort === 'nutrient') return { [`nutrients.${nutrient}.Varde`]: -1 }
-    return { [sort]: 1 }
+    if (sort === 'name') return { ['name']: 1 }
+    if (sort === 'group') return { ['group']: 1 }
+    // return { [sort]: 1 }
   }
   databaseQuery.sort(sortQuery(sort));
 
   console.log("2")
   console.timeLog("get")
 
-  const items = await databaseQuery.limit(+limit).skip(+limit * (page - 1))
+  const items = await databaseQuery.limit(limit).skip(limit * (page - 1))
   const results = await databaseQueryCount.countDocuments()
 
-  const pages = Math.ceil(results / +limit)
+  const pages = Math.ceil(results / limit)
 
   console.log("Results: ", results)
   console.log("3")
@@ -323,7 +328,6 @@ app.get('/items/:id', async (req, res) => {
 ///// Create User /////
 
 app.post("/users", async (req, res) => {
-  console.log(req.body)
   try {
     const { name, email, password } = req.body
     const user = new User({ name, email, password: bcrypt.hashSync(password) }) // stores password encrypted
@@ -343,7 +347,7 @@ app.post("/sessions", async (req, res) => {
     const user = await User.findOne({ name })
 
     if (user && bcrypt.compareSync(password, user.password)) {
-      res.status(201).json({ userId: user._id, accessToken: user.accessToken }) //response to frontend
+      res.status(201).json({ userId: user._id, name: user.name, email: user.email, accessToken: user.accessToken }) //response to frontend
     } else {
       res.status(404).json({ notFound: true })
     }
@@ -361,7 +365,6 @@ app.get("/users/:id", (req, res) => {
 })
 
 // Add item
-
 app.post("/users/:id", authenticator)
 app.post("/users/:id", async (req, res) => {
   const { id } = req.params
@@ -384,6 +387,8 @@ app.post("/users/:id", async (req, res) => {
   }
 })
 
+
+// Set price on item
 app.put("/users/:id/:itemId", authenticator)
 app.put("/users/:id/:itemId", async (req, res) => {
   const { id, itemId } = req.params
@@ -394,18 +399,17 @@ app.put("/users/:id/:itemId", async (req, res) => {
       { _id: id, 'savedItems._id': itemId },
       { $set: { 'savedItems.$.price': price } }, //using $[<identifier>]
       { useFindAndModify: false, new: true }, //return uppdated
-    )
-    const newSavedItemsArray = await user.savedItems
+    ).populate('savedItems.item')
+    const newSavedItemsArray = await user.savedItems // change to new item?
     res.status(201)
-      .json({ message: 'Price set', item: newSavedItemsArray }) // return new array item.
+      .json({ message: 'Price set', items: newSavedItemsArray }) // return new array item.
   } catch (err) {
     res.status(400).json({ message: 'Could not set price', error: err })
   }
 })
 
 
-
-
+// Delete item
 app.delete("/users/:id/:itemId", authenticator)
 app.delete("/users/:id/:itemId", async (req, res) => {
   const { id, itemId } = req.params
