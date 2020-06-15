@@ -9,7 +9,7 @@ import { About } from "./pages/About"
 import { Item } from "./pages/Item"
 
 import { Nav } from "./components/Nav"
-import { ScrollToTop } from "./components/ScrollToTop"
+import { ScrollToTop } from "./lib/ScrollToTop"
 
 import { user } from "./reducers/user"
 import { ui } from "./reducers/ui"

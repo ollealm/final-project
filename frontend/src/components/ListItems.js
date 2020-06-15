@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ui } from "../reducers/ui"
-import { PieChart } from "../components/PieChart"
+import { PieChart } from "../lib/PieChart"
 
 const ItemsWrapper = styled.div`
   display: flex;
