@@ -1,17 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { ui } from './ui'
 
 const initialState = {
   login: {
     accessToken: null,
     userId: 0,
-    errorMessage: null, // move to ui
+    errorMessage: null,
   },
   userData: {
     name: null,
     email: null,
-    savedItems: [],
   },
+  savedItems: [],
 }
 
 export const user = createSlice({
@@ -27,15 +26,24 @@ export const user = createSlice({
       state.login.userId = userId
     },
     setUserData: (state, action) => {
-      const { userData } = action.payload
-      state.userData = userData
+      console.log("User data", action.payload)
+      const { name, email } = action.payload
+      state.userData.name = name
+      state.userData.email = email
     },
     setErrorMessage: (state, action) => {
       const { errorMessage } = action.payload
       state.login.errorMessage = errorMessage
     },
+    setSavedItems: (state, action) => {
+      const { savedItems } = action.payload
+      state.savedItems = savedItems;
+    },
     saveItem: (state, action) => {
-      state.userData.savedItems.push(action.payload);
+      state.savedItems.push(action.payload);
+    },
+    modifyItem: (state, action) => {
+      state.savedItems = action.payload // change to only update one
     },
     removeItem: (state, action) => {
       state.savedItems.splice(action.payload, 1)
@@ -44,9 +52,9 @@ export const user = createSlice({
 })
 
 
+
+
 // Thunks
-
-
 
 //Login
 export const login = (name, password, URL) => {
@@ -63,10 +71,11 @@ export const login = (name, password, URL) => {
         throw 'Login failed. Check username and password'
       })
       .then((json) => {
-        dispatch(
-          user.actions.setAccessToken({ accessToken: json.accessToken })
-        )
+        console.log("login", json)
+        dispatch(user.actions.setAccessToken({ accessToken: json.accessToken }))
         dispatch(user.actions.setUserId({ userId: json.userId }))
+        dispatch(user.actions.setUserData({ name: json.name, email: json.email }))
+        dispatch(user.actions.setErrorMessage({})); // clears the error if previous attempt failed
       })
       .catch((err) => {
         dispatch(logout());
@@ -76,21 +85,8 @@ export const login = (name, password, URL) => {
 }
 
 
-// useEffect(() => {
-//   fetch(`${URL}/${userId}`, {
-//     method: "GET",
-//     headers: { Authorization: accessToken },
-//   })
-//     .then((res) => res.json())
-//     .then((json) => setUserInfo(json))
-//     .catch((err) => console.log("error:", err));
-// }, [accessToken]);
-
-
-
-
-/// User Data
-export const getUserData = (URL) => {
+/// Saved Items
+export const getSavedItems = (URL) => {
   return (dispatch, getState) => {
     const accessToken = getState().user.login.accessToken;
     const userId = getState().user.login.userId;
@@ -106,8 +102,9 @@ export const getUserData = (URL) => {
         throw 'Could not get information. Make sure you are logged in and try again.'
       })
       .then((json) => {
+        console.log(json)
         dispatch(
-          user.actions.setUserData({ userData: json })
+          user.actions.setSavedItems({ savedItems: json.savedItems })
         )
       })
       .catch((err) => {
@@ -152,9 +149,40 @@ export const saveItem = (itemNumber, price = null) => {
   }
 }
 
+//Change and remove
+// method "PUT" or "DELETE"
+export const modifyItem = (itemId, index, method, price = null) => {
+  const URL = "http://localhost:8090/users"
+  console.log("Modify", itemId, index, method, price)
+  return (dispatch, getState) => {
+    const accessToken = getState().user.login.accessToken;
+    const userId = getState().user.login.userId;
 
-
-
+    fetch(`${URL}/${userId}/${itemId}`, { //path to user data
+      method: method,
+      headers: {
+        Authorization: accessToken,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        price: price,
+      })
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json()
+        }
+        throw 'Could not modify item. Make sure you are logged in and try again.'
+      })
+      .then((json) => {
+        if (method === "DELETE") dispatch(user.actions.removeItem(index))
+        if (method === "PUT") dispatch(user.actions.modifyItem(json.items))  // sends the whole new array, change to only new object
+      })
+      .catch((err) => {
+        dispatch(user.actions.setErrorMessage({ errorMessage: err }))
+      }) //401
+  }
+}
 
 
 export const logout = () => {

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Route, useParams, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useSelector } from 'react-redux';
 
 const Navigation = styled.nav`
   height: 50px;
@@ -28,6 +29,8 @@ const StyledLink = styled(Link)`
 `
 
 export const Nav = () => {
+  const name = useSelector((store) => store.user.userData.name);
+
   return (
     <Navigation>
       <h1>Title</h1>
@@ -38,8 +41,8 @@ export const Nav = () => {
         <StyledLink to="/items">
           <li>Items</li>
         </StyledLink>
-        <StyledLink to="/login">
-          <li>User</li>
+        <StyledLink to="/user">
+          <li>{name ? name : "Login"}</li>
         </StyledLink>
       </NavLinks>
     </Navigation>
