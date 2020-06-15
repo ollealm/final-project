@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useParams, useHistory, Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 
-import { PieChart } from "../components/PieChart"
+import { PieChart } from "../lib/PieChart"
 import { LoadingIndicator } from '../lib/LoadingIndicator';
 
 import { items as itemsReducer } from "../reducers/items"
@@ -211,8 +211,8 @@ export const Item = ({ itemProps }) => {
             {
               Object.values(item.nutrients).map(nutrient => (
                 <TableRow key={nutrient.Namn}>
-                  <TableCell>{nutrient.Namn}</TableCell>
-                  <TableCell>{nutrient.Varde}{nutrient.Enhet}</TableCell>
+                  <TableCell key={nutrient.Namn}>{nutrient.Namn}</TableCell>
+                  <TableCell key={nutrient.Namn}>{nutrient.Varde}{nutrient.Enhet}</TableCell>
                 </TableRow>
               )
               )

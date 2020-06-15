@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getSavedItems, modifyItem, logout } from '../reducers/user';
-import './profile.css'
 
 export const Profile = ({ URL }) => {
   const dispatch = useDispatch()
@@ -20,7 +19,7 @@ export const Profile = ({ URL }) => {
   // {errorMessage && <h4>Error Message : {`${errorMessage}`}</h4>}
   // {userData &&
   return (
-    <div className="profilepage">
+    <div>
 
       <div><p>User: {`${userData.name} ${userData.email}`}</p>
         {savedItems.map((item, index) => (
