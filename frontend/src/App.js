@@ -3,7 +3,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom"
 import { Provider } from "react-redux"
 import { configureStore, combineReducers } from "@reduxjs/toolkit"
 
-import { Login } from "./pages/Login"
+import { User } from "./pages/User"
 import { Items } from "./pages/Items"
 import { About } from "./pages/About"
 import { Item } from "./pages/Item"
@@ -47,8 +47,8 @@ export const App = () => {
           <Route path="/nutrients/:nutrientShort">
             <Nutrient />
           </Route> */}
-          <Route path="/login" exact>
-            <Login />
+          <Route path="/user" exact>
+            <User />
           </Route>
         </Switch>
       </BrowserRouter>

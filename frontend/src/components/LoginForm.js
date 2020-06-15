@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Profile } from './Profile'
 
 import { useDispatch, useSelector } from 'react-redux';
 import { user, login } from '../reducers/user';
@@ -11,7 +10,9 @@ const SESSION_URL = `${BASE_URL}/sessions`;
 
 export const LoginForm = () => {
   const dispatch = useDispatch();
-  const accessToken = useSelector((store) => store.user.login.accessToken);
+
+  const [showSignup, setShowSignup] = useState(false)
+
   const errorMessage = useSelector((store) => store.user.login.errorMessage);
 
   const [name, setName] = useState('');
@@ -43,10 +44,11 @@ export const LoginForm = () => {
       });
   };
 
-  if (!accessToken) {
-    return (
-      <div>
-        <h1>Login or sign up</h1>
+  //  if (!accessToken) {
+  return (
+    <div>
+      <h1>Login or sign up</h1>
+      {!showSignup &&
         <form onSubmit={handleLogin}>
           <label>
             Name&nbsp;
@@ -67,10 +69,16 @@ export const LoginForm = () => {
           </label>
           <button type="submit">
             Login
-          </button>
+        </button>
+          <button type="submit" onClick={() => setShowSignup(!showSignup)}>
+            Signup
+        </button>
         </form>
+      }
 
-        <form onSubmit={handleSignup}>
+      {showSignup &&
+        // {/* <SignupForm {...{ handleSignup, name, setName, password, setPassword, email, setEmail }} /> */ }
+        < form onSubmit={handleSignup}>
           <label>
             Name&nbsp;
             <input
@@ -100,12 +108,14 @@ export const LoginForm = () => {
           <button type="submit">
             Sign up
           </button>
+          <button type="submit" onClick={() => setShowSignup(!showSignup)}>
+            Login
+        </button>
         </form>
+      }
 
-        <p>{errorMessage}</p>
-      </div>
-    );
-  } else {
-    return <Profile URL={USERS_URL} />
-  }
+      <p>{errorMessage}</p>
+    </div >
+  );
+  //  } else return <></>
 }

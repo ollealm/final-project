@@ -59,7 +59,7 @@ export const Item = ({ itemProps }) => {
   const history = useHistory();
 
   const itemsArray = useSelector(store => store.items.itemsArray)
-  const savedItems = useSelector(store => store.user.userData.savedItems)
+  const savedItems = useSelector(store => store.user.savedItems)
 
   console.log("itemsArray from store")
   console.log(itemsArray)
@@ -174,6 +174,12 @@ export const Item = ({ itemProps }) => {
     omegaValues = [C18_3.Varde, C20_5.Varde + C22_5.Varde + C22_6.Varde, C18_2.Varde + C20_4.Varde]
     omegaNames = ["Omega-3 kort", "Omega-3 lång", "Omega-6"]
   }
+
+  // Show if part of saved items
+  // Show what list
+  // Show price
+  // Show name
+  // Add name and price to save
 
   return (
     <div>
