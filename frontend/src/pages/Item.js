@@ -4,9 +4,17 @@ import styled from 'styled-components';
 import { useParams, useHistory, Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 
-import { PieChart } from "../lib/PieChart"
-import { EnergyRatio } from "../components/charts/EnergyRatio"
 import { LoadingIndicator } from '../lib/LoadingIndicator';
+import { EnergyRatio } from "../components/charts/EnergyRatio"
+import { MacroComponents } from "../components/charts/MacroComponents"
+import { FatProfile } from "../components/charts/FatProfile"
+import { OmegaRatio } from "../components/charts/OmegaRatio"
+import { LipidProfile } from "../components/charts/LipidProfile"
+import { Waste } from "../components/charts/Waste"
+
+import { BarChart } from "../lib/BarChart"
+
+import { NutrientTable } from "../components/charts/NutrientTable"
 
 import { items as itemsReducer } from "../reducers/items"
 import { user } from "../reducers/user"
@@ -27,30 +35,6 @@ const Wrapper = styled.div`
   
 `
 
-const NutrientTable = styled.table`
-  margin: 100px;
-`
-
-const TableRow = styled.tr`
-  &:nth-child(even) {
-  background-color: #eee;
-}
-`
-
-const TableHead = styled.th`
-  text-align: left;
-  &:nth-child(even) {
-  text-align: right;
-}
-`
-
-const TableCell = styled.td`
-  width: 130px;
-  padding: 5px 0;
-  &:nth-child(even) {
-  text-align: right;
-}
-`
 
 
 export const Item = ({ itemProps }) => {
@@ -135,47 +119,6 @@ export const Item = ({ itemProps }) => {
     history.push("/items")
   }
 
-  const valueAndName = (Arr => {
-
-  })
-
-  let macroValues = []
-  let macroNames = []
-  let gramValues = []
-  let gramNames = []
-  let fatValues = []
-  let fatNames = []
-  let omegaValues = []
-  let omegaNames = []
-  let ratioValues = []
-  let ratioNames = []
-
-  if (item) {
-    const { Fett, Prot, Kolh, Mono_disack } = item.nutrients //macro
-    macroValues = [Fett.Varde * 2.25, Prot.Varde, (Kolh.Varde - Mono_disack.Varde), Mono_disack.Varde]
-    macroNames = [Fett.Namn, Prot.Namn, Kolh.Namn, Mono_disack.Namn]
-
-    const { Aska, Vatt, Alko, Fibe } = item.nutrients // gram
-    const { Avfa } = item.nutrients // gram
-    gramValues = [Fett.Varde, Prot.Varde, Kolh.Varde, Fibe.Varde, Alko.Varde, Vatt.Varde, Aska.Varde]
-    gramNames = [Fett.Namn, Prot.Namn, Kolh.Namn, Fibe.Namn, Alko.Namn, Vatt.Namn, Aska.Namn]
-    ratioValues = [Avfa.Varde, 100]
-    ratioNames = [Avfa.Namn, "Total"]
-
-    const { Mfet, Mone, Pole, Kole } = item.nutrients // fat
-    fatValues = [Mfet.Varde, Mone.Varde, Pole.Varde]
-    fatNames = [Mfet.Namn, Mone.Namn, Pole.Namn]
-
-    const { C4_0_C10_0, C12_0, C14_0, C16_0, C18_0, C20_0 } = item.nutrients // omega 3
-    const { C16_1 } = item.nutrients // omega 7
-    const { C18_1 } = item.nutrients // omega 9
-    const { C18_2, C20_4 } = item.nutrients // omega 6
-    const { C18_3, C20_5, C22_5, C22_6 } = item.nutrients // omega 3
-
-    omegaValues = [C18_3.Varde, C20_5.Varde + C22_5.Varde + C22_6.Varde, C18_2.Varde + C20_4.Varde]
-    omegaNames = ["Omega-3 kort", "Omega-3 lång", "Omega-6"]
-  }
-
   // Show if part of saved items
   // Show what list
   // Show price
@@ -186,44 +129,40 @@ export const Item = ({ itemProps }) => {
     <div>
       <LoadingIndicator />
       Item {itemNumber}
+
       {console.log("loading component")}
       {console.log("Item in return: ", item)}
+
       {item && <ItemWrapper>
         {console.log("loading item in return")}
         <h2>Singel item</h2>
         <h3>{item.number} {item.name}</h3>
         <p>{item.group}</p>
+
         <button type="button" onClick={() => saveCurrent()}>
           Save
         </button>
+
         <Wrapper>
           <EnergyRatio {...item.nutrients} />
-          {/* <MacroComponents {...nutrients} /> */}
-
-          {/* <PieChart valuesArr={gramValues} textArr={gramNames} />
-          <PieChart valuesArr={macroValues} textArr={macroNames} />
-          <PieChart valuesArr={fatValues} textArr={fatNames} />
-          <PieChart valuesArr={omegaValues} textArr={omegaNames} />
-          <PieChart valuesArr={ratioValues} textArr={ratioNames} /> */}
+          <MacroComponents {...item.nutrients} />
+          <FatProfile {...item.nutrients} />
+          <OmegaRatio {...item.nutrients} />
+          <LipidProfile {...item.nutrients} />
+          <Waste {...item.nutrients} />
         </Wrapper>
-        <NutrientTable>
-          <tbody>
-            <TableRow>
-              <TableHead>Nutrients</TableHead>
-              <TableHead>Per 100g</TableHead>
-            </TableRow>
-            {
-              Object.values(item.nutrients).map(nutrient => (
-                <TableRow key={nutrient.Namn}>
-                  <TableCell key={nutrient.Namn}>{nutrient.Namn}</TableCell>
-                  <TableCell key={nutrient.Namn}>{nutrient.Varde}{nutrient.Enhet}</TableCell>
-                </TableRow>
-              )
-              )
-            }
-          </tbody>
-        </NutrientTable>
-      </ItemWrapper >}
-    </div>
+
+        {/*
+          <Stapeldiagram>
+          <Etikett (tabell)>
+          <Tabell macro>?
+          <Tabell vita>?
+          <Tabell mine>?
+          */}
+
+        <NutrientTable nutrients={item.nutrients} />
+
+      </ItemWrapper>}
+    </div >
   )
 }

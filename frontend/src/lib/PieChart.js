@@ -59,7 +59,7 @@ const PieChartStyle = styled.div`
 
 
 //Change to object with, value, color, text instead o arrays?
-export const PieChart = ({ valuesArr = [], colorsArr = [], textArr = [], origValues, unit, hue = 260, sat = 80, size = "200px", test = 0 }) => {
+export const PieChart = ({ valuesArr = [], colorsArr = [], textArr = [], origValues = null, unit, hue = 260, sat = 80, size = "200px", test = 0 }) => {
 
   let percetageArray = []
 
@@ -79,7 +79,7 @@ export const PieChart = ({ valuesArr = [], colorsArr = [], textArr = [], origVal
     const total = valuesArr.reduce((acc, cur) => acc + cur, 0)
     let percentageAcc = 0
     const chartValues = valuesArr.map((value, index) => {
-      const percentage = Math.round((value / total) * 100)
+      const percentage = Math.round((value / total) * 1000) / 10
       percentageAcc += percentage
       percetageArray.push(percentage)
       return `${colorsArr[index]} 0deg ${percentageAcc}%`
@@ -90,7 +90,7 @@ export const PieChart = ({ valuesArr = [], colorsArr = [], textArr = [], origVal
   return (
     <div>
       <PieChartStyle size={size} perc={getChartValues()} />
-      <Categories colorsArr={colorsArr} percetages={percetageArray} texts={textArr} origValues={origValues} unit={unit} />
+      <Categories colorsArr={colorsArr} percetages={percetageArray} texts={textArr} values={origValues || valuesArr} unit={unit} />
     </div>
   )
 }
