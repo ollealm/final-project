@@ -5,6 +5,7 @@ import { useParams, useHistory, Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 
 import { PieChart } from "../lib/PieChart"
+import { EnergyRatio } from "../components/charts/EnergyRatio"
 import { LoadingIndicator } from '../lib/LoadingIndicator';
 
 import { items as itemsReducer } from "../reducers/items"
@@ -196,11 +197,14 @@ export const Item = ({ itemProps }) => {
           Save
         </button>
         <Wrapper>
-          <PieChart valuesArr={gramValues} textArr={gramNames} />
+          <EnergyRatio {...item.nutrients} />
+          {/* <MacroComponents {...nutrients} /> */}
+
+          {/* <PieChart valuesArr={gramValues} textArr={gramNames} />
           <PieChart valuesArr={macroValues} textArr={macroNames} />
           <PieChart valuesArr={fatValues} textArr={fatNames} />
           <PieChart valuesArr={omegaValues} textArr={omegaNames} />
-          <PieChart valuesArr={ratioValues} textArr={ratioNames} />
+          <PieChart valuesArr={ratioValues} textArr={ratioNames} /> */}
         </Wrapper>
         <NutrientTable>
           <tbody>

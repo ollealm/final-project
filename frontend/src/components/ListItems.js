@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { ui } from "../reducers/ui"
 import { PieChart } from "../lib/PieChart"
+import { ItemsCard } from "./ItemsCard"
 
 const ItemsWrapper = styled.div`
   display: flex;
@@ -53,17 +54,10 @@ export const ListItems = () => {
           // items card
           // creat <energy ratio component> put in item card. conditional prop for categories
           // chart and catagories inside energy ratio.
-          const { Fett, Prot, Kolh, Mono_disack } = item.nutrients //macro
-          const values = [Fett.Varde * 2.25, Prot.Varde, (Kolh.Varde - Mono_disack.Varde), Mono_disack.Varde]
-          const names = [Fett.Namn, Prot.Namn, `${Kolh.Namn} (excl.\u{00A0}socker)`, Mono_disack.Namn]
-          // const colors = []
           return (
             <div key={item._id} >
               <Link to={`/items/${item.number}`}>
-                <h3>{item.number} {item.name}</h3>
-                <p>{item.group}</p>
-                <PieChart valuesArr={values} textArr={names} />
-                {/* Catagories props = orig.values, precentages, unit, names*/}
+                <ItemsCard {...item} />
               </Link>
             </div>
           )
