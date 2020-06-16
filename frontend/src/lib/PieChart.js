@@ -1,5 +1,7 @@
 import React from 'react'
+import { Categories } from "./Categories"
 import styled from 'styled-components';
+
 
 
 //conic-gradient not widly supported, ie firefox, yet
@@ -55,60 +57,40 @@ const PieChartStyle = styled.div`
   }
 `;
 
-const Catergory = styled.div`
-  margin: 5px 0 0 65px;
-  width: 150px;
-  &::before {
-    content: "";
-    background-color: ${props => props.color};
-    position: absolute;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    margin-left: -25px;
-  }
-`
-
-// move to parent
-// multipliers ie fat
-// sub-values ie sugar  
-
-
 
 //Change to object with, value, color, text instead o arrays?
-export const PieChart = ({ valuesArr = [], colorsArr = [], textArr = [], hue = 260, sat = 80, size = "200px", test = 0 }) => {
-  // console.log(valuesArr)
+export const PieChart = ({ valuesArr = [], colorsArr = [], textArr = [], origValues, unit, hue = 260, sat = 80, size = "200px", test = 0 }) => {
+
+  let percetageArray = []
+
   //For testing purpose 
-  // textArr = ["Fett", "Protein", "Socker"]
   for (let index = 0; index < test; index++) {
     valuesArr.push(index + 10)
   }
 
+
   if (colorsArr.length === 0) {
-    // valuesArr.forEach((value, index) => {
-    //   colorsArr.push(`hsl(${index * (360 / valuesArr.length)}, ${sat}%, 50%)`)
-    // })
     valuesArr.forEach((value, index) => {
       colorsArr.push(`hsl(${hue - (index * 50)}, ${sat}%, ${(((index + 0.5) * (100 / valuesArr.length)))}%)`)
     })
   }
 
-  const getPercentage = () => {
+  const getChartValues = () => {
     const total = valuesArr.reduce((acc, cur) => acc + cur, 0)
     let percentageAcc = 0
-    const percentageArr = valuesArr.map((value, index) => {
-      percentageAcc = Math.round((value / total) * 100) + percentageAcc
+    const chartValues = valuesArr.map((value, index) => {
+      const percentage = Math.round((value / total) * 100)
+      percentageAcc += percentage
+      percetageArray.push(percentage)
       return `${colorsArr[index]} 0deg ${percentageAcc}%`
     });
-    return `${[...percentageArr]}`
+    return `${[...chartValues]}`
   }
 
   return (
     <div>
-      <PieChartStyle size={size} perc={getPercentage()} />
-      {textArr.map((value, index) => (
-        <Catergory key={index} color={colorsArr[index]}>{value} {valuesArr[index]} %</Catergory>
-      ))}
+      <PieChartStyle size={size} perc={getChartValues()} />
+      <Categories colorsArr={colorsArr} percetages={percetageArray} texts={textArr} origValues={origValues} unit={unit} />
     </div>
   )
 }
