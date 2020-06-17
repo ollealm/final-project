@@ -11,10 +11,10 @@ import { FatProfile } from "../components/charts/FatProfile"
 import { OmegaRatio } from "../components/charts/OmegaRatio"
 import { LipidProfile } from "../components/charts/LipidProfile"
 import { Waste } from "../components/charts/Waste"
+import { Vitamines } from "../components/charts/Vitamines"
+import { Minerals } from "../components/charts/Minerals"
 
 import { BarChart } from "../lib/BarChart"
-
-import { NutrientTable } from "../components/charts/NutrientTable"
 
 import { items as itemsReducer } from "../reducers/items"
 import { user } from "../reducers/user"
@@ -124,7 +124,6 @@ export const Item = ({ itemProps }) => {
   // Show price
   // Show name
   // Add name and price to save
-
   return (
     <div>
       <LoadingIndicator />
@@ -135,6 +134,7 @@ export const Item = ({ itemProps }) => {
 
       {item && <ItemWrapper>
         {console.log("loading item in return")}
+        {console.log(item.nutrients)}
         <h2>Singel item</h2>
         <h3>{item.number} {item.name}</h3>
         <p>{item.group}</p>
@@ -144,6 +144,7 @@ export const Item = ({ itemProps }) => {
         </button>
 
         <Wrapper>
+          {/* <BarChart /> */}
           <EnergyRatio {...item.nutrients} />
           <MacroComponents {...item.nutrients} />
           <FatProfile {...item.nutrients} />
@@ -151,6 +152,8 @@ export const Item = ({ itemProps }) => {
           <LipidProfile {...item.nutrients} />
           <Waste {...item.nutrients} />
         </Wrapper>
+        <Vitamines {...item.nutrients} />
+        <Minerals {...item.nutrients} />
 
         {/*
           <Stapeldiagram>
@@ -158,10 +161,9 @@ export const Item = ({ itemProps }) => {
           <Tabell macro>?
           <Tabell vita>?
           <Tabell mine>?
-          */}
+          
 
-        <NutrientTable nutrients={item.nutrients} />
-
+*/}
       </ItemWrapper>}
     </div >
   )
