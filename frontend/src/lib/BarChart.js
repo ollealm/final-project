@@ -2,6 +2,31 @@ import React from 'react'
 import { Categories } from "./Categories"
 import styled from 'styled-components';
 
+const ChartContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  position: relative;
+  color: blue;
+  background: grey;
+  width: 10px;
+  height: ${props => props.height};
+  width: ${props => props.width};
+
+`
+
+const Bar = styled.div`
+  position: relative;
+
+  color: blue;
+  background: red;
+  width: 10px;
+  height: ${props => `${props.value}px`};
+
+`
+
+
+
 //Change to object with, value, color, text instead o arrays?
 export const BarChart = ({ valuesArr = [], colorsArr = [], textArr = [], origValues = null, unit, hue = 260, sat = 80, size = "200px", test = 5 }) => {
 
@@ -35,9 +60,12 @@ export const BarChart = ({ valuesArr = [], colorsArr = [], textArr = [], origVal
 
   return (
     <div>
-      {valuesArr.map(value => (
-        <div>{value}</div>
-      ))}
+      <ChartContainer height="200px" width="300px" margin={5}>
+
+        {valuesArr.map(value => (
+          <Bar value={value} />
+        ))}
+      </ChartContainer>
       {/* <Categories colorsArr={colorsArr} percetages={percetageArray} texts={textArr} values={origValues || valuesArr} unit={unit} /> */}
     </div>
   )
