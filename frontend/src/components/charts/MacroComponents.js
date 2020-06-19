@@ -2,7 +2,7 @@ import React from 'react'
 import { PieChart } from "../../lib/PieChart"
 
 
-export const MacroComponents = ({ Fett, Prot, Kolh, Alko, Fibe, Vatt, Aska }) => {
+export const MacroComponents = ({ Fett, Prot, Kolh, Alko, Fibe, Vatt, Aska, small }) => {
 
   // const { Fett, Prot, Kolh, Mono_disack } = item.nutrients //macro
 
@@ -25,7 +25,7 @@ export const MacroComponents = ({ Fett, Prot, Kolh, Alko, Fibe, Vatt, Aska }) =>
 
   return (
     <div>
-      <PieChart valuesArr={values} textArr={texts} unit={Fett.Enhet} />
+      <PieChart valuesArr={values} textArr={texts} unit={Fett.Enhet} small={small} />
     </div>
   )
 }
