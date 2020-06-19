@@ -2,7 +2,8 @@ import React from 'react'
 import { PieChart } from "../../lib/PieChart"
 
 
-export const EnergyRatio = ({ Fett, Prot, Alko, Kolh, Mono_disack }) => {
+export const EnergyRatio = ({ Fett, Prot, Alko, Kolh, Mono_disack, small, notext }) => {
+  console.log("small ratio", small)
 
   // const { Fett, Prot, Kolh, Mono_disack } = item.nutrients //macro
   const origValues = [Fett.Varde, Prot.Varde, Alko.Varde, Math.round((Kolh.Varde - Mono_disack.Varde) * 10) / 10, Mono_disack.Varde]
@@ -12,7 +13,7 @@ export const EnergyRatio = ({ Fett, Prot, Alko, Kolh, Mono_disack }) => {
 
   return (
     <div>
-      <PieChart valuesArr={values} textArr={texts} origValues={origValues} unit={Fett.Enhet} />
+      <PieChart valuesArr={values} textArr={texts} origValues={origValues} unit={Fett.Enhet} small={small} notext={notext} />
     </div>
   )
 }

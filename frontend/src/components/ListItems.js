@@ -11,7 +11,26 @@ const ItemsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-left: 100px;
+  width: 100%;
+  & a {
+    text-decoration: none; 
+    /* &:hover{
+      text-decoration: underline;
+    } */
+  }
+`
+const CardWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+
+`
+const CardLink = styled(Link)`
+  width: 100%;
+/* width: 45%;
+  margin-left: 5%; */
 `
 
 export const ListItems = () => {
@@ -49,19 +68,18 @@ export const ListItems = () => {
           onClick={prevPage}>
           Prev
           </button>
-
-        {items.map(item => {
-          // items card
-          // creat <energy ratio component> put in item card. conditional prop for categories
-          // chart and catagories inside energy ratio.
-          return (
-            <div key={item._id} >
-              <Link to={`/items/${item.number}`}>
+        <CardWrapper>
+          {items.map(item => {
+            // items card
+            // creat <energy ratio component> put in item card. conditional prop for categories
+            // chart and catagories inside energy ratio.
+            return (
+              <CardLink key={item._id} to={`/items/${item.number}`}>
                 <ItemsCard {...item} />
-              </Link>
-            </div>
-          )
-        })}
+              </CardLink>
+            )
+          })}
+        </CardWrapper>
       </>}
     </ItemsWrapper >
   )
