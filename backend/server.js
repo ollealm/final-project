@@ -28,12 +28,13 @@ app.use(bodyParser.json())
 if (process.env.RESET_ITEMS_DB) {
 
   console.log("Database items reset")
+  console.timeLog("Reset")
 
   const seedDatabase = async () => {
     await Item.deleteMany({})
 
     console.log("Documents deleted")
-    // console.timeLog("Reset")
+    console.timeLog("Reset")
 
     const convertArrayToObject = (array, key) => {
       const initialValue = {};
@@ -59,7 +60,7 @@ if (process.env.RESET_ITEMS_DB) {
     })
 
     console.log("Pre-processing")
-    // console.timeLog("Reset")
+    console.timeLog("Reset")
 
     await items.forEach((item, index) => {
       new Item({
@@ -69,12 +70,12 @@ if (process.env.RESET_ITEMS_DB) {
         nutrients: item.Naringsvarden.Naringsvarde,
       }).save()
       if (index % 100 === 0) {
-        // console.log(`Item: ${index}`)
-        // console.timeLog("Reset")
+        console.log(`Item: ${index}`)
+        console.timeLog("Reset")
       }
     })
     console.log("Database re-seeded")
-    // console.timeEnd("Reset")
+    console.timeEnd("Reset")
 
     // userSchema.pre('save', function (next) {
     //   this.screenname = this.get('_id'); // considering _id is input by client
