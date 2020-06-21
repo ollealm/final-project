@@ -28,7 +28,7 @@ app.use(bodyParser.json())
 if (process.env.RESET_ITEMS_DB) {
 
   console.log("Database items reset")
-  console.timeLog("Reset")
+  console.time("Reset")
 
   const seedDatabase = async () => {
     await Item.deleteMany({})
