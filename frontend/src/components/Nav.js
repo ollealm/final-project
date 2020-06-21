@@ -8,9 +8,18 @@ const Navigation = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: grey;
-  color: white;
+  background: hsla(552,60%,95%,1);
+  background: hsla(552,70%,70%,1);
+  background: white;
+
+  /* border: 1px Solid grey; */
+  
+  color: black;
   padding: 0 50px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 50px;
+
 `
 
 const NavLinks = styled.ul`
@@ -22,10 +31,36 @@ const NavLinks = styled.ul`
 `
 
 const StyledLink = styled(Link)`
-  color: white;
+  position: relative;
+  padding: 0px;
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 90%;
+    height: 2px;
+    width: 0%;
+    left: 5%;
+    background-color: hsla(552,70%,70%,1);
+    transition: 0.5s ease all;
+}
+
   &:hover {
-    color: black;
+    /* color: hsla(2340,70%,70%,1);
+    color: hsla(552,70%,70%,1); */
+    text-decoration: none;
+    /* text-decoration: underline;
+    text-decoration-color: hsla(2340,70%,70%,1);
+    text-decoration-thickness: 3px; */
+    &::after {
+      width: 90%;
+      transition: 0.3s ease all;
+    }
   }
+
 `
 
 export const Nav = () => {

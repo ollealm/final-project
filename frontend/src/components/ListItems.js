@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,6 +6,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ui } from "../reducers/ui"
 import { PieChart } from "../lib/PieChart"
 import { ItemsCard } from "./ItemsCard"
+import { Button, ButtonBracket } from 'lib/Buttons';
+import { Select } from '../lib/FormElements';
+
+const Pagination = styled.div`
+  display: ;
+  
+  `
+const FlexContainer = styled.div`
+  display: flex;
+  font-size: 12px;
+`
+
 
 const ItemsWrapper = styled.div`
   display: flex;
@@ -19,6 +31,7 @@ const ItemsWrapper = styled.div`
     } */
   }
 `
+
 const CardWrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -34,6 +47,8 @@ const CardLink = styled(Link)`
 `
 
 export const ListItems = () => {
+  const [chart, setChart] = useState('')
+
   const dispatch = useDispatch();
 
   const items = useSelector(store => store.items.currentResult)
@@ -47,27 +62,36 @@ export const ListItems = () => {
     dispatch(ui.actions.setQueryPage(Math.max(pagination.page - 1, 1)))
   }
 
+  const handleChangeChart = event => {
+    setChart(event.target.value)
+  };
+
   return (
     <ItemsWrapper>
-
-      <h2>List</h2>
-
       {items.length > 0 && <>
-        <div>
-          <p>Page: {pagination.page}</p>
-          <p>Pages: {pagination.pages}</p>
-          <p>Total results: {pagination.total}</p>
-        </div>
-        <button
-          type="button"
-          onClick={nextPage}>
-          Next
-            </button>
-        <button
-          type="button"
-          onClick={prevPage}>
-          Prev
-          </button>
+        <Pagination>
+          <p>Found {pagination.total} items</p>
+          <FlexContainer>
+            <Button
+              type="button"
+              onClick={prevPage}>
+              Prev
+          </Button>
+            <Button
+              type="button"
+              onClick={nextPage}>
+              Next
+            </Button>
+            <Select onChange={handleChangeChart}>
+
+              <option key="energy" value="">Energy</option>
+              <option key="macro" value="macro">Macro</option>
+              <option key="omega" value="omega">Omega</option>
+
+            </Select>
+          </FlexContainer>
+          <p><small>Page {pagination.page} of {pagination.pages}</small></p>
+        </Pagination>
         <CardWrapper>
           {items.map(item => {
             // items card
@@ -75,7 +99,7 @@ export const ListItems = () => {
             // chart and catagories inside energy ratio.
             return (
               <CardLink key={item._id} to={`/items/${item.number}`}>
-                <ItemsCard {...item} />
+                <ItemsCard {...item} chart={chart} />
               </CardLink>
             )
           })}

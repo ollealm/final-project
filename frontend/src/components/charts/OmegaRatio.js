@@ -2,7 +2,7 @@ import React from 'react'
 import { PieChart } from "../../lib/PieChart"
 
 
-export const OmegaRatio = ({ C18_2, C20_4, C18_3, C20_5, C22_5, C22_6 }) => {
+export const OmegaRatio = ({ C18_2, C20_4, C18_3, C20_5, C22_5, C22_6, small }) => {
 
   // const { Fett, Prot, Kolh, Mono_disack } = item.nutrients //macro
 
@@ -25,7 +25,7 @@ export const OmegaRatio = ({ C18_2, C20_4, C18_3, C20_5, C22_5, C22_6 }) => {
 
   return (
     <div>
-      <PieChart valuesArr={values} textArr={texts} unit={C18_2.Enhet} />
+      <PieChart valuesArr={values} textArr={texts} unit={C18_2.Enhet} small />
     </div>
   )
 }
