@@ -26,6 +26,7 @@ app.use(bodyParser.json())
 ///// RESET DATABASE /////
 
 if (process.env.RESET_DB) {
+  /*
   console.log("Database reset")
   console.time("Reset")
 
@@ -83,6 +84,7 @@ if (process.env.RESET_DB) {
 
   }
   seedDatabase()
+  */
 }
 
 
