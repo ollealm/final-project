@@ -8,6 +8,7 @@ const CatergoriesWrapper = styled.div`
 
 const Catergory = styled.div`
   /* margin: 5px 0 0 65px; */
+  
   width: 120px;
   opacity: ${props => props.opacity};
   color: ${props => props.textColor};

@@ -2,6 +2,8 @@ import React from 'react'
 import { EnergyRatio } from "./charts/EnergyRatio"
 
 import styled from 'styled-components';
+import { MacroComponents } from './charts/MacroComponents';
+import { OmegaRatio } from './charts/OmegaRatio';
 
 const CardWrapper = styled.div`
   position: relative;
@@ -17,14 +19,7 @@ const CardWrapper = styled.div`
   color: black;  
   border-radius: 5px;
   max-width: 450px;
-  /* border: 1px Solid transparent; */
-  
-  &:hover {
-    & h2 {
-      text-decoration: underline;
-      text-decoration-color: hsla(${props => props.color}, 70%, 70%, 1);
-    }
-    &::before {
+  &::before {
       content: "";
       z-index: -1;
       background: hsla(${props => props.color}, 70%, 70%, 1);
@@ -34,9 +29,30 @@ const CardWrapper = styled.div`
       transform: translate(-50%, -50%) scale(0.98, 0.93);
       width: 100%;
       height: 100%;
-      opacity: 1;
+      opacity: 0;
       border-radius: 30%;
       filter: blur(15px);
+      transition: 0.5s ease all 0.1s;
+
+    }
+
+
+  /* border: 1px Solid transparent; */
+
+  &:hover {
+    & h2 {
+      text-decoration: underline;
+      text-decoration-color: hsla(${props => props.color}, 70%, 70%, 1);
+    }
+    /*
+    & h2::after {
+      width: 90%;
+      transition: 0.3s ease all;
+    } */
+    &::before {
+      opacity: 1;
+      transition: 0.3s ease all;
+
     }
       
   }
@@ -64,7 +80,20 @@ const CardCharts = styled.div`
   /* margin-right: -50px; */
 `
 
-export const ItemsCard = ({ name, group, nutrients }) => {
+const CardHead = styled.h2`
+  &::after {
+    content: "";
+    position: absolute;
+    top: 90%;
+    height: 2px;
+    width: 0%;
+    left: 5%;
+    background-color: hsla(${props => props.color}, 70%, 70%, 1);
+    transition: 0.5s ease all;
+  }
+`
+
+export const ItemsCard = ({ name, group, nutrients, chart }) => {
 
   // generate unique number from string
   // const hashCode = s => s.split('').reduce((a, b) => (((a << 1) - a) + b.charCodeAt(0)) | 0, 0)
@@ -76,12 +105,14 @@ export const ItemsCard = ({ name, group, nutrients }) => {
   return (
     <CardWrapper color={hashCode(group)}>
       <CardText>
-        <h2>{name}</h2>
+        <CardHead color={hashCode(group)}> {name}</CardHead>
         <p>{group}</p>
       </CardText>
       <CardCharts>
-        {/* Conditional render with dropdown */}
-        <EnergyRatio {...nutrients} small notext />
+        {chart === "macro" && <MacroComponents {...nutrients} small notext />}
+        {chart === "omega" && <OmegaRatio {...nutrients} small notext />}
+        {chart === "" && <EnergyRatio {...nutrients} small notext />}
+        {/* <EnergyRatio {...nutrients} small notext /> */}
       </CardCharts>
     </CardWrapper>
   )

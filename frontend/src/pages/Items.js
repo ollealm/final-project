@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { ListItems } from "../components/ListItems"
 import { LoadingIndicator } from '../lib/LoadingIndicator';
+import { SearchInput, Select } from '../lib/FormElements';
 
 import { items as itemsReducer } from "../reducers/items"
 import { searchItems } from '../reducers/items';
@@ -17,6 +18,11 @@ const ItemsWrapper = styled.div`
   margin: auto;
   width: 80%;
 `
+
+const SearchWrapper = styled.div`
+  display: flex;
+`
+
 
 export const Items = () => {
   const dispatch = useDispatch();
@@ -63,27 +69,29 @@ export const Items = () => {
 
   return (
     <ItemsWrapper>
-      <input
-        type="text"
-        placeholder="Search"
-        value={searchName}
-        onChange={handleChangeName}
-      />
-      <input
-        type="text"
-        placeholder="Group"
-        value={searchGroup}
-        onChange={handleChangeGroup}
-      />
-      <label>
-        <select onChange={handleChangeSort}>
+      <SearchWrapper>
+        <SearchInput
+          type="text"
+          placeholder="Search"
+          value={searchName}
+          onChange={handleChangeName}
+        />
+        <SearchInput
+          type="text"
+          placeholder="Group"
+          value={searchGroup}
+          onChange={handleChangeGroup}
+        />
+        <label>
+          <Select onChange={handleChangeSort}>
 
-          <option key="number" value="">number</option>
-          <option key="name" value="name">name</option>
-          <option key="group" value="group">group</option>
+            <option key="number" value="">Number</option>
+            <option key="name" value="name">Name</option>
+            <option key="group" value="group">Group</option>
 
-        </select>
-      </label>
+          </Select>
+        </label>
+      </SearchWrapper>
       <LoadingIndicator />
       <ListItems />
 
