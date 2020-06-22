@@ -206,7 +206,10 @@ const Item = mongoose.model("Item", {
     P: {
       Namn: String,
       Forkortning: String,
-      Varde: Number,
+      Varde: {
+        type: Number,
+        default: 0,
+      },
       Enhet: String,
     },
     I: {
@@ -221,7 +224,10 @@ const Item = mongoose.model("Item", {
     Fe: {
       Namn: String,
       Forkortning: String,
-      Varde: Number,
+      Varde: {
+        type: Number,
+        default: 0,
+      },
       Enhet: String,
     },
     Ca: {
@@ -263,13 +269,19 @@ const Item = mongoose.model("Item", {
     VitA: {
       Namn: String,
       Forkortning: String,
-      Varde: Number,
+      Varde: {
+        type: Number,
+        default: 0,
+      },
       Enhet: String,
     },
     Reti: {
       Namn: String,
       Forkortning: String,
-      Varde: Number,
+      Varde: {
+        type: Number,
+        default: 0,
+      },
       Enhet: String,
     },
     VitD: {
@@ -287,7 +299,10 @@ const Item = mongoose.model("Item", {
     b_Kar: {
       Namn: String,
       Forkortning: String,
-      Varde: Number,
+      Varde: {
+        type: Number,
+        default: 0,
+      },
       Enhet: String,
     },
     Tiam: {
@@ -323,7 +338,10 @@ const Item = mongoose.model("Item", {
     VitB12: {
       Namn: String,
       Forkortning: String,
-      Varde: Number,
+      Varde: {
+        type: Number,
+        default: 0,
+      },
       Enhet: String,
     },
     VitB6: {
@@ -341,7 +359,10 @@ const Item = mongoose.model("Item", {
     Mono_disack: {
       Namn: String,
       Forkortning: String,
-      Varde: Number,
+      Varde: {
+        type: Number,
+        default: 0,
+      },
       Enhet: String,
     },
     Fullk_tot: {
