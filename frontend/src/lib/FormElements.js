@@ -35,7 +35,7 @@ export const Select = styled.select`
   border-radius: 3px;
   margin: 0;
   padding: 10px;
-  width: 200px;
+  width: 150px;
   height: 40px;
   font-size: 16px;
   box-sizing: border-box;

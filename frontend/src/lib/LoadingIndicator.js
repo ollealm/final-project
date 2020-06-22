@@ -12,6 +12,7 @@ export const LoadingIndicator = () => {
 }
 
 const Loading = styled.div`
+  z-index: 99;
   position: fixed;
   top: 40%;
   left: 50%;

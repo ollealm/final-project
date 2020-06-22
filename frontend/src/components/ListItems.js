@@ -9,42 +9,42 @@ import { ItemsCard } from "./ItemsCard"
 import { Button, ButtonBracket } from 'lib/Buttons';
 import { Select } from '../lib/FormElements';
 
+
+
+
+const ListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+`
+
 const Pagination = styled.div`
-  display: ;
-  
-  `
+  display: ;  
+`
+
 const FlexContainer = styled.div`
   display: flex;
   font-size: 12px;
 `
 
-
-const ItemsWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
-  & a {
-    text-decoration: none; 
-    /* &:hover{
-      text-decoration: underline;
-    } */
-  }
-`
-
 const CardWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
+  justify-content: flex-start;
+  align-items: stretch;
   flex-wrap: wrap;
-
+  margin: 0 -10px;
+  & a {
+    text-decoration: none; 
+  }
 `
-const CardLink = styled(Link)`
-  width: 100%;
+// const CardLink = styled(Link)`
+// margin: 10px 10px;
+/* width: 100%; */
 /* width: 45%;
   margin-left: 5%; */
-`
+// `
 
 export const ListItems = () => {
   const [chart, setChart] = useState('')
@@ -67,7 +67,7 @@ export const ListItems = () => {
   };
 
   return (
-    <ItemsWrapper>
+    <ListWrapper>
       {items.length > 0 && <>
         <Pagination>
           <p>Found {pagination.total} items</p>
@@ -98,13 +98,13 @@ export const ListItems = () => {
             // creat <energy ratio component> put in item card. conditional prop for categories
             // chart and catagories inside energy ratio.
             return (
-              <CardLink key={item._id} to={`/items/${item.number}`}>
-                <ItemsCard {...item} chart={chart} />
-              </CardLink>
+              // <CardLink key={item._id} to={`/items/${item.number}`}>
+              <ItemsCard {...item} chart={chart} />
+              // </CardLink>
             )
           })}
         </CardWrapper>
       </>}
-    </ItemsWrapper >
+    </ListWrapper >
   )
 }
