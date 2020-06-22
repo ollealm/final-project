@@ -20,8 +20,9 @@ const ItemsWrapper = styled.div`
   width: 80%;
 `
 
-const SearchWrapper = styled.div`
+const SearchWrapper = styled.form`
   display: flex;
+  flex-direction: row;
   @media (max-width: 768px) {
     flex-direction: column;
   }
@@ -66,6 +67,7 @@ export const Items = () => {
   };
 
   const handleSearch = event => {
+    event.preventDefault()
     dispatch(searchItems(url))
     dispatch(ui.actions.setQueryPage(1)) //reset page
   };
@@ -87,7 +89,7 @@ export const Items = () => {
 
   return (
     <ItemsWrapper>
-      <SearchWrapper>
+      <SearchWrapper onSubmit={handleSearch}>
         <SearchInput
           type="text"
           placeholder="Search"
@@ -100,7 +102,6 @@ export const Items = () => {
           // value="{searchGroup}"
           onChange={handleChangeGroup}
         />
-        <Button type="button" onClick={handleSearch}>Search</Button>
         <label>
           <Select onChange={handleChangeSort}>
 
@@ -110,6 +111,7 @@ export const Items = () => {
 
           </Select>
         </label>
+        <Button type="submit">Search</Button>
       </SearchWrapper>
       {notFound && <ErrorMessage>{errorMessage}</ErrorMessage>}
       <LoadingIndicator />
