@@ -258,8 +258,9 @@ app.get('/items', async (req, res) => {
 
   console.log(req.query)
   // const nameRegex = new RegExp(`${name}`, 'i')
-  const nameRegex = new RegExp(`${name}\\b`, 'i')
-  const groupRegex = new RegExp(`\\b${group}\\b`, 'i')
+  const nameRegex = new RegExp(`${name}`, 'i')
+  const groupRegex = new RegExp(`${group}`, 'i')
+  // const groupRegex = new RegExp(`\\b${group}\\b`, 'i')
 
   console.log("1")
   console.timeLog("get")
