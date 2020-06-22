@@ -15,20 +15,29 @@ background: ${props => props.small ? 'darkred' : 'limegreen'}
 
   */
 
+const PieChartWrapper = styled.div`
+  display: flex;
+  flex-direction: ${props => props.small ? "column-reverse" : "column"};
+`
+
 const ChartWrapper = styled.div`
- display: flex;
- flex-direction: ${props => props.small ? "row" : "column"};
- justify-content: flex-start;
- align-items: flex-start;
- margin: 1em 20px;
- &:hover {
-  /* & div {
-    opacity: 0.5;
-  } */
- }
+  display: flex;
+  flex-direction: ${props => props.small ? "row" : "column"};
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin: 1em 20px;
+  &:hover {
+    /* & div {
+      opacity: 0.5;
+    } */
+  }
 `
 
 
+const ChartTitle = styled.h3`
+  text-align: center;
+  font-size: ${props => props.small ? "13px" : "17px"};
+`
 
 
 const PieChartStyle = styled.div`
@@ -38,8 +47,8 @@ const PieChartStyle = styled.div`
   background: red;
   border-radius: 50%;
   background: conic-gradient(${props => props.perc});
-  width: ${props => props.small ? "100px" : "200px"};
-  height: ${props => props.small ? "100px" : "200px"};
+  width: ${props => props.small ? "100px" : "180px"};
+  height: ${props => props.small ? "100px" : "180px"};
   transition: .2s;
 
   box-shadow: 
@@ -79,19 +88,21 @@ const PieChartStyle = styled.div`
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: ${props => props.small ? "100px" : "200px"};
-    height: ${props => props.small ? "100px" : "200px"};
+    width: ${props => props.small ? "100px" : "180px"};
+    height: ${props => props.small ? "100px" : "180px"};
     opacity: 1;
     mix-blend-mode: hard-light;
   }
   
   
   &+div {
-    transition: 0.2s;
-    opacity: 0;
+    transition: .3s;
+    visibility: ${props => props.small ? "hidden" : "visible"};
+    opacity: ${props => props.small ? "0" : "1"};
   }
   &:hover {
     &+div {
+      visibility: visible;
       opacity: 1;
     }
     
@@ -106,7 +117,7 @@ const PieChartStyle = styled.div`
 
 
 //Change to object with, value, color, text instead o arrays?
-export const PieChart = ({ valuesArr = [], colorsArr = [], textArr = [], origValues = null, unit, hue = 260, sat = 80, size = "200px", test = 0, small, notext }) => {
+export const PieChart = ({ title, valuesArr = [], colorsArr = [], textArr = [], origValues = null, unit, hue = 260, sat = 80, size = "200px", test = 0, small, notext }) => {
   let percetageArray = []
 
   //For testing purpose 
@@ -134,10 +145,13 @@ export const PieChart = ({ valuesArr = [], colorsArr = [], textArr = [], origVal
   }
 
   return (
-    <ChartWrapper small={small}>
-      <PieChartStyle size={size} perc={getChartValues()} small={small} />
-      {!notext && <Categories colorsArr={colorsArr} percetages={percetageArray} texts={textArr} values={origValues || valuesArr} unit={unit} small={small} />}
-    </ChartWrapper>
+    <PieChartWrapper small={small}>
+      <ChartTitle small={small}>{title}</ChartTitle>
+      <ChartWrapper small={small}>
+        <PieChartStyle size={size} perc={getChartValues()} small={small} />
+        {!notext && <Categories colorsArr={colorsArr} percetages={percetageArray} texts={textArr} values={origValues || valuesArr} unit={unit} small={small} />}
+      </ChartWrapper>
+    </PieChartWrapper>
   )
 }
 

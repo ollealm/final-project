@@ -9,10 +9,10 @@ export const EnergyRatio = ({ Fett, Prot, Alko, Kolh, Mono_disack, small, notext
   const values = [Fett.Varde * 2.25, Prot.Varde, Alko.Varde * 1.75, (Kolh.Varde - Mono_disack.Varde), Mono_disack.Varde]
   const texts = [Fett.Namn, Prot.Namn, Alko.Namn, `${Kolh.Namn} (exkl.\u{00A0}socker)`, "Socker"]
   // const colors = []
-
+  const title = "Energy Ratio"
   return (
     <div>
-      <PieChart valuesArr={values} textArr={texts} origValues={origValues} unit={Fett.Enhet} small={small} notext={notext} />
+      <PieChart title={title} valuesArr={values} textArr={texts} origValues={origValues} unit={Fett.Enhet} small={small} notext={notext} />
     </div>
   )
 }

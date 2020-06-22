@@ -15,6 +15,7 @@ import { Vitamines } from "../components/charts/Vitamines"
 import { Minerals } from "../components/charts/Minerals"
 
 import { BarChart } from "../lib/BarChart"
+import { ButtonBracket } from '../lib/Buttons';
 
 import { items as itemsReducer } from "../reducers/items"
 import { user } from "../reducers/user"
@@ -24,87 +25,118 @@ import { saveItem } from '../reducers/user';
 
 const ItemWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin: auto;
+  width: 80%;
 `
 
-const Wrapper = styled.div`
+const InfoWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  width: 50%;
+`
+const ItemText = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 350px;
+  box-sizing: border-box;
+  padding: 1em;
+  background: hsla(${props => props.color}, 60%, 95%, 1);
+  min-height: 150px;
+  margin-bottom: 20px;
+  & h2 {
+    margin: 0;
+  }
+  & p {
+    font-size: 12px;
+    margin: 0;
+  }
+  & span {
+    margin-right: 5px;
+  }
+`
+
+const ChartWrapper = styled.div`
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
-  
+  width: 50%;
+  min-width: 500px;
+  box-sizing: border-box;
+  padding: 1em;
+  background: hsla(${props => props.color}, 60%, 95%, 1);
+  margin-bottom: 20px;
+`
+
+const TableWrapper = styled.div`
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 1em;
+  background: hsla(${props => props.color}, 60%, 95%, 1);
+  margin-bottom: 20px;
+  width: 350px;
+`
+
+const CardButton = styled(ButtonBracket)`
+  position: relative;
+  z-index: 10;
+  margin: 10px 10px 15px 0;
 `
 
 
-
-export const Item = ({ itemProps }) => {
+export const Item = () => {
   const [item, setItem] = useState()
+  const [itemSaved, setItemSaved] = useState(false)
   const [statusCode, setStatusCode] = useState(200);
   const { itemNumber } = useParams();
   const history = useHistory();
 
   const itemsArray = useSelector(store => store.items.itemsArray)
   const savedItems = useSelector(store => store.user.savedItems)
-
-  console.log("itemsArray from store")
-  console.log(itemsArray)
-  console.log(itemsArray.length)
+  const user = useSelector(store => store.user.userData.name)
 
   const dispatch = useDispatch();
+  const hashCode = s => s.split('').reduce((a, b) => (a + b.charCodeAt(0)), 0)
 
   const saveCurrent = () => {
-    // dispatch(user.actions.saveItem(item))
-    //Thunk to save to database
     dispatch(saveItem(itemNumber))
+    setItemSaved(true)
   }
 
   if (itemsArray.length > 0 && !item) {
-    let findItem = itemsArray.find(({ number }) => number === +itemNumber)
-    // let findItem = itemsArray.find((item) => item.number === +itemNumber)
-    console.log("find in redux")
-    console.log(findItem)
-    findItem && setItem(findItem)
+    let foundItem = itemsArray.find(({ number }) => number === +itemNumber)
+    console.log("found in redux")
+    foundItem && setItem(foundItem)
   } else if (savedItems.length > 0 && !item) {
-    let findItem = savedItems.find(({ item }) => item.number === +itemNumber).item
-    console.log("find in Saved items redux")
-    console.log(findItem)
-    findItem && setItem(findItem)
+    let foundItem = savedItems.find(({ item }) => item.number === +itemNumber)
+    console.log("found in Saved items redux")
+    foundItem && setItem(foundItem.item)
+    console.log(item)
+    foundItem && setItemSaved(true)
   }
-
-
-  // if (itemsArray.length > 0) {
-  //   setItem(itemsArray.find(({ number }) => number === +itemNumber))
-  //   console.log("find")
-  //   console.log(item)
-  // } else console.log("no items in array")
-
 
   const url = `http://localhost:8090/items/${itemNumber}`;
   console.log(itemNumber)
+  console.log(user)
 
-  console.log("item before useEffect ", item)
   useEffect(() => {
-    // setLoading(true); //change to dispach
-    console.log("useEffect")
-    console.log(itemsArray.length)
     if (!item) {
       console.log("fetching")
       dispatch(ui.actions.setLoading(true))
       fetch(url)
         .then((res) => {
-          console.log("Res: ", res)
           setStatusCode(res.status) //dispach?
           return res.json();
         })
         .then(data => {
-          console.log("Data: ", data)
           setItem(data)
-          console.log("Item after set: ", item)
-          // setTimeout(() => { // timeout to always show loader
-          // setItems(data.items);
-          // setPages({ pages: data.pages, total: data.results })
-          // setLoading(false)
-          // }, 50)
           dispatch(ui.actions.setLoading(false))
         })
         .catch(error => {
@@ -119,51 +151,42 @@ export const Item = ({ itemProps }) => {
     history.push("/items")
   }
 
-  // Show if part of saved items
-  // Show what list
-  // Show price
-  // Show name
-  // Add name and price to save
   return (
     <div>
       <LoadingIndicator />
-      Item {itemNumber}
-
-      {console.log("loading component")}
-      {console.log("Item in return: ", item)}
 
       {item && <ItemWrapper>
-        {console.log("loading item in return")}
-        {console.log(item.nutrients)}
-        <h2>Singel item</h2>
-        <h3>{item.number} {item.name}</h3>
-        <p>{item.group}</p>
 
-        <button type="button" onClick={() => saveCurrent()}>
-          Save
-        </button>
+        <InfoWrapper>
+          <ItemText color={hashCode(item.group)}>
+            <div>
+              <h2>{item.name}</h2>
+              {(!itemSaved && user) &&
+                <CardButton type="button" onClick={() => saveCurrent()}>
+                  Save Item
+                </CardButton>}
+            </div>
+            <p>{item.group}</p>
+          </ItemText>
+          <TableWrapper color={hashCode(item.group)}>
+            <Vitamines {...item.nutrients} color={hashCode(item.group)} />
+          </TableWrapper>
+          <TableWrapper color={hashCode(item.group)}>
+            <Minerals {...item.nutrients} color={hashCode(item.group)} />
+          </TableWrapper>
+        </InfoWrapper>
 
-        <Wrapper>
-          {/* <BarChart /> */}
+        <ChartWrapper color={hashCode(item.group)}>
           <EnergyRatio {...item.nutrients} />
           <MacroComponents {...item.nutrients} />
+        </ChartWrapper>
+        <ChartWrapper color={hashCode(item.group)}>
           <FatProfile {...item.nutrients} />
           <OmegaRatio {...item.nutrients} />
-          <LipidProfile {...item.nutrients} />
-          <Waste {...item.nutrients} />
-        </Wrapper>
-        <Vitamines {...item.nutrients} />
-        <Minerals {...item.nutrients} />
+        </ChartWrapper>
+        {/* <LipidProfile {...item.nutrients} />
+          <Waste {...item.nutrients} /> */}
 
-        {/*
-          <Stapeldiagram>
-          <Etikett (tabell)>
-          <Tabell macro>?
-          <Tabell vita>?
-          <Tabell mine>?
-          
-
-*/}
       </ItemWrapper>}
     </div >
   )
