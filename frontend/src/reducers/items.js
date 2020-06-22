@@ -47,13 +47,11 @@ export const searchItems = (url) => {
     fetch(url)
       .then((res) => {
         //setStatusCode(res.status) //dispach        
-        return res.json();
-        /*
+        // return res.json();
         if (res.ok) {
           return res.json()
         }
-        throw 'Login failed. Check username and password'
-        */
+        throw 'No items found'
       })
       .then(data => {
         dispatch(items.actions.saveItem(data.items)) // OLD adding all results
@@ -67,7 +65,7 @@ export const searchItems = (url) => {
       })
       .catch((err) => {
         // dispatch error message. no results
-        dispatch(ui.actions.setErrorMessage({ errorMessage: err }))
+        dispatch(ui.actions.setErrorMessage(err))
         dispatch(ui.actions.setLoading(false))
         dispatch(ui.actions.setNotFound(true))
       })

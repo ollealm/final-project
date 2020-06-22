@@ -25,7 +25,10 @@ const SearchWrapper = styled.div`
   @media (max-width: 768px) {
     flex-direction: column;
   }
+`
 
+const ErrorMessage = styled.p`
+  color: red;
 `
 
 
@@ -33,13 +36,15 @@ export const Items = () => {
   const dispatch = useDispatch();
 
   const searchName = useSelector(store => store.ui.queryName)
-  const errorMessage = useSelector(store => store.ui.errorMessage)
   const searchGroup = useSelector(store => store.ui.queryGroup)
   const sort = useSelector(store => store.ui.querySort)
   const currentPage = useSelector(store => store.ui.queryPage)
   const limit = useSelector(store => store.ui.queryLimit)
 
   const currentQuery = useSelector(store => store.ui.currentQuery)
+
+  const errorMessage = useSelector(store => store.ui.errorMessage)
+  const notFound = useSelector(store => store.ui.notFound)
 
   const url = `http://localhost:8090/items?name=${searchName}&group=${searchGroup}&sort=${sort}&page=${currentPage}` //&limit=${limit}`;  
 
@@ -73,7 +78,7 @@ export const Items = () => {
 
   useEffect(() => {
     console.log("useEffect")
-    if (url !== currentQuery) { // ony fetch if query has changed
+    if (url !== currentQuery && !notFound) { // ony fetch if query has changed
       console.log("fetching")
       dispatch(searchItems(url))
     }
@@ -106,7 +111,7 @@ export const Items = () => {
           </Select>
         </label>
       </SearchWrapper>
-      {/* {errorMessage} */}
+      {notFound && <ErrorMessage>{errorMessage}</ErrorMessage>}
       <LoadingIndicator />
       <ListItems />
 
