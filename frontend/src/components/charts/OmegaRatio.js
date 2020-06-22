@@ -22,10 +22,11 @@ export const OmegaRatio = ({ C18_2, C20_4, C18_3, C20_5, C22_5, C22_6, small }) 
   // if value add to array
   // values.filter()
   // const colors = []
+  const title = "Omega Ratio"
 
   return (
     <div>
-      <PieChart valuesArr={values} textArr={texts} unit={C18_2.Enhet} small={small} />
+      <PieChart title={title} valuesArr={values} textArr={texts} unit={C18_2.Enhet} small={small} />
     </div>
   )
 }

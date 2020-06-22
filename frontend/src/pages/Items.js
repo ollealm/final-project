@@ -6,18 +6,15 @@ import { ListItems } from "../components/ListItems"
 import { LoadingIndicator } from '../lib/LoadingIndicator';
 import { SearchInput, Select } from '../lib/FormElements';
 import { Button } from '../lib/Buttons';
+import { PageWrapper } from '../lib/PageWrapper';
 
 import { items as itemsReducer } from "../reducers/items"
 import { searchItems } from '../reducers/items';
 import { ui } from "../reducers/ui"
 
-const ItemsWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  margin: auto;
-  width: 80%;
+const ItemsWrapper = styled(PageWrapper)`
+  flex-flow: row wrap;
+  justify-content: flex-start;
 `
 
 const SearchWrapper = styled.form`

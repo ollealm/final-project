@@ -22,11 +22,11 @@ export const LipidProfile = ({ C4_0_C10_0, C12_0, C14_0, C16_0, C18_0, C20_0, C1
   // const { C18_1 } = props // omega 9
   // const { C18_2, C20_4 } = props // omega 6
   // const { C18_3, C20_5, C22_5, C22_6 } = props // omega 3
-
+  const title = "Lipid Profile"
 
   return (
     <div>
-      <PieChart valuesArr={values} textArr={texts} unit={C18_2.Enhet} />
+      <PieChart title={title} valuesArr={values} textArr={texts} unit={C18_2.Enhet} />
     </div>
   )
 }

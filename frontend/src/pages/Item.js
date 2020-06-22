@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components';
 
-import { useParams, useHistory, Link } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 
 import { LoadingIndicator } from '../lib/LoadingIndicator';
@@ -14,29 +14,24 @@ import { Waste } from "../components/charts/Waste"
 import { Vitamines } from "../components/charts/Vitamines"
 import { Minerals } from "../components/charts/Minerals"
 
-import { BarChart } from "../lib/BarChart"
 import { ButtonBracket } from '../lib/Buttons';
+import { PageWrapper } from '../lib/PageWrapper';
 
-import { items as itemsReducer } from "../reducers/items"
-import { user } from "../reducers/user"
 import { ui } from "../reducers/ui"
 import { saveItem } from '../reducers/user';
 
 
-const ItemWrapper = styled.div`
-  display: flex;
+const ItemWrapper = styled(PageWrapper)`
   flex-flow: row wrap;
-  align-items: flex-start;
   justify-content: flex-start;
-  margin: auto;
-  width: 80%;
 `
 
 const InfoWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: stretch;
-  width: 50%;
+  /* width: 50%; */
+  margin-right: 1em;
 `
 const ItemText = styled.div`
   display: flex;
@@ -62,10 +57,15 @@ const ItemText = styled.div`
 
 const ChartWrapper = styled.div`
   display: flex;
-  flex-flow: row wrap;
-  justify-content: space-around;
+  flex-flow: column;
   width: 50%;
   min-width: 500px;
+`
+
+const ChartGroup = styled.div`
+  display: flex;
+  flex-flow: row;
+  justify-content: space-around;
   box-sizing: border-box;
   padding: 1em;
   background: hsla(${props => props.color}, 60%, 95%, 1);
@@ -123,8 +123,6 @@ export const Item = () => {
   }
 
   const url = `http://localhost:8090/items/${itemNumber}`;
-  console.log(itemNumber)
-  console.log(user)
 
   useEffect(() => {
     if (!item) {
@@ -176,17 +174,20 @@ export const Item = () => {
           </TableWrapper>
         </InfoWrapper>
 
-        <ChartWrapper color={hashCode(item.group)}>
-          <EnergyRatio {...item.nutrients} />
-          <MacroComponents {...item.nutrients} />
-        </ChartWrapper>
-        <ChartWrapper color={hashCode(item.group)}>
-          <FatProfile {...item.nutrients} />
-          <OmegaRatio {...item.nutrients} />
-        </ChartWrapper>
-        {/* <LipidProfile {...item.nutrients} />
-          <Waste {...item.nutrients} /> */}
+        <ChartWrapper>
 
+          <ChartGroup color={hashCode(item.group)}>
+            <EnergyRatio {...item.nutrients} />
+            <MacroComponents {...item.nutrients} />
+          </ChartGroup>
+
+          <ChartGroup color={hashCode(item.group)}>
+            <FatProfile {...item.nutrients} />
+            <OmegaRatio {...item.nutrients} />
+          </ChartGroup>
+          {/* <LipidProfile {...item.nutrients} />
+          <Waste {...item.nutrients} /> */}
+        </ChartWrapper>
       </ItemWrapper>}
     </div >
   )
