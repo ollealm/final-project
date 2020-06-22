@@ -249,7 +249,7 @@ app.get('/nutrients', async (req, res) => {
 // ITEMS
 app.get('/items', async (req, res) => {
   const { name, group, sort, nutrient } = req.query
-  let { page = 1, limit = 20 } = req.query
+  let { page = 1, limit = 24 } = req.query
   page = Math.max(page, 1)
   limit = Math.max(limit, 1)
 
