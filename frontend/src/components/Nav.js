@@ -13,14 +13,11 @@ const Navigation = styled.nav`
   background: hsla(552,60%,95%,1);
   background: hsla(552,70%,70%,1);
   background: white;
-
-  /* border: 1px Solid grey; */
   
   color: black;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 50px;
-
 `
 
 const NavLinks = styled.ul`
@@ -47,15 +44,10 @@ const StyledLink = styled(Link)`
     left: 5%;
     background-color: hsla(552,70%,70%,1);
     transition: 0.5s ease all;
-}
+  }
 
   &:hover {
-    /* color: hsla(2340,70%,70%,1);
-    color: hsla(552,70%,70%,1); */
     text-decoration: none;
-    /* text-decoration: underline;
-    text-decoration-color: hsla(2340,70%,70%,1);
-    text-decoration-thickness: 3px; */
     &::after {
       width: 90%;
       transition: 0.3s ease all;
@@ -64,7 +56,6 @@ const StyledLink = styled(Link)`
   @media (max-width: 768px) {
     display: none;
   }
-
 `
 
 export const Nav = () => {

@@ -7,11 +7,12 @@ export const Minerals = ({ Ca, Fe, I, K, Mg, Na, P, Se, Zn, color }) => {
   const nutrients = [Ca, Fe, I, K, Mg, Na, P, Se, Zn]
   const RDI = [800, 14, 150, 2000, 375, "-", 700, 55, 10]
 
+  const title = "Minerals"
 
 
   return (
     <div>
-      <NutrientTable nutrients={nutrients} RDI={RDI} color={color} />
+      <NutrientTable title={title} nutrients={nutrients} RDI={RDI} color={color} />
     </div>
   )
 }

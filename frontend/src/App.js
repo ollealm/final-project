@@ -9,6 +9,7 @@ import { About } from "./pages/About"
 import { Item } from "./pages/Item"
 
 import { Nav } from "./components/Nav"
+import { Footer } from "./components/Footer"
 import { ScrollToTop } from "./lib/ScrollToTop"
 
 import { user } from "./reducers/user"
@@ -51,6 +52,7 @@ export const App = () => {
             <User />
           </Route>
         </Switch>
+        <Footer />
       </BrowserRouter>
     </Provider>
   )

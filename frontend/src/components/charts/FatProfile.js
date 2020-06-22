@@ -22,10 +22,11 @@ export const FatProfile = ({ Mfet, Mone, Pole }) => {
   // if value add to array
   // values.filter()
   // const colors = []
+  const title = "Fat Profile"
 
   return (
     <div>
-      <PieChart valuesArr={values} textArr={texts} unit={Mfet.Enhet} />
+      <PieChart title={title} valuesArr={values} textArr={texts} unit={Mfet.Enhet} />
     </div>
   )
 }

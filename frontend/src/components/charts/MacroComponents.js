@@ -22,10 +22,11 @@ export const MacroComponents = ({ Fett, Prot, Kolh, Alko, Fibe, Vatt, Aska, smal
   // if value add to array
   // values.filter()
   // const colors = []
+  const title = "Macro Composition"
 
   return (
     <div>
-      <PieChart valuesArr={values} textArr={texts} unit={Fett.Enhet} small={small} />
+      <PieChart title={title} valuesArr={values} textArr={texts} unit={Fett.Enhet} small={small} />
     </div>
   )
 }
