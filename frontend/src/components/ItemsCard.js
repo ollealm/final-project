@@ -97,7 +97,7 @@ const CardCharts = styled.div`
 
 const CardButton = styled(ButtonBracket)`
   position: relative;
-  z-index: 10;
+  z-index: 1;
   margin: 10px 10px 15px 0;
 `
 
@@ -127,7 +127,7 @@ export const ItemsCard = ({ id, number, name, group, nutrients, index, chart, pr
       <CardCharts>
         {chart === "macro" && <MacroComponents {...nutrients} small notext />}
         {chart === "omega" && <OmegaRatio {...nutrients} small notext />}
-        {chart === "" && <EnergyRatio {...nutrients} small notext />}
+        {chart === "" && <EnergyRatio {...nutrients} small />}
         {/* <EnergyRatio {...nutrients} small notext /> */}
       </CardCharts>
 

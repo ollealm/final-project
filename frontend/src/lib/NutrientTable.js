@@ -2,16 +2,19 @@ import React from 'react'
 import styled from 'styled-components';
 
 const Table = styled.table`
-  margin: 100px;
+  /* margin: 10px; */
+  width: 300px;
+  margin-bottom: 20px;
 `
 
 const TableRow = styled.tr`
   /* color: ${props => `hsl(${props.color} 100% 50%)`}; */
   /* color: ${props => `hsl(${props.color} 50% 20%)`}; */
+  /* font-weight: ${props => props.weight}; */
   color: ${props => props.color};
-  font-weight: bold;
+  font-size: 14px;
   &:nth-child(even) {
-  /* background-color: #eee */
+  background-color: rgba(255, 255, 255, .6)
 }
 `
 
@@ -26,10 +29,14 @@ const TableHead = styled.th`
 const TableCell = styled.td`
   width: fit-content;
   /* min-width: 50px; */
-  padding: 5px 0 5px 25px;
+  padding: 7px 0 5px 7px;
   text-align: right;
+  font-weight: ${props => props.weight};
+  color: ${props => props.color};
+
   &:nth-child(1) {
-  padding: 5px 25px 5px 0;
+  padding-left: 5px;
+  padding-right: 5px;
   text-align: left;
 }
 `
@@ -37,20 +44,25 @@ const TableCell = styled.td`
 const pickColor = (value, colors) => {
   if (value > 80) return colors[4]
   if (value > 40) return colors[3]
-  if (value > 20) return colors[2]
-  if (value > 10) return colors[1]
+  if (value > 10) return colors[2]
+  if (value > 0) return colors[1]
   return colors[0]
 }
 
-export const NutrientTable = ({ nutrients, RDI = [], colorsArr = [] }) => {
+const pickWeight = (value) => {
+  if (value > 10) return "bold"
+  return "normal"
+}
+
+export const NutrientTable = ({ nutrients, RDI = [], color }) => {
   // colorArr = ["black", "NAVY", "DARKBLUE", "MEDIUMBLUE", "BLUE"]
   // colorArr = [0, 20, 40, 60, 80]
-  colorsArr = [
-    `hsl(260, 80%, 0%)`,
-    `hsl(260, 80%, 20%)`,
-    `hsl(210, 80%, 30%)`,
-    `hsl(160, 80%, 40%)`,
-    `hsl(110, 80%, 50%)`,
+  const colorsArr = [
+    `hsl(${color}, 0%, 60%)`,
+    `hsl(${color}, 60%, 0%)`,
+    `hsl(${color}, 70%, 30%)`,
+    `hsl(${color}, 80%, 40%)`,
+    `hsl(${color}, 90%, 50%)`,
   ]
 
   return (
@@ -68,11 +80,11 @@ export const NutrientTable = ({ nutrients, RDI = [], colorsArr = [] }) => {
             const PercRDI = Math.round((nutrient.Varde / RDI[index]) * 1000) / 10
             return (
               <TableRow key={nutrient.Namn} color={pickColor(PercRDI, colorsArr)} >
-                <TableCell>{nutrient.Namn}</TableCell>
+                <TableCell color={pickColor(PercRDI, colorsArr)} weight={pickWeight(PercRDI)}>{nutrient.Namn}</TableCell>
                 <TableCell>{nutrient.Varde}</TableCell>
                 <TableCell>{nutrient.Enhet}</TableCell>
                 <TableCell>{RDI[index]}</TableCell>
-                <TableCell>{PercRDI}&nbsp;%</TableCell>
+                {!isNaN(PercRDI) && <TableCell color={pickColor(PercRDI, colorsArr)} weight={pickWeight(PercRDI)}>{PercRDI}&nbsp;%</TableCell>}
               </TableRow>
             )
           })
