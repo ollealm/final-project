@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 
 const Navigation = styled.nav`
   height: 50px;
+  width: 80%;
+  margin: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,9 +17,8 @@ const Navigation = styled.nav`
   /* border: 1px Solid grey; */
   
   color: black;
-  padding: 0 50px;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   margin-bottom: 50px;
 
 `
@@ -60,6 +61,9 @@ const StyledLink = styled(Link)`
       transition: 0.3s ease all;
     }
   }
+  @media (max-width: 768px) {
+    display: none;
+  }
 
 `
 
@@ -68,7 +72,7 @@ export const Nav = () => {
 
   return (
     <Navigation>
-      <h1>Title</h1>
+      <h1>Nutrients</h1>
       <NavLinks>
         <StyledLink to="/about">
           <li>About</li>

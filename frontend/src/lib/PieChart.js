@@ -33,6 +33,7 @@ const ChartWrapper = styled.div`
 
 const PieChartStyle = styled.div`
   position: relative;
+  z-index: 10;
   color: blue;
   background: red;
   border-radius: 50%;
@@ -106,7 +107,6 @@ const PieChartStyle = styled.div`
 
 //Change to object with, value, color, text instead o arrays?
 export const PieChart = ({ valuesArr = [], colorsArr = [], textArr = [], origValues = null, unit, hue = 260, sat = 80, size = "200px", test = 0, small, notext }) => {
-  console.log("small pie", small)
   let percetageArray = []
 
   //For testing purpose 

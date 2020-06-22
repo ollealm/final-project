@@ -1,10 +1,39 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
+import styled from 'styled-components';
+
+import { ItemsCard } from "./ItemsCard"
+import { Select } from '../lib/FormElements';
+import { ButtonBracket } from '../lib/Buttons';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getSavedItems, modifyItem, logout } from '../reducers/user';
 
+
+const ProfileWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+`
+
+const CardWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex-wrap: wrap;
+  margin: 0 -10px;
+  & a {
+    text-decoration: none; 
+  }
+`
+// const CardLink = styled(Link)`
+//   margin: 10px 10px;
+// `
+
 export const Profile = ({ URL }) => {
+  const [chart, setChart] = useState('')
   const dispatch = useDispatch()
 
   const userData = useSelector((store) => store.user.userData);
@@ -14,27 +43,32 @@ export const Profile = ({ URL }) => {
     dispatch(getSavedItems(URL))
   }, [])
 
+  const handleChangeChart = event => {
+    setChart(event.target.value)
+  };
+
   //selector that dispatch different lists?
   //or just conditional rendering
   // {errorMessage && <h4>Error Message : {`${errorMessage}`}</h4>}
   // {userData &&
   return (
-    <div>
-
+    <ProfileWrapper>
       <div><p>User: {`${userData.name} ${userData.email}`}</p>
-        {savedItems.map((item, index) => (
-          <div div key={item._id} >
-            <Link to={`/items/${item.itemNumber}`}>
-              <h3>{item.itemNumber} {item.item.name} Price: {item.price}</h3>
-            </Link>
-            <button type="button" onClick={() => dispatch(modifyItem(item._id, index, "DELETE"))}>
-              Remove
-            </button>
-            <button type="button" onClick={() => dispatch(modifyItem(item._id, index, "PUT", 10))}>
-              Add price to item
-            </button>
-          </div>
-        ))}
+        <Select onChange={handleChangeChart}>
+
+          <option key="energy" value="">Energy</option>
+          <option key="macro" value="macro">Macro</option>
+          <option key="omega" value="omega">Omega</option>
+
+        </Select>
+        <CardWrapper>
+          {savedItems.map((item, index) => (
+            // <CardLink key={item._id} to={`/items/${item.item.number}`}>
+            <ItemsCard {...item.item} id={item._id} index={index} chart={chart} price={item.price} profile />
+            // </CardLink>
+          ))}
+        </CardWrapper>
+
       </div>
 
       <input
@@ -43,6 +77,6 @@ export const Profile = ({ URL }) => {
         value="Logout"
       />
 
-    </div>
+    </ProfileWrapper>
   )
 }

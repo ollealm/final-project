@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ListItems } from "../components/ListItems"
 import { LoadingIndicator } from '../lib/LoadingIndicator';
 import { SearchInput, Select } from '../lib/FormElements';
+import { Button } from '../lib/Buttons';
 
 import { items as itemsReducer } from "../reducers/items"
 import { searchItems } from '../reducers/items';
@@ -21,6 +22,10 @@ const ItemsWrapper = styled.div`
 
 const SearchWrapper = styled.div`
   display: flex;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+
 `
 
 
@@ -28,6 +33,7 @@ export const Items = () => {
   const dispatch = useDispatch();
 
   const searchName = useSelector(store => store.ui.queryName)
+  const errorMessage = useSelector(store => store.ui.errorMessage)
   const searchGroup = useSelector(store => store.ui.queryGroup)
   const sort = useSelector(store => store.ui.querySort)
   const currentPage = useSelector(store => store.ui.queryPage)
@@ -46,11 +52,16 @@ export const Items = () => {
 
   const handleChangeName = event => {
     dispatch(ui.actions.setQueryName(event.target.value))
-    dispatch(ui.actions.setQueryPage(1)) //reset page
+    // dispatch(ui.actions.setQueryPage(1)) //reset page
   };
 
   const handleChangeGroup = event => {
     dispatch(ui.actions.setQueryGroup(event.target.value))
+    // dispatch(ui.actions.setQueryPage(1)) //reset page
+  };
+
+  const handleSearch = event => {
+    dispatch(searchItems(url))
     dispatch(ui.actions.setQueryPage(1)) //reset page
   };
 
@@ -59,13 +70,15 @@ export const Items = () => {
     dispatch(ui.actions.setQueryPage(1)) //reset page
   };
 
+
   useEffect(() => {
     console.log("useEffect")
     if (url !== currentQuery) { // ony fetch if query has changed
       console.log("fetching")
       dispatch(searchItems(url))
     }
-  }, [url]);
+  }, [sort, currentPage]);
+
 
   return (
     <ItemsWrapper>
@@ -73,25 +86,27 @@ export const Items = () => {
         <SearchInput
           type="text"
           placeholder="Search"
-          value={searchName}
+          // value="{searchName}"
           onChange={handleChangeName}
         />
         <SearchInput
           type="text"
           placeholder="Group"
-          value={searchGroup}
+          // value="{searchGroup}"
           onChange={handleChangeGroup}
         />
+        <Button type="button" onClick={handleSearch}>Search</Button>
         <label>
           <Select onChange={handleChangeSort}>
 
-            <option key="number" value="">Number</option>
+            <option key="number" value="">Order</option>
             <option key="name" value="name">Name</option>
             <option key="group" value="group">Group</option>
 
           </Select>
         </label>
       </SearchWrapper>
+      {/* {errorMessage} */}
       <LoadingIndicator />
       <ListItems />
 

@@ -63,11 +63,13 @@ export const searchItems = (url) => {
         // console.log("dispatching items")
         dispatch(items.actions.setCurrentPagination({ page: data.page, pages: data.pages, total: data.results }))
         dispatch(ui.actions.setLoading(false))
+        dispatch(ui.actions.setNotFound(false))
       })
       .catch((err) => {
         // dispatch error message. no results
         dispatch(ui.actions.setErrorMessage({ errorMessage: err }))
         dispatch(ui.actions.setLoading(false))
+        dispatch(ui.actions.setNotFound(true))
       })
   }
 }

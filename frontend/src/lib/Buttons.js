@@ -31,7 +31,7 @@ export const ButtonBracket = styled.button`
   cursor: pointer;
   margin-left: 5px;
   margin-top: 3px;
-  color: #bbb;
+  color: rgba(0, 0, 0, 0.2);
   background: none;
   padding: 0;
   border: none;

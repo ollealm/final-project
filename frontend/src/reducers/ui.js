@@ -4,7 +4,7 @@ export const ui = createSlice({
   name: 'ui',
   initialState: {
     isLoading: false,
-    NotFound: false,
+    notFound: false,
     // LoginFailed: ,
     errorMessage: "",
     currentQuery: "",
@@ -19,7 +19,7 @@ export const ui = createSlice({
       state.isLoading = action.payload
     },
     setNotFound: (state, action) => {
-      state.NotFound = action.payload
+      state.notFound = action.payload
     },
     setErrorMessage: (state, action) => {
       state.errorMessage = action.payload
@@ -41,9 +41,6 @@ export const ui = createSlice({
     },
     setQueryLimit: (state, action) => {
       state.queryLimit = action.payload
-    },
-    setNotFound: (state, action) => {
-      state.isNotFound = action.payload
     },
   }
 })
