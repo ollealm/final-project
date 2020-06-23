@@ -1,7 +1,10 @@
 import React from 'react'
 import { BrowserRouter, Switch, Route } from "react-router-dom"
 import { Provider } from "react-redux"
-import { configureStore, combineReducers } from "@reduxjs/toolkit"
+// import { configureStore, combineReducers } from "@reduxjs/toolkit"
+import { createStore, combineReducers } from "@reduxjs/toolkit"
+import thunk from 'redux-thunk'
+import { applyMiddleware, compose } from '@reduxjs/toolkit'
 
 import { User } from "./pages/User"
 import { Items } from "./pages/Items"
@@ -16,6 +19,7 @@ import { user } from "./reducers/user"
 import { ui } from "./reducers/ui"
 import { items } from "./reducers/items"
 
+export const BASE_URL = 'http://localhost:8090'
 
 const reducer = combineReducers({
   user: user.reducer,
@@ -23,7 +27,38 @@ const reducer = combineReducers({
   items: items.reducer,
 })
 
-const store = configureStore({ reducer })
+// const store = configureStore({ reducer })
+
+// Persisted state
+
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+// Retrieve localstorage as initial state
+const persistedStateJSON = localStorage.getItem('nutrientsReduxState')
+let persistedState = {}
+
+if (persistedStateJSON) {
+  persistedState = JSON.parse(persistedStateJSON)
+}
+
+// Create store with initial state
+const store = createStore(
+  reducer,
+  persistedState,
+  composeEnhancer(applyMiddleware(thunk))
+)
+
+// Store the state in localstorage on Redux state change
+store.subscribe(() => {
+  // trying to only save user reducer in local storage
+  // const state = store.getState();
+  // console.log(state)
+  // localStorage.setItem('nutrientsReduxState.user.login', JSON.stringify(state.user.login))
+  localStorage.setItem('nutrientsReduxState', JSON.stringify(store.getState()))
+})
+
+
+
 
 export const App = () => {
   return (

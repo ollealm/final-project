@@ -8,6 +8,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { user, login } from '../reducers/user';
 import './loginform.css'
 
+import { BASE_URL } from '../App';
+
+
 const LoginWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -22,10 +25,6 @@ const FlexContainer = styled.div`
   width: 100%;
 `
 
-const BASE_URL = "http://localhost:8090"
-const USERS_URL = `${BASE_URL}/users`;
-const SESSION_URL = `${BASE_URL}/sessions`;
-
 export const LoginForm = () => {
   const dispatch = useDispatch();
 
@@ -39,13 +38,13 @@ export const LoginForm = () => {
 
   const handleLogin = (event) => {
     event.preventDefault();
-    dispatch(login(name, password, SESSION_URL));
+    dispatch(login(name, password));
   };
 
   const handleSignup = (event) => {
     event.preventDefault();
 
-    fetch(USERS_URL, {
+    fetch(`${BASE_URL}/users`, {
       method: "POST",
       body: JSON.stringify({ name, email, password }),
       headers: { "Content-Type": "application/json" },
@@ -56,7 +55,7 @@ export const LoginForm = () => {
         }
         return res.json();
       })
-      .then((json) => dispatch(login(name, password, SESSION_URL))) //setLoggedInUser(json)) -> run dispatch
+      .then((json) => dispatch(login(name, password))) //setLoggedInUser(json)) -> run dispatch
       .catch((err) => {
         dispatch(user.actions.setErrorMessage({ errorMessage: err }));
       });
