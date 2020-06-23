@@ -17,6 +17,7 @@ const ItemsWrapper = styled(PageWrapper)`
 `
 
 const SearchWrapper = styled.form`
+  margin-top: 0px;
   display: flex;
   flex-direction: row;
   width: 100%;

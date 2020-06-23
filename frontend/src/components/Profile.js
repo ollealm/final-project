@@ -19,12 +19,13 @@ const ProfileWrapper = styled.div`
 
 const ProfileSettings = styled.div`
   width: 100%;  
-`
+  `
 
 const FlexContainer = styled.div`
   display: flex;
   justify-content: space-between;
   font-size: 12px;
+  margin-bottom: 20px;
 `
 
 const CardWrapper = styled.div`
