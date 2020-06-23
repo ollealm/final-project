@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { BASE_URL } from '../App';
 
 const initialState = {
   login: {
@@ -57,9 +58,9 @@ export const user = createSlice({
 // Thunks
 
 //Login
-export const login = (name, password, URL) => {
+export const login = (name, password) => {
   return (dispatch) => {
-    fetch(URL, {
+    fetch(`${BASE_URL}/sessions`, {
       method: 'POST',
       body: JSON.stringify({ name, password }),
       headers: { 'Content-Type': 'application/json' },
@@ -86,10 +87,11 @@ export const login = (name, password, URL) => {
 
 
 /// Saved Items
-export const getSavedItems = (URL) => {
+export const getSavedItems = () => {
   return (dispatch, getState) => {
     const accessToken = getState().user.login.accessToken;
     const userId = getState().user.login.userId;
+    const URL = `${BASE_URL}/users`
 
     fetch(`${URL}/${userId}`, { //path to user data
       method: 'GET',
@@ -116,7 +118,7 @@ export const getSavedItems = (URL) => {
 //Add to list
 
 export const saveItem = (itemNumber, price = null) => {
-  const URL = "http://localhost:8090/users"
+  const URL = `${BASE_URL}/users`
   return (dispatch, getState) => {
     const accessToken = getState().user.login.accessToken;
     const userId = getState().user.login.userId;
@@ -152,7 +154,7 @@ export const saveItem = (itemNumber, price = null) => {
 //Change and remove
 // method "PUT" or "DELETE"
 export const modifyItem = (itemId, index, method, price = null) => {
-  const URL = "http://localhost:8090/users"
+  const URL = `${BASE_URL}/users`
   console.log("Modify", itemId, index, method, price)
   return (dispatch, getState) => {
     const accessToken = getState().user.login.accessToken;

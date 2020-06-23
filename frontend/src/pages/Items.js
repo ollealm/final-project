@@ -12,6 +12,8 @@ import { items as itemsReducer } from "../reducers/items"
 import { searchItems } from '../reducers/items';
 import { ui } from "../reducers/ui"
 
+import { BASE_URL } from '../App';
+
 const ItemsWrapper = styled(PageWrapper)`
   flex-flow: row wrap;
 `
@@ -46,7 +48,7 @@ export const Items = () => {
   const errorMessage = useSelector(store => store.ui.errorMessage)
   const notFound = useSelector(store => store.ui.notFound)
 
-  const url = `http://localhost:8090/items?name=${searchName}&group=${searchGroup}&sort=${sort}&page=${currentPage}` //&limit=${limit}`;  
+  const url = `${BASE_URL}/items?name=${searchName}&group=${searchGroup}&sort=${sort}&page=${currentPage}` //&limit=${limit}`;  
 
   // const urlQuery = `
   // &name=${searchName}

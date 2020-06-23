@@ -19,7 +19,8 @@ const ProfileWrapper = styled.div`
 
 const ProfileSettings = styled.div`
   width: 100%;  
-  `
+  text-align: right;
+`
 
 const FlexContainer = styled.div`
   display: flex;
@@ -45,7 +46,7 @@ const CardWrapper = styled.div`
 
 
 
-export const Profile = ({ URL }) => {
+export const Profile = () => {
   const [chart, setChart] = useState('')
   const dispatch = useDispatch()
 
@@ -53,7 +54,7 @@ export const Profile = ({ URL }) => {
   const savedItems = useSelector((store) => store.user.savedItems);
 
   useEffect(() => {
-    dispatch(getSavedItems(URL))
+    dispatch(getSavedItems())
   }, [])
 
   const handleChangeChart = event => {
@@ -67,6 +68,13 @@ export const Profile = ({ URL }) => {
   return (
     <ProfileWrapper>
       <ProfileSettings>
+
+        <ButtonBracket
+          type="button"
+          onClick={(e) => dispatch(logout())}>
+          Logout
+      </ButtonBracket>
+
         <FlexContainer>
           <p>{userData.name}'s saved items</p>
           <p>{userData.email}</p>
@@ -98,13 +106,6 @@ export const Profile = ({ URL }) => {
           // </CardLink>
         ))}
       </CardWrapper>
-
-
-      {/* <input
-        type="submit"
-        onClick={(e) => dispatch(logout())}
-        value="Logout"
-      /> */}
 
     </ProfileWrapper>
   )

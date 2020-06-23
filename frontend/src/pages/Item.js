@@ -20,6 +20,7 @@ import { PageWrapper } from '../lib/PageWrapper';
 import { ui } from "../reducers/ui"
 import { saveItem } from '../reducers/user';
 
+import { BASE_URL } from '../App';
 
 const ItemWrapper = styled(PageWrapper)`
   flex-flow: row wrap;
@@ -123,11 +124,14 @@ export const Item = () => {
     setItemSaved(true)
   }
 
+  // setts item 2 times, if both in Array and Saved
   if (itemsArray.length > 0 && !item) {
     let foundItem = itemsArray.find(({ number }) => number === +itemNumber)
     console.log("found in redux")
     foundItem && setItem(foundItem)
-  } else if (savedItems.length > 0 && !item) {
+  }
+  // else 
+  if (savedItems.length > 0 && !item) {
     let foundItem = savedItems.find(({ item }) => item.number === +itemNumber)
     console.log("found in Saved items redux")
     foundItem && setItem(foundItem.item)
@@ -135,7 +139,7 @@ export const Item = () => {
     foundItem && setItemSaved(true)
   }
 
-  const url = `http://localhost:8090/items/${itemNumber}`;
+  const url = `${BASE_URL}/items/${itemNumber}`;
 
   useEffect(() => {
     if (!item) {
