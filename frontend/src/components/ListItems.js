@@ -14,6 +14,7 @@ const ListWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
+  margin-top: 30px;
 `
 
 const Pagination = styled.div`
