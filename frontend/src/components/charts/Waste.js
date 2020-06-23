@@ -1,7 +1,6 @@
 import React from 'react'
 import { PieChart } from "../../lib/PieChart"
 
-
 export const Waste = ({ Avfa }) => {
 
   const values = [Avfa.Varde, 100 - Avfa.Varde]
@@ -11,7 +10,12 @@ export const Waste = ({ Avfa }) => {
 
   return (
     <div>
-      <PieChart title={title} valuesArr={values} textArr={texts} unit={Avfa.Enhet} />
+      <PieChart
+        title={title}
+        valuesArr={values}
+        textArr={texts}
+        unit={Avfa.Enhet}
+      />
     </div>
   )
 }

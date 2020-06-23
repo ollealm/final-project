@@ -19,7 +19,8 @@ import { user } from "./reducers/user"
 import { ui } from "./reducers/ui"
 import { items } from "./reducers/items"
 
-export const BASE_URL = 'http://localhost:8090'
+// export const BASE_URL = 'http://localhost:8090'
+export const BASE_URL = 'https://nutrient-search.herokuapp.com'
 
 const reducer = combineReducers({
   user: user.reducer,
@@ -30,7 +31,6 @@ const reducer = combineReducers({
 // const store = configureStore({ reducer })
 
 // Persisted state
-
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 // Retrieve localstorage as initial state
@@ -57,7 +57,8 @@ store.subscribe(() => {
   localStorage.setItem('nutrientsReduxState', JSON.stringify(store.getState()))
 })
 
-
+//clear local storage
+//localStorage.removeItem('nutrientsReduxState');
 
 
 export const App = () => {
@@ -65,7 +66,6 @@ export const App = () => {
     <Provider store={store}>
       <BrowserRouter>
         <ScrollToTop />
-
         <Nav />
         <Switch>
           <Route path="/about" exact>

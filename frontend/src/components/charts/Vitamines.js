@@ -1,9 +1,9 @@
 import React from 'react'
 import { NutrientTable } from "../../lib/NutrientTable"
 
-
-export const Vitamines = ({ Ener, b_Kar, Reti, VitA, Tiam, Ribo, Niac, Niek, VitB6, Folat, VitB12, VitC, VitD, VitE,
-  color }) => {
+export const Vitamines = ({
+  Ener, b_Kar, Reti, VitA, Tiam, Ribo, Niac, Niek, VitB6, Folat, VitB12, VitC, VitD, VitE, color
+}) => {
 
   const nutrients = [b_Kar, Reti, VitA, Tiam, Ribo, Niac, Niek, VitB6, Folat, VitB12, VitC, VitD, VitE]
   const kcal = Ener.Varde
@@ -13,13 +13,13 @@ export const Vitamines = ({ Ener, b_Kar, Reti, VitA, Tiam, Ribo, Niac, Niek, Vit
 
   return (
     <div>
-      <NutrientTable title={title} kcal={kcal} nutrients={nutrients} RDI={RDI} color={color} />
+      <NutrientTable
+        title={title}
+        kcal={kcal}
+        nutrients={nutrients}
+        RDI={RDI}
+        color={color}
+      />
     </div>
   )
 }
-
-/*
-b_Kar, Reti, VitA, Tiam, Ribo, Niac, Niek, Ribo, VitB6, Folat, VitB12, VitC, VitD, VitE
-
-Ca, Fe, I, K, Mg, Na, P, Se, Zn
-*/

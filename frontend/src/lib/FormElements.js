@@ -30,7 +30,6 @@ export const SearchInput = styled.input`
 `;
 
 export const Select = styled.select`
-  /* display: block; */
   border: 1px solid #ccc;
   border-radius: 3px;
   margin: 0;

@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
-import { Link } from "react-router-dom";
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ui } from "../reducers/ui"
-import { PieChart } from "../lib/PieChart"
 import { ItemsCard } from "./ItemsCard"
-import { Button, ButtonBracket } from 'lib/Buttons';
+import { Button } from 'lib/Buttons';
 import { Select } from '../lib/FormElements';
 
 const ListWrapper = styled.div`
@@ -38,12 +36,6 @@ const CardWrapper = styled.div`
     text-decoration: none; 
   }
 `
-// const CardLink = styled(Link)`
-// margin: 10px 10px;
-/* width: 100%; */
-/* width: 45%;
-  margin-left: 5%; */
-// `
 
 export const ListItems = () => {
   const [chart, setChart] = useState('')
@@ -69,64 +61,62 @@ export const ListItems = () => {
 
   return (
     <ListWrapper>
-      {items.length > 0 && <>
-        <Pagination>
-          <FlexContainer>
-            <Button
-              type="button"
-              onClick={prevPage}>
-              Prev
+      {items.length > 0 &&
+        <>
+          <Pagination>
+            <FlexContainer>
+              <Button
+                type="button"
+                onClick={prevPage}>
+                Prev
             </Button>
-            <Select onChange={handleChangeChart}>
 
-              <option key="energy" value="">Energy Ratio</option>
-              <option key="macro" value="macro">Macro</option>
-              <option key="omega" value="omega">Omega Ratio</option>
+              <Select onChange={handleChangeChart}>
+                <option key="energy" value="">Energy Ratio</option>
+                <option key="macro" value="macro">Macro</option>
+                <option key="omega" value="omega">Omega Ratio</option>
+              </Select>
 
-            </Select>
-            <Button
-              type="button"
-              onClick={nextPage}>
-              Next
+              <Button
+                type="button"
+                onClick={nextPage}>
+                Next
             </Button>
-          </FlexContainer>
-          <FlexContainer>
-            <p>{pagination.total} items</p>
-            <p>Page {pagination.page} of {pagination.pages}</p>
-          </FlexContainer>
-        </Pagination>
-        <CardWrapper>
-          {items.map(item => {
-            // items card
-            // creat <energy ratio component> put in item card. conditional prop for categories
-            // chart and catagories inside energy ratio.
-            return (
-              // <CardLink key={item._id} to={`/items/${item.number}`}>
+            </FlexContainer>
+
+            <FlexContainer>
+              <p>{pagination.total} items</p>
+              <p>Page {pagination.page} of {pagination.pages}</p>
+            </FlexContainer>
+          </Pagination>
+
+          <CardWrapper>
+            {items.map(item => (
               <ItemsCard {...item} chart={chart} />
-              // </CardLink>
-            )
-          })}
-        </CardWrapper>
-        <Pagination>
-          <FlexContainer>
-            <p>{pagination.total} items</p>
-            <p><small>Page {pagination.page} of {pagination.pages}</small></p>
-          </FlexContainer>
-          <FlexContainer>
-            <Button
-              type="button"
-              onClick={prevPage}>
-              Prev
-            </Button>
-            <Button
-              type="button"
-              onClick={nextPage}>
-              Next
-            </Button>
-          </FlexContainer>
-        </Pagination>
+            ))}
+          </CardWrapper>
 
-      </>}
+          <Pagination>
+            <FlexContainer>
+              <p>{pagination.total} items</p>
+              <p><small>Page {pagination.page} of {pagination.pages}</small></p>
+            </FlexContainer>
+            <FlexContainer>
+              <Button
+                type="button"
+                onClick={prevPage}>
+                Prev
+            </Button>
+              <Button
+                type="button"
+                onClick={nextPage}>
+                Next
+            </Button>
+            </FlexContainer>
+          </Pagination>
+
+        </>
+      }
     </ListWrapper >
   )
 }

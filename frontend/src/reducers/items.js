@@ -17,7 +17,6 @@ export const items = createSlice({
       state.item = action.payload
     },
     saveItem: (state, action) => {
-      // state.itemsArray.push(...action.payload)
       // Only save new items to store
       action.payload.forEach(item => {
         const exists = state.itemsArray.some(element => element.number === item.number)
@@ -39,7 +38,6 @@ export const items = createSlice({
 // Thunks
 // itemSearch, query, group, nutrient
 // getItem
-
 
 export const searchItems = (url) => {
   return (dispatch) => {

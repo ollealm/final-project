@@ -1,6 +1,6 @@
 import React from 'react'
 import { EnergyRatio } from "./charts/EnergyRatio"
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from "react-router-dom";
 
 import styled from 'styled-components';
@@ -8,8 +8,7 @@ import { MacroComponents } from './charts/MacroComponents';
 import { OmegaRatio } from './charts/OmegaRatio';
 import { ButtonBracket } from '../lib/Buttons';
 
-import { getSavedItems, modifyItem, logout } from '../reducers/user';
-
+import { modifyItem } from '../reducers/user';
 
 const CardWrapper = styled.div`
   position: relative;
@@ -24,8 +23,6 @@ const CardWrapper = styled.div`
   background: hsla(${props => props.color}, 60%, 95%, 1);
   transition: 0.2s;
   color: black;  
-  /* max-width: 500px; */
-  /* min-width: 300px; */
   border-radius: 5px;
   &::before {
       content: "";
@@ -80,7 +77,7 @@ const CardText = styled.div`
   }
   & p {
     font-size: 12px;
-    margin: 0;
+    margin: 10px 0 0 0;
   }
   & span {
     margin-right: 5px;
@@ -105,14 +102,19 @@ const RemoveButton = styled(CardButton)`
   right: 0px;
 `
 
-
 export const ItemsCard = ({ id, number, name, group, nutrients, index, chart, price = null, profile }) => {
 
   const dispatch = useDispatch();
 
-  // generate unique number from string
-  // const hashCode = s => s.split('').reduce((a, b) => (((a << 1) - a) + b.charCodeAt(0)) | 0, 0)
+  // generate a unique number from string, to use as a color value
   const hashCode = s => s.split('').reduce((a, b) => (a + b.charCodeAt(0)), 0)
+
+  const handleAddPrice = () => {
+    dispatch(modifyItem(id, index, "PUT", prompt("Add a price per kg")))
+  };
+  const handleRemoveItem = () => {
+    dispatch(modifyItem(id, index, "DELETE"))
+  };
 
   return (
     <CardWrapper color={hashCode(group)}>
@@ -122,22 +124,26 @@ export const ItemsCard = ({ id, number, name, group, nutrients, index, chart, pr
           <h2>{name}</h2>
           {price && <span>{price} kr/kg</span>}
           {profile &&
-            <CardButton type="button" onClick={() => dispatch(modifyItem(id, index, "PUT", prompt("Add a price per kg")))}>
+            <CardButton
+              type="button"
+              onClick={handleAddPrice}>
               {price ? "+" : "Add price"}
             </CardButton>
           }
         </div>
         <p>{group}</p>
       </CardText>
+
       <CardCharts>
         {chart === "macro" && <MacroComponents {...nutrients} small notext />}
         {chart === "omega" && <OmegaRatio {...nutrients} small notext />}
         {chart === "" && <EnergyRatio {...nutrients} small />}
-        {/* <EnergyRatio {...nutrients} small notext /> */}
       </CardCharts>
 
       {profile &&
-        <RemoveButton type="button" onClick={() => dispatch(modifyItem(id, index, "DELETE"))}>
+        <RemoveButton
+          type="button"
+          onClick={handleRemoveItem}>
           –
         </RemoveButton>
       }
@@ -148,28 +154,6 @@ export const ItemsCard = ({ id, number, name, group, nutrients, index, chart, pr
     </CardWrapper>
   )
 }
-/*        <ButtonBracket type="button" onClick={() => dispatch(modifyItem(item._id, index, "DELETE"))}>
-          –
-            </ButtonBracket>
-        <p>{price}</p>
-        <ButtonBracket type="button" onClick={() => dispatch(modifyItem(item._id, index, "PUT", 10))}>
-          {item.price ? "+" : "Add price"}
-        </ButtonBracket> */
-
-
-/*
-Items
-ListItems
-ItemsCard
-  SpecificChartComponent - handles data
-    PieChart or other cartcomponent
-
-
-Item
-  SpecificChartComponent - handles data
-    PieChart or other cartcomponent
-  Table component
-*/
 
 
 

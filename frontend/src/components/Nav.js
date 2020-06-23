@@ -9,11 +9,7 @@ const Navigation = styled.nav`
   margin: auto;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  background: hsla(552,60%,95%,1);
-  background: hsla(552,70%,70%,1);
-  background: white;
-  
+  align-items: center;  
   color: black;
   text-transform: uppercase;
   letter-spacing: 1px;

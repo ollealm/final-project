@@ -4,7 +4,6 @@ import { Profile } from '../components/Profile'
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { LoadingIndicator } from '../lib/LoadingIndicator';
 import { PageWrapper } from '../lib/PageWrapper';
 
 const UserWrapper = styled(PageWrapper)`
@@ -17,7 +16,6 @@ export const User = () => {
   return (
     <UserWrapper>
       {accessToken ?
-        // <LoadingIndicator />
         <Profile /> :
         <LoginForm />}
     </UserWrapper>
