@@ -35,6 +35,7 @@ const InfoWrapper = styled.div`
   flex-grow: 1;
 `
 const ItemText = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -58,9 +59,20 @@ const ItemText = styled.div`
     margin-right: 5px;
   }
   `
+const Energy = styled.div`
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    & p {
+      margin: 0 0 5px 0;
+      font-size: 14px;
+    }
+  `
+
 const Text = styled.div`
   width: 200px;
 `
+
 
 const ChartWrapper = styled.div`
   display: flex;
@@ -174,6 +186,10 @@ export const Item = () => {
 
         <InfoWrapper>
           <ItemText color={hashCode(item.group)}>
+            <Energy>
+              <p>100 g gives <strong>{item.nutrients.Ener.Varde} kcal</strong></p>
+              <p>100 kcal takes <strong>{Math.round((100 / item.nutrients.Ener.Varde) * 100)} g</strong></p>
+            </Energy>
             <Text>
               <h2>{item.name}</h2>
               {(!itemSaved && user) &&
