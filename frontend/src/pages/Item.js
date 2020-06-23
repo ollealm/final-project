@@ -23,8 +23,7 @@ import { saveItem } from '../reducers/user';
 
 const ItemWrapper = styled(PageWrapper)`
   flex-flow: row wrap;
-  justify-content: flex-start;
-`
+  `
 
 const InfoWrapper = styled.div`
   display: flex;
@@ -32,27 +31,34 @@ const InfoWrapper = styled.div`
   justify-content: stretch;
   /* width: 50%; */
   margin-right: 1em;
+  flex-grow: 1;
 `
 const ItemText = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 350px;
+  flex-shrink: 1;
+  /* width: 350px; */
   box-sizing: border-box;
   padding: 1em;
   background: hsla(${props => props.color}, 60%, 95%, 1);
   min-height: 150px;
   margin-bottom: 20px;
+  border-radius: 5px;
+  width: 100%;
   & h2 {
     margin: 0;
   }
   & p {
     font-size: 12px;
-    margin: 0;
+    margin-bottom: 0;
   }
   & span {
     margin-right: 5px;
   }
+  `
+const Text = styled.div`
+  width: 200px;
 `
 
 const ChartWrapper = styled.div`
@@ -60,6 +66,7 @@ const ChartWrapper = styled.div`
   flex-flow: column;
   width: 50%;
   min-width: 500px;
+  flex-grow: 1;
 `
 
 const ChartGroup = styled.div`
@@ -70,18 +77,24 @@ const ChartGroup = styled.div`
   padding: 1em;
   background: hsla(${props => props.color}, 60%, 95%, 1);
   margin-bottom: 20px;
+  border-radius: 5px;
 `
 
 const TableWrapper = styled.div`
+`
+
+const TableContainer = styled.div`
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: column nowrap;
   justify-content: flex-start;
   width: 100%;
   box-sizing: border-box;
   padding: 1em;
   background: hsla(${props => props.color}, 60%, 95%, 1);
   margin-bottom: 20px;
-  width: 350px;
+  /* width: 350px; */
+  width: 100%;
+  border-radius: 5px;
 `
 
 const CardButton = styled(ButtonBracket)`
@@ -157,21 +170,21 @@ export const Item = () => {
 
         <InfoWrapper>
           <ItemText color={hashCode(item.group)}>
-            <div>
+            <Text>
               <h2>{item.name}</h2>
               {(!itemSaved && user) &&
                 <CardButton type="button" onClick={() => saveCurrent()}>
                   Save Item
                 </CardButton>}
-            </div>
+            </Text>
             <p>{item.group}</p>
           </ItemText>
-          <TableWrapper color={hashCode(item.group)}>
+          <TableContainer color={hashCode(item.group)}>
             <Vitamines {...item.nutrients} color={hashCode(item.group)} />
-          </TableWrapper>
-          <TableWrapper color={hashCode(item.group)}>
+          </TableContainer>
+          <TableContainer color={hashCode(item.group)}>
             <Minerals {...item.nutrients} color={hashCode(item.group)} />
-          </TableWrapper>
+          </TableContainer>
         </InfoWrapper>
 
         <ChartWrapper>

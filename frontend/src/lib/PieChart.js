@@ -44,7 +44,7 @@ const PieChartStyle = styled.div`
   position: relative;
   z-index: 10;
   color: blue;
-  background: red;
+  background: rgba(255,255,255,.5);
   border-radius: 50%;
   background: conic-gradient(${props => props.perc});
   width: ${props => props.small ? "100px" : "180px"};

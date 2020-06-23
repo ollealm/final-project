@@ -7,5 +7,5 @@ export const PageWrapper = styled.section`
   justify-content: flex-start;
   margin: auto;
   width: 80%;
-  min-height: calc(100vh - 200px);
+  min-height: calc(100vh - 250px);
 `

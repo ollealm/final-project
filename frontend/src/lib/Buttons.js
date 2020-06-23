@@ -4,7 +4,8 @@ export const Button = styled.button`
   cursor: pointer;
   border: 1px solid #ccc;
   border-radius: 3px;
-  margin: 0 10px 0 0;
+  /* margin: 0 10px 0 0; */
+  margin: 0;
   font-size: 14px;
   color: #000;
   background: white;

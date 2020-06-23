@@ -3,8 +3,13 @@ import styled from 'styled-components';
 
 const Table = styled.table`
   /* margin: 10px; */
-  width: 300px;
+  width: 100%;
   margin-bottom: 20px;
+`
+const TableTitle = styled.h3`
+  text-align: center;
+  font-size: 17px;
+  margin-top: 0;
 `
 
 const TableRow = styled.tr`
@@ -54,7 +59,7 @@ const pickWeight = (value) => {
   return "normal"
 }
 
-export const NutrientTable = ({ nutrients, RDI = [], color }) => {
+export const NutrientTable = ({ title, nutrients, RDI = [], color }) => {
   // colorArr = ["black", "NAVY", "DARKBLUE", "MEDIUMBLUE", "BLUE"]
   // colorArr = [0, 20, 40, 60, 80]
   const colorsArr = [
@@ -66,30 +71,33 @@ export const NutrientTable = ({ nutrients, RDI = [], color }) => {
   ]
 
   return (
-    <Table>
-      <tbody>
-        <TableRow>
-          <TableHead>Nutrient</TableHead>
-          <TableHead>100g</TableHead>
-          <TableHead>Unit</TableHead>
-          <TableHead>RDI</TableHead>
-          <TableHead>%</TableHead>
-        </TableRow>
-        {
-          Object.values(nutrients).map((nutrient, index) => {
-            const PercRDI = Math.round((nutrient.Varde / RDI[index]) * 1000) / 10
-            return (
-              <TableRow key={nutrient.Namn} color={pickColor(PercRDI, colorsArr)} >
-                <TableCell color={pickColor(PercRDI, colorsArr)} weight={pickWeight(PercRDI)}>{nutrient.Namn}</TableCell>
-                <TableCell>{nutrient.Varde}</TableCell>
-                <TableCell>{nutrient.Enhet}</TableCell>
-                <TableCell>{RDI[index]}</TableCell>
-                {!isNaN(PercRDI) && <TableCell color={pickColor(PercRDI, colorsArr)} weight={pickWeight(PercRDI)}>{PercRDI}&nbsp;%</TableCell>}
-              </TableRow>
-            )
-          })
-        }
-      </tbody>
-    </Table >
+    <>
+      <TableTitle>{title}</TableTitle>
+      <Table>
+        <tbody>
+          <TableRow>
+            <TableHead>Nutrient</TableHead>
+            <TableHead>100g</TableHead>
+            <TableHead>Unit</TableHead>
+            <TableHead>RDI</TableHead>
+            <TableHead>%</TableHead>
+          </TableRow>
+          {
+            Object.values(nutrients).map((nutrient, index) => {
+              const PercRDI = Math.round((nutrient.Varde / RDI[index]) * 1000) / 10
+              return (
+                <TableRow key={nutrient.Namn} color={pickColor(PercRDI, colorsArr)} >
+                  <TableCell color={pickColor(PercRDI, colorsArr)} weight={pickWeight(PercRDI)}>{nutrient.Namn}</TableCell>
+                  <TableCell>{nutrient.Varde}</TableCell>
+                  <TableCell>{nutrient.Enhet}</TableCell>
+                  <TableCell>{RDI[index]}</TableCell>
+                  {!isNaN(PercRDI) && <TableCell color={pickColor(PercRDI, colorsArr)} weight={pickWeight(PercRDI)}>{PercRDI}&nbsp;%</TableCell>}
+                </TableRow>
+              )
+            })
+          }
+        </tbody>
+      </Table >
+    </>
   )
 }

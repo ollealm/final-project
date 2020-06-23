@@ -9,9 +9,6 @@ import { ItemsCard } from "./ItemsCard"
 import { Button, ButtonBracket } from 'lib/Buttons';
 import { Select } from '../lib/FormElements';
 
-
-
-
 const ListWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -20,11 +17,12 @@ const ListWrapper = styled.div`
 `
 
 const Pagination = styled.div`
-  display: ;  
+  width: 100%;  
 `
 
 const FlexContainer = styled.div`
   display: flex;
+  justify-content: space-between;
   font-size: 12px;
 `
 
@@ -56,10 +54,12 @@ export const ListItems = () => {
 
   const nextPage = () => {
     dispatch(ui.actions.setQueryPage(Math.min(pagination.page + 1, pagination.pages)))
+    window.scrollTo(0, 0);
   }
 
   const prevPage = () => {
     dispatch(ui.actions.setQueryPage(Math.max(pagination.page - 1, 1)))
+    window.scrollTo(0, 0);
   }
 
   const handleChangeChart = event => {
@@ -70,27 +70,29 @@ export const ListItems = () => {
     <ListWrapper>
       {items.length > 0 && <>
         <Pagination>
-          <p>Found {pagination.total} items</p>
           <FlexContainer>
             <Button
               type="button"
               onClick={prevPage}>
               Prev
-          </Button>
+            </Button>
+            <Select onChange={handleChangeChart}>
+
+              <option key="energy" value="">Energy Ratio</option>
+              <option key="macro" value="macro">Macro</option>
+              <option key="omega" value="omega">Omega Ratio</option>
+
+            </Select>
             <Button
               type="button"
               onClick={nextPage}>
               Next
             </Button>
-            <Select onChange={handleChangeChart}>
-
-              <option key="energy" value="">Energy</option>
-              <option key="macro" value="macro">Macro</option>
-              <option key="omega" value="omega">Omega</option>
-
-            </Select>
           </FlexContainer>
-          <p><small>Page {pagination.page} of {pagination.pages}</small></p>
+          <FlexContainer>
+            <p>{pagination.total} items</p>
+            <p>Page {pagination.page} of {pagination.pages}</p>
+          </FlexContainer>
         </Pagination>
         <CardWrapper>
           {items.map(item => {
@@ -104,6 +106,25 @@ export const ListItems = () => {
             )
           })}
         </CardWrapper>
+        <Pagination>
+          <FlexContainer>
+            <p>{pagination.total} items</p>
+            <p><small>Page {pagination.page} of {pagination.pages}</small></p>
+          </FlexContainer>
+          <FlexContainer>
+            <Button
+              type="button"
+              onClick={prevPage}>
+              Prev
+            </Button>
+            <Button
+              type="button"
+              onClick={nextPage}>
+              Next
+            </Button>
+          </FlexContainer>
+        </Pagination>
+
       </>}
     </ListWrapper >
   )

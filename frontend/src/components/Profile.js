@@ -17,6 +17,16 @@ const ProfileWrapper = styled.div`
   width: 100%;
 `
 
+const ProfileSettings = styled.div`
+  width: 100%;  
+`
+
+const FlexContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+`
+
 const CardWrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -31,6 +41,8 @@ const CardWrapper = styled.div`
 // const CardLink = styled(Link)`
 //   margin: 10px 10px;
 // `
+
+
 
 export const Profile = ({ URL }) => {
   const [chart, setChart] = useState('')
@@ -53,29 +65,45 @@ export const Profile = ({ URL }) => {
   // {userData &&
   return (
     <ProfileWrapper>
-      <div><p>User: {`${userData.name} ${userData.email}`}</p>
-        <Select onChange={handleChangeChart}>
+      <ProfileSettings>
+        <FlexContainer>
+          <p>{userData.name}'s saved items</p>
+          <p>{userData.email}</p>
+        </FlexContainer>
+        <FlexContainer>
+          <Select
+          // onChange={handleChangeSort}
+          >
 
-          <option key="energy" value="">Energy</option>
-          <option key="macro" value="macro">Macro</option>
-          <option key="omega" value="omega">Omega</option>
+            <option key="number" value="">Order</option>
+            <option key="name" value="name">Name</option>
+            <option key="group" value="group">Group</option>
 
-        </Select>
-        <CardWrapper>
-          {savedItems.map((item, index) => (
-            // <CardLink key={item._id} to={`/items/${item.item.number}`}>
-            <ItemsCard {...item.item} id={item._id} index={index} chart={chart} price={item.price} profile />
-            // </CardLink>
-          ))}
-        </CardWrapper>
+          </Select>
 
-      </div>
+          <Select onChange={handleChangeChart}>
 
-      <input
+            <option key="energy" value="">Energy</option>
+            <option key="macro" value="macro">Macro</option>
+            <option key="omega" value="omega">Omega</option>
+
+          </Select>
+        </FlexContainer>
+      </ProfileSettings>
+      <CardWrapper>
+        {savedItems.map((item, index) => (
+          // <CardLink key={item._id} to={`/items/${item.item.number}`}>
+          <ItemsCard {...item.item} id={item._id} index={index} chart={chart} price={item.price} profile />
+          // </CardLink>
+        ))}
+      </CardWrapper>
+
+
+      {/* <input
         type="submit"
         onClick={(e) => dispatch(logout())}
         value="Logout"
-      />
+      /> */}
 
     </ProfileWrapper>
   )
