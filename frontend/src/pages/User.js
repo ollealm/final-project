@@ -4,9 +4,11 @@ import { Profile } from '../components/Profile'
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
+import { LoadingIndicator } from '../lib/LoadingIndicator';
 import { PageWrapper } from '../lib/PageWrapper';
 
 const UserWrapper = styled(PageWrapper)`
+  flex-flow: row wrap;
 `
 
 const BASE_URL = "http://localhost:8090"
@@ -17,7 +19,10 @@ export const User = () => {
 
   return (
     <UserWrapper>
-      {accessToken ? <Profile URL={USERS_URL} /> : <LoginForm />}
+      {accessToken ?
+        // <LoadingIndicator />
+        <Profile URL={USERS_URL} /> :
+        <LoginForm />}
     </UserWrapper>
   )
 }

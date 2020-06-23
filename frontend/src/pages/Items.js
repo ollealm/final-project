@@ -14,12 +14,13 @@ import { ui } from "../reducers/ui"
 
 const ItemsWrapper = styled(PageWrapper)`
   flex-flow: row wrap;
-  justify-content: flex-start;
 `
 
 const SearchWrapper = styled.form`
   display: flex;
   flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
   @media (max-width: 768px) {
     flex-direction: column;
   }

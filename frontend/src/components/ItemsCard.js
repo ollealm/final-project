@@ -16,6 +16,7 @@ const CardWrapper = styled.div`
   box-sizing: border-box;
   margin: 10px 10px;
   display: flex;
+  flex-grow: 1;
   flex-direction: row;
   justify-content: space-between;
   align-items: stretch;
@@ -23,8 +24,8 @@ const CardWrapper = styled.div`
   background: hsla(${props => props.color}, 60%, 95%, 1);
   transition: 0.2s;
   color: black;  
-  max-width: 450px;
-  min-width: 350px;
+  /* max-width: 500px; */
+  /* min-width: 300px; */
   border-radius: 5px;
   &::before {
       content: "";
@@ -72,7 +73,7 @@ const CardText = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 200px;
+  width: 180px;
   margin: 1em;
   & h2 {
     margin: 0;
@@ -91,8 +92,6 @@ const CardCharts = styled.div`
     flex-direction: column;
     align-items: flex-start;
     margin: 20px;
-    /* width: 40%; */
-    /* margin-right: -50px; */
   `
 
 const CardButton = styled(ButtonBracket)`
@@ -100,6 +99,12 @@ const CardButton = styled(ButtonBracket)`
   z-index: 1;
   margin: 10px 10px 15px 0;
 `
+const RemoveButton = styled(CardButton)`
+  position: absolute;
+  top: 0px;
+  right: 0px;
+`
+
 
 export const ItemsCard = ({ id, number, name, group, nutrients, index, chart, price = null, profile }) => {
 
@@ -132,9 +137,9 @@ export const ItemsCard = ({ id, number, name, group, nutrients, index, chart, pr
       </CardCharts>
 
       {profile &&
-        <CardButton type="button" onClick={() => dispatch(modifyItem(id, index, "DELETE"))}>
+        <RemoveButton type="button" onClick={() => dispatch(modifyItem(id, index, "DELETE"))}>
           –
-        </CardButton>
+        </RemoveButton>
       }
 
       <CardLink key={id} to={`/items/${number}`}>

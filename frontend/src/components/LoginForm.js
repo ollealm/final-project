@@ -1,8 +1,26 @@
 import React, { useState } from 'react'
+import styled from 'styled-components';
+
+import { Button } from 'lib/Buttons';
+import { SearchInput } from '../lib/FormElements';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { user, login } from '../reducers/user';
 import './loginform.css'
+
+const LoginWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+`
+
+const FlexContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  width: 100%;
+`
 
 const BASE_URL = "http://localhost:8090"
 const USERS_URL = `${BASE_URL}/users`;
@@ -46,33 +64,36 @@ export const LoginForm = () => {
 
   //  if (!accessToken) {
   return (
-    <div>
+    <LoginWrapper>
       <h1>Login or sign up</h1>
       {!showSignup &&
         <form onSubmit={handleLogin}>
           <label>
-            Name&nbsp;
-            <input
+            <SearchInput
               required
               value={name}
+              placeholder="Name"
               onChange={(event) => setName(event.target.value)}
             />
           </label>
           <label>
-            Password&nbsp;
-            <input
+            <SearchInput
               required
               type="password"
               value={password}
+              placeholder="Password"
               onChange={(event) => setPassword(event.target.value)}
             />
           </label>
-          <button type="submit">
-            Login
-        </button>
-          <button type="submit" onClick={() => setShowSignup(!showSignup)}>
-            Signup
-        </button>
+          <FlexContainer>
+
+            <Button type="submit">
+              Login
+        </Button>
+            <Button type="submit" onClick={() => setShowSignup(!showSignup)}>
+              Signup
+        </Button>
+          </FlexContainer>
         </form>
       }
 
@@ -80,42 +101,45 @@ export const LoginForm = () => {
         // {/* <SignupForm {...{ handleSignup, name, setName, password, setPassword, email, setEmail }} /> */ }
         < form onSubmit={handleSignup}>
           <label>
-            Name&nbsp;
-            <input
+            <SearchInput
               required
               value={name}
+              placeholder="Name"
               onChange={(event) => setName(event.target.value)}
             />
           </label>
           <label>
-            email&nbsp;
-            <input
+            <SearchInput
               required
               type="email"
               value={email}
+              placeholder="Email"
               onChange={(event) => setEmail(event.target.value)}
             />
           </label>
           <label>
-            Password&nbsp;
-            <input
+            <SearchInput
               required
               type="password"
               value={password}
+              placeholder="Password"
               onChange={(event) => setPassword(event.target.value)}
             />
           </label>
-          <button type="submit">
-            Sign up
-          </button>
-          <button type="submit" onClick={() => setShowSignup(!showSignup)}>
-            Login
-        </button>
+          <FlexContainer>
+
+            <Button type="submit">
+              Sign up
+          </Button>
+            <Button type="submit" onClick={() => setShowSignup(!showSignup)}>
+              Login
+        </Button>
+          </FlexContainer>
         </form>
       }
 
       <p>{errorMessage}</p>
-    </div >
+    </LoginWrapper >
   );
   //  } else return <></>
 }

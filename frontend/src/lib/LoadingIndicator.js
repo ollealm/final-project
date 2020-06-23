@@ -14,15 +14,15 @@ export const LoadingIndicator = () => {
 const Loading = styled.div`
   z-index: 99;
   position: fixed;
-  top: 40%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 70px;
-  height: 70px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
-  background-color: rgba(245, 245, 245, 0.5);
-  animation: wait 1s linear infinite ;
-  animation-delay: 0.1s;
+  background-color: rgba(255, 255, 255, 0.5);
+  animation: wait 1s linear infinite ; 
+  animation-delay: 0.1s; /* waits 0.1s before displaying, to not flicker */
   opacity: 0;
   @keyframes wait {
     0% {opacity: 1;}
@@ -31,13 +31,14 @@ const Loading = styled.div`
   &::after {
     content: " ";
     position: absolute;
-    top: 5px;
-    left: 5px;
-    width: 50px;
-    height: 50px;
+    top: 10px;
+    left: 10px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
-    border: 5px solid #ddd;
-    border-color: #eee transparent #eee transparent;
+    border: 5px solid #000;
+    border-color: #000 transparent #000 transparent;
+    opacity: .5;
     animation: rotate 1s linear infinite ;
     @keyframes rotate {
       0% { transform: rotate(0deg);}

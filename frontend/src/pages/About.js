@@ -8,7 +8,7 @@ const AboutWrapper = styled(PageWrapper)`
 export const About = () => {
   return (
     <AboutWrapper>
-      <h1>About</h1>
+      <p>All data from <a href="https://www.livsmedelsverket.se/livsmedel-och-innehall/naringsamne/livsmedelsdatabasen">Livsmedelsdatabasen</a> version 2020. </p>
     </AboutWrapper>
   )
 }

@@ -5,7 +5,7 @@ const FooterContainer = styled.footer`
   height: 50px;
   width: 80%;
   margin: auto;
-  margin-top: 50px;
+  margin-top: 100px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -19,8 +19,8 @@ export const Footer = () => {
   return (
     <FooterContainer>
       <p>Nutrient Search</p>
+      <p>&copy; Olle Alm</p>
       <p>2020</p>
-      <p>Olle Alm</p>
     </FooterContainer>
   )
 }
