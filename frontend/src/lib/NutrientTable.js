@@ -59,7 +59,7 @@ const pickWeight = (value) => {
   return "normal"
 }
 
-export const NutrientTable = ({ title, nutrients, RDI = [], color }) => {
+export const NutrientTable = ({ title, kcal, nutrients, RDI = [], color }) => {
   // colorArr = ["black", "NAVY", "DARKBLUE", "MEDIUMBLUE", "BLUE"]
   // colorArr = [0, 20, 40, 60, 80]
   const colorsArr = [
@@ -77,21 +77,27 @@ export const NutrientTable = ({ title, nutrients, RDI = [], color }) => {
         <tbody>
           <TableRow>
             <TableHead>Nutrient</TableHead>
-            <TableHead>100g</TableHead>
+            <TableHead>100 g</TableHead>
+            <TableHead>100 kcal</TableHead>
             <TableHead>Unit</TableHead>
             <TableHead>RDI</TableHead>
-            <TableHead>%</TableHead>
+            <TableHead>% g</TableHead>
+            <TableHead>% kcal</TableHead>
           </TableRow>
           {
             Object.values(nutrients).map((nutrient, index) => {
               const PercRDI = Math.round((nutrient.Varde / RDI[index]) * 1000) / 10
+              const value_100Kcal = Math.round((nutrient.Varde / kcal) * 1000) / 10
+              const PercRDI_100Kcal = Math.round((value_100Kcal / RDI[index]) * 1000) / 10
               return (
                 <TableRow key={nutrient.Namn} color={pickColor(PercRDI, colorsArr)} >
                   <TableCell color={pickColor(PercRDI, colorsArr)} weight={pickWeight(PercRDI)}>{nutrient.Namn}</TableCell>
                   <TableCell>{nutrient.Varde}</TableCell>
+                  <TableCell>{value_100Kcal}</TableCell>
                   <TableCell>{nutrient.Enhet}</TableCell>
                   <TableCell>{RDI[index]}</TableCell>
                   {!isNaN(PercRDI) && <TableCell color={pickColor(PercRDI, colorsArr)} weight={pickWeight(PercRDI)}>{PercRDI}&nbsp;%</TableCell>}
+                  {!isNaN(PercRDI_100Kcal) && <TableCell color={pickColor(PercRDI_100Kcal, colorsArr)} weight={pickWeight(PercRDI_100Kcal)}>{PercRDI_100Kcal}&nbsp;%</TableCell>}
                 </TableRow>
               )
             })
