@@ -8,7 +8,6 @@ import { SearchInput, Select } from '../lib/FormElements';
 import { Button } from '../lib/Buttons';
 import { PageWrapper } from '../lib/PageWrapper';
 
-import { items as itemsReducer } from "../reducers/items"
 import { searchItems } from '../reducers/items';
 import { ui } from "../reducers/ui"
 
@@ -33,7 +32,6 @@ const ErrorMessage = styled.p`
   color: red;
 `
 
-
 export const Items = () => {
   const dispatch = useDispatch();
 
@@ -50,21 +48,12 @@ export const Items = () => {
 
   const url = `${BASE_URL}/items?name=${searchName}&group=${searchGroup}&sort=${sort}&page=${currentPage}` //&limit=${limit}`;  
 
-  // const urlQuery = `
-  // &name=${searchName}
-  // &group=${searchGroup}
-  // &sort=${sort}
-  // &page=${currentPage}
-  // &limit=${limit}`
-
   const handleChangeName = event => {
     dispatch(ui.actions.setQueryName(event.target.value))
-    // dispatch(ui.actions.setQueryPage(1)) //reset page
   };
 
   const handleChangeGroup = event => {
     dispatch(ui.actions.setQueryGroup(event.target.value))
-    // dispatch(ui.actions.setQueryPage(1)) //reset page
   };
 
   const handleSearch = event => {
@@ -94,22 +83,20 @@ export const Items = () => {
         <SearchInput
           type="text"
           placeholder="Search"
-          // value="{searchName}"
+          value={searchName}
           onChange={handleChangeName}
         />
         <SearchInput
           type="text"
           placeholder="Group"
-          // value="{searchGroup}"
+          value={searchGroup}
           onChange={handleChangeGroup}
         />
         <label>
           <Select onChange={handleChangeSort}>
-
             <option key="number" value="">Order</option>
             <option key="name" value="name">Name</option>
             <option key="group" value="group">Group</option>
-
           </Select>
         </label>
         <Button type="submit">Search</Button>

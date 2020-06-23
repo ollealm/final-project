@@ -4,16 +4,16 @@ import styled from 'styled-components';
 import { useParams, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 
-import { LoadingIndicator } from '../lib/LoadingIndicator';
 import { EnergyRatio } from "../components/charts/EnergyRatio"
 import { MacroComponents } from "../components/charts/MacroComponents"
 import { FatProfile } from "../components/charts/FatProfile"
 import { OmegaRatio } from "../components/charts/OmegaRatio"
-import { LipidProfile } from "../components/charts/LipidProfile"
-import { Waste } from "../components/charts/Waste"
+// import { LipidProfile } from "../components/charts/LipidProfile"
+// import { Waste } from "../components/charts/Waste"
 import { Vitamines } from "../components/charts/Vitamines"
 import { Minerals } from "../components/charts/Minerals"
 
+import { LoadingIndicator } from '../lib/LoadingIndicator';
 import { ButtonBracket } from '../lib/Buttons';
 import { PageWrapper } from '../lib/PageWrapper';
 
@@ -24,7 +24,7 @@ import { BASE_URL } from '../App';
 
 const ItemWrapper = styled(PageWrapper)`
   flex-flow: row wrap;
-  `
+`
 
 const InfoWrapper = styled.div`
   display: flex;
@@ -60,19 +60,18 @@ const ItemText = styled.div`
   }
   `
 const Energy = styled.div`
-    position: absolute;
-    top: 1em;
-    right: 1em;
-    & p {
-      margin: 0 0 5px 0;
-      font-size: 14px;
-    }
-  `
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  & p {
+    margin: 0 0 5px 0;
+    font-size: 14px;
+  }
+`
 
 const Text = styled.div`
   width: 200px;
 `
-
 
 const ChartWrapper = styled.div`
   display: flex;
@@ -105,7 +104,6 @@ const TableContainer = styled.div`
   padding: 1em;
   background: hsla(${props => props.color}, 60%, 95%, 1);
   margin-bottom: 20px;
-  /* width: 350px; */
   width: 100%;
   border-radius: 5px;
 `
@@ -115,7 +113,6 @@ const CardButton = styled(ButtonBracket)`
   z-index: 10;
   margin: 10px 10px 15px 0;
 `
-
 
 export const Item = () => {
   const [item, setItem] = useState()
@@ -218,8 +215,12 @@ export const Item = () => {
             <FatProfile {...item.nutrients} />
             <OmegaRatio {...item.nutrients} />
           </ChartGroup>
-          {/* <LipidProfile {...item.nutrients} />
-          <Waste {...item.nutrients} /> */}
+
+          {/* <ChartGroup color={hashCode(item.group)}>
+            <LipidProfile {...item.nutrients} />
+            <Waste {...item.nutrients} />
+          </ChartGroup> */}
+
         </ChartWrapper>
       </ItemWrapper>}
     </div >

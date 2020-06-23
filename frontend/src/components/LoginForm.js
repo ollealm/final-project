@@ -6,10 +6,8 @@ import { SearchInput } from '../lib/FormElements';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { user, login } from '../reducers/user';
-import './loginform.css'
 
 import { BASE_URL } from '../App';
-
 
 const LoginWrapper = styled.div`
   display: flex;
@@ -23,6 +21,18 @@ const FlexContainer = styled.div`
   justify-content: space-between;
   font-size: 12px;
   width: 100%;
+`
+
+const Form = styled.form`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 50px;
+`
+
+const Label = styled.label`
+  margin-bottom: 20px;
 `
 
 export const LoginForm = () => {
@@ -41,6 +51,7 @@ export const LoginForm = () => {
     dispatch(login(name, password));
   };
 
+  // move to thunk
   const handleSignup = (event) => {
     event.preventDefault();
 
@@ -61,21 +72,20 @@ export const LoginForm = () => {
       });
   };
 
-  //  if (!accessToken) {
   return (
     <LoginWrapper>
       <h1>Login or sign up</h1>
       {!showSignup &&
-        <form onSubmit={handleLogin}>
-          <label>
+        <Form onSubmit={handleLogin}>
+          <Label>
             <SearchInput
               required
               value={name}
               placeholder="Name"
               onChange={(event) => setName(event.target.value)}
             />
-          </label>
-          <label>
+          </Label>
+          <Label>
             <SearchInput
               required
               type="password"
@@ -83,7 +93,7 @@ export const LoginForm = () => {
               placeholder="Password"
               onChange={(event) => setPassword(event.target.value)}
             />
-          </label>
+          </Label>
           <FlexContainer>
 
             <Button type="submit">
@@ -93,21 +103,21 @@ export const LoginForm = () => {
               Signup
         </Button>
           </FlexContainer>
-        </form>
+        </Form>
       }
 
       {showSignup &&
         // {/* <SignupForm {...{ handleSignup, name, setName, password, setPassword, email, setEmail }} /> */ }
-        < form onSubmit={handleSignup}>
-          <label>
+        <Form onSubmit={handleSignup}>
+          <Label>
             <SearchInput
               required
               value={name}
               placeholder="Name"
               onChange={(event) => setName(event.target.value)}
             />
-          </label>
-          <label>
+          </Label>
+          <Label>
             <SearchInput
               required
               type="email"
@@ -115,8 +125,8 @@ export const LoginForm = () => {
               placeholder="Email"
               onChange={(event) => setEmail(event.target.value)}
             />
-          </label>
-          <label>
+          </Label>
+          <Label>
             <SearchInput
               required
               type="password"
@@ -124,7 +134,7 @@ export const LoginForm = () => {
               placeholder="Password"
               onChange={(event) => setPassword(event.target.value)}
             />
-          </label>
+          </Label>
           <FlexContainer>
 
             <Button type="submit">
@@ -134,11 +144,10 @@ export const LoginForm = () => {
               Login
         </Button>
           </FlexContainer>
-        </form>
+        </Form>
       }
 
       <p>{errorMessage}</p>
     </LoginWrapper >
   );
-  //  } else return <></>
 }

@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components';
 
 const CatergoriesWrapper = styled.div`
-  /* width: 150px; */
   position: ${props => props.small ? "absolute" : "static"};
   margin-top: ${props => props.small ? "0" : "30px"};
   right: -120px;
@@ -24,9 +23,7 @@ const CatergoriesWrapper = styled.div`
   }
 `
 
-
 const Catergory = styled.div`
-  /* margin: 5px 0 0 65px; */
   position: relative;
   z-index: 2;
   width: 120px;
@@ -64,8 +61,6 @@ export const Categories = ({ colorsArr, percetages, texts, values, unit, small }
             opacity={opacity}
             small={small}
           >
-            {/* <p>{texts[index]} <small>(&#8202;<em>{value} {unit}</em>&#8202;)&ensp;{value > 0 && <strong>{percetages[index]}&thinsp;%</strong>}</small></p> */}
-            {/* <p>{texts[index]} <small>(<em>{value}&nbsp;{unit}</em>)&ensp;{value > 0 && <strong>{percetages[index]}&nbsp;%</strong>}</small></p> */}
             <p>{texts[index]} <small>(<em>{value}&nbsp;{unit}</em>)&ensp;</small><strong>{percetages[index]}&nbsp;%</strong></p>
           </Catergory>
         )
