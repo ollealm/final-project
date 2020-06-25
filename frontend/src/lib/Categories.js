@@ -27,7 +27,6 @@ const Catergory = styled.div`
   position: relative;
   z-index: 2;
   width: 120px;
-  opacity: ${props => props.opacity};
   color: ${props => props.textColor};
   font-size: ${props => props.small ? "12px" : "15px"};
   margin-left: 30px;
@@ -51,14 +50,12 @@ export const Categories = ({ colorsArr, percetages, texts, values, unit, small }
   return (
     <CatergoriesWrapper small={small}>
       {values.map((value, index) => {
-        const textColor = (value > 0) ? "black" : "grey"
-        const opacity = (value > 0) ? "1" : "0.5"
+        const textColor = (value > 0) ? "rgba(0, 0, 0, 1)" : "rgba(0, 0, 0, .2)"
         if (value > 0) return (
           <Catergory
             key={index}
             color={colorsArr[index]}
             textColor={textColor}
-            opacity={opacity}
             small={small}
           >
             <p>{texts[index]} <small>(<em>{value}&nbsp;{unit}</em>)&ensp;</small><strong>{percetages[index]}&nbsp;%</strong></p>

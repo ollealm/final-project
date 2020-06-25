@@ -23,13 +23,16 @@ const ChartTitle = styled.h3`
   font-size: ${props => props.small ? "13px" : "17px"};
 `
 
+// The acctuall chart
 const PieChartStyle = styled.div`
   position: relative;
   z-index: 10;
   color: blue;
   background: rgba(255,255,255,.5);
   border-radius: 50%;
+
   background: conic-gradient(${props => props.perc});
+  
   width: ${props => props.small ? "100px" : "180px"};
   height: ${props => props.small ? "100px" : "180px"};
   transition: .2s;
@@ -73,7 +76,7 @@ const PieChartStyle = styled.div`
 //Change to object with, value, color, text instead o arrays?
 export const PieChart = ({
   title, valuesArr = [], colorsArr = [], textArr = [], origValues = null, unit,
-  hue = 260, sat = 80, size = "200px", test = 0, small, notext }) => {
+  hue = 260, sat = 80, test = 0, small, notext }) => {
 
   let percetageArray = []
 
@@ -82,6 +85,8 @@ export const PieChart = ({
     valuesArr.push(index + 10)
   }
 
+
+  // CHART COLORS
   //generatin a color for each value
   if (colorsArr.length === 0) {
     valuesArr.forEach((value, index) => {
@@ -91,6 +96,7 @@ export const PieChart = ({
     })
   }
 
+  // CHART VALUES
   //gererating percentage values and conic-gradient value 
   const getChartValues = () => {
 
@@ -108,6 +114,7 @@ export const PieChart = ({
     return `${[...chartValues]}`
   }
 
+
   return (
     <PieChartWrapper small={small}>
       <ChartTitle small={small}>
@@ -115,7 +122,6 @@ export const PieChart = ({
       </ChartTitle>
       <ChartWrapper small={small}>
         <PieChartStyle
-          size={size}
           perc={getChartValues()}
           small={small}
         />
