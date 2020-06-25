@@ -24,6 +24,7 @@ const CardWrapper = styled.div`
   transition: 0.2s;
   color: black;  
   border-radius: 5px;
+  
   &::before {
       content: "";
       z-index: -1;
@@ -135,8 +136,8 @@ export const ItemsCard = ({ id, number, name, group, nutrients, index, chart, pr
       </CardText>
 
       <CardCharts>
-        {chart === "macro" && <MacroComponents {...nutrients} small notext />}
-        {chart === "omega" && <OmegaRatio {...nutrients} small notext />}
+        {chart === "macro" && <MacroComponents {...nutrients} small />}
+        {chart === "omega" && <OmegaRatio {...nutrients} small />}
         {chart === "" && <EnergyRatio {...nutrients} small />}
       </CardCharts>
 

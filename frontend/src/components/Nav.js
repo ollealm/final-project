@@ -50,7 +50,7 @@ const StyledLink = styled(Link)`
     }
   }
   @media (max-width: 768px) {
-    display: none;
+    /* display: none; */
   }
 `
 

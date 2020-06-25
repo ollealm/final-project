@@ -53,7 +53,8 @@ store.subscribe(() => {
   // trying to only save user reducer in local storage
   // const state = store.getState();
   // console.log(state)
-  // localStorage.setItem('nutrientsReduxState.user.login', JSON.stringify(state.user.login))
+  // localStorage.setItem('nutrientsReduxState', JSON.stringify(state.user))
+  // console.log(localStorage.getItem('nutrientsReduxState'))
   localStorage.setItem('nutrientsReduxState', JSON.stringify(store.getState()))
 })
 
