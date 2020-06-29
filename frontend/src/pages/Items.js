@@ -25,6 +25,7 @@ const SearchWrapper = styled.form`
   justify-content: space-between;
   @media (max-width: 768px) {
     flex-direction: column;
+    height: 200px;
   }
 `
 

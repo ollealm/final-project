@@ -1,7 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Switch, Route } from "react-router-dom"
 import { Provider } from "react-redux"
-// import { configureStore, combineReducers } from "@reduxjs/toolkit"
 import { createStore, combineReducers } from "@reduxjs/toolkit"
 import thunk from 'redux-thunk'
 import { applyMiddleware, compose } from '@reduxjs/toolkit'
@@ -28,8 +27,6 @@ const reducer = combineReducers({
   items: items.reducer,
 })
 
-// const store = configureStore({ reducer })
-
 // Persisted state
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -42,20 +39,18 @@ if (persistedStateJSON) {
 }
 
 // Create store with initial state
+// only user reducer
 const store = createStore(
   reducer,
-  persistedState,
+  { user: persistedState },
   composeEnhancer(applyMiddleware(thunk))
 )
 
 // Store the state in localstorage on Redux state change
 store.subscribe(() => {
-  // trying to only save user reducer in local storage
-  // const state = store.getState();
-  // console.log(state)
-  // localStorage.setItem('nutrientsReduxState', JSON.stringify(state.user))
-  // console.log(localStorage.getItem('nutrientsReduxState'))
-  localStorage.setItem('nutrientsReduxState', JSON.stringify(store.getState()))
+  // saveing user reducer in local storage
+  const state = store.getState();
+  localStorage.setItem('nutrientsReduxState', JSON.stringify(state.user))
 })
 
 //clear local storage
