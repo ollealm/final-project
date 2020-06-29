@@ -16,6 +16,9 @@ const ChartWrapper = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   margin: 1em 20px;
+  @media (max-width: 768px) {
+    margin: 1em 15px;
+  }
 `
 
 const ChartTitle = styled.h3`
@@ -32,7 +35,7 @@ const PieChartStyle = styled.div`
   border-radius: 50%;
 
   background: conic-gradient(${props => props.perc});
-  
+
   width: ${props => props.small ? "100px" : "180px"};
   height: ${props => props.small ? "100px" : "180px"};
   transition: .2s;
@@ -59,6 +62,9 @@ const PieChartStyle = styled.div`
     transition: .3s;
     visibility: ${props => props.small ? "hidden" : "visible"};
     opacity: ${props => props.small ? "0" : "1"};
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 
   &:hover {

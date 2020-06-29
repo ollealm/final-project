@@ -14,6 +14,9 @@ const Navigation = styled.nav`
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 50px;
+  @media (max-width: 768px) {
+    align-items: flex-start;
+  }
 `
 
 const NavLinks = styled.ul`
@@ -22,6 +25,13 @@ const NavLinks = styled.ul`
   justify-content: space-between;
   align-items: center;
   list-style: none;
+  @media (max-width: 768px) {
+    /* display: none; */
+    flex-direction: column;
+    align-items: flex-end;
+    height: 100px;
+    width: auto;
+  }
 `
 
 const StyledLink = styled(Link)`
@@ -48,9 +58,6 @@ const StyledLink = styled(Link)`
       width: 90%;
       transition: 0.3s ease all;
     }
-  }
-  @media (max-width: 768px) {
-    /* display: none; */
   }
 `
 

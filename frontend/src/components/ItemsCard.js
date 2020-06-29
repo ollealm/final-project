@@ -51,7 +51,7 @@ const CardWrapper = styled.div`
     }  
   }
   @media (max-width: 768px) {
-    width: 300px;
+    width: 100%;
   }
 `
 
@@ -83,6 +83,13 @@ const CardText = styled.div`
   & span {
     margin-right: 5px;
   }
+  @media (max-width: 768px) {
+    width: 100px;
+    & h2 {
+      font-size: 1em;
+    }
+  }
+
 `
 
 const CardCharts = styled.div`
@@ -90,6 +97,9 @@ const CardCharts = styled.div`
     flex-direction: column;
     align-items: flex-start;
     margin: 20px;
+    @media (max-width: 768px) {
+      margin: 0px;
+  }
   `
 
 const CardButton = styled(ButtonBracket)`
