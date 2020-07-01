@@ -34,18 +34,25 @@ const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 // Retrieve localstorage as initial state
 const persistedStateJSON = localStorage.getItem('nutrientsReduxState')
 let persistedState = {}
+let store = {}
 
 if (persistedStateJSON) {
   persistedState = JSON.parse(persistedStateJSON)
+  store = createStore(
+    reducer,
+    { user: persistedState },
+    composeEnhancer(applyMiddleware(thunk))
+  )
+} else {
+  store = createStore(
+    reducer,
+    composeEnhancer(applyMiddleware(thunk))
+  )
 }
 
 // Create store with initial state
 // only user reducer
-const store = createStore(
-  reducer,
-  { user: persistedState },
-  composeEnhancer(applyMiddleware(thunk))
-)
+
 
 // Store the state in localstorage on Redux state change
 store.subscribe(() => {
