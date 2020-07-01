@@ -23,7 +23,8 @@ const ProfileSettings = styled.div`
 const FlexContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  font-size: 12px;
+  font-size: 16px;
+  font-weight: 700;
   margin-bottom: 20px;
 `
 
@@ -96,7 +97,7 @@ export const Profile = () => {
         <FlexContainer>
           <Select
             onChange={handleChangeSort}
-          >
+            disabled={(savedItems.length > 0) ? false : true}>
             <option key="order" value="">Order</option>
             <option key="number" value="itemNumber">Number</option>
             <option key="name" value="item.name">Name</option>
@@ -104,7 +105,9 @@ export const Profile = () => {
             <option key="price" value="price">Price</option>
           </Select>
 
-          <Select onChange={handleChangeChart}>
+          <Select
+            onChange={handleChangeChart}
+            disabled={(savedItems.length > 0) ? false : true}>
             <option key="energy" value="">Energy</option>
             <option key="macro" value="macro">Macro</option>
             <option key="omega" value="omega">Omega</option>
@@ -124,6 +127,6 @@ export const Profile = () => {
         ))}
       </CardWrapper>
 
-    </ProfileWrapper>
+    </ProfileWrapper >
   )
 }

@@ -108,13 +108,14 @@ export const Home = () => {
         if (items.length < randomItems) setCount(count + 1)
         console.log(count)
         console.log(items.length)
+        dispatch(ui.actions.setLoading(false))
       })
       .catch(error => {
         console.log("Error: ", error);
         setCount(count + 1)
+        dispatch(ui.actions.setLoading(false))
       });
 
-    dispatch(ui.actions.setLoading(false))
 
   }, [count]);
 
