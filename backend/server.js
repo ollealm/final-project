@@ -3,6 +3,7 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import bcrypt from "bcrypt-nodejs"
+import listEndpoints from "express-list-endpoints"
 
 import User from './models/users'
 import Item from './models/items'
@@ -15,7 +16,7 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 mongoose.set('useCreateIndex', true)
 
-const port = process.env.PORT || 8090
+const port = process.env.PORT || 8080
 const app = express()
 
 // Add middlewares to enable cors and json body parsing
@@ -110,11 +111,12 @@ const authenticator = async (req, res, next) => {
 }
 
 
+
 ///// ROUTS /////
 
 //ROOT
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send(listEndpoints(app))
   // Display routes
 })
 
