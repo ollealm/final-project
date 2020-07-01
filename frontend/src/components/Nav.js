@@ -98,7 +98,7 @@ export const Nav = () => {
           <li>About</li>
         </StyledLink>
         <StyledLink to="/items">
-          <li>Items</li>
+          <li>Search</li>
         </StyledLink>
         <StyledLink to="/user">
           <li>{name ? name : "Login"}</li>
