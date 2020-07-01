@@ -1,12 +1,14 @@
-# Final Project – Technigo Bootcamp
+# Final Project – Technigo Bootcamp&ensp;|&ensp;[View Live &#10555;](https://nutrient-search.netlify.app/)
+
+## Nutrient Search 
 My final project at the Technigo Bootcamp.
+A full MERN Stack web-app to browse, sort, filter and save nutrition data from [Livsmedelsdatabasen](http://www7.slv.se/SokNaringsinnehall). 
 
-A full MERN Stack web application to browse, sort, filter and save nutrition data from Livsmedelsdatabasen. 
+## Screenshot
+![Screenshot](screenshot.jpg)
 
-Currently under development.
-
-## Sneak Peak
-![Screenshot](sneak-peak.png)
+## Backend
+https://nutrient-search.herokuapp.com/
 
 ## View it live
-1st July 2020
+https://nutrient-search.netlify.app/
