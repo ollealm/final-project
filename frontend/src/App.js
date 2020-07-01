@@ -5,6 +5,7 @@ import { createStore, combineReducers } from "@reduxjs/toolkit"
 import thunk from 'redux-thunk'
 import { applyMiddleware, compose } from '@reduxjs/toolkit'
 
+import { Home } from "./pages/Home"
 import { User } from "./pages/User"
 import { Items } from "./pages/Items"
 import { About } from "./pages/About"
@@ -50,7 +51,9 @@ const store = createStore(
 store.subscribe(() => {
   // saveing user reducer in local storage
   const state = store.getState();
+  // console.log("state", state)
   localStorage.setItem('nutrientsReduxState', JSON.stringify(state.user))
+  // console.log("local", localStorage.getItem('nutrientsReduxState'))
 })
 
 //clear local storage
@@ -64,6 +67,9 @@ export const App = () => {
         <ScrollToTop />
         <Nav />
         <Switch>
+          <Route path="/" exact>
+            <Home />
+          </Route>
           <Route path="/about" exact>
             <About />
           </Route>

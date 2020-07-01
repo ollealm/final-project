@@ -23,11 +23,15 @@ const TableRow = styled.tr`
 const TableHead = styled.th`
   width: 10px;
   text-align: right;
-
+  max-width: 10px;
+  
   &:nth-child(1) {
     text-align: left;
   }
-`
+  @media (max-width: 480px) {
+    display: ${props => props.mobile ? "none" : ""};
+  }
+  `
 
 const TableCell = styled.td`
   width: fit-content;
@@ -35,11 +39,16 @@ const TableCell = styled.td`
   text-align: right;
   font-weight: ${props => props.weight};
   color: ${props => props.color};
-
+  
   &:nth-child(1) {
     padding-left: 5px;
     padding-right: 5px;
     text-align: left;
+  }
+  @media (max-width: 480px) {
+    max-width: 60px;
+    overflow-wrap: break-word;
+    display: ${props => props.mobile ? "none" : ""};
   }
 `
 
@@ -75,11 +84,11 @@ export const NutrientTable = ({ title, kcal, nutrients, RDI = [], color }) => {
           <TableRow>
             <TableHead>Nutrient</TableHead>
             <TableHead>100 g</TableHead>
-            <TableHead>100 kcal</TableHead>
+            <TableHead mobile>100 kcal</TableHead>
             <TableHead>Unit</TableHead>
             <TableHead>RDI</TableHead>
             <TableHead>% g</TableHead>
-            <TableHead>% kcal</TableHead>
+            <TableHead mobile>% kcal</TableHead>
           </TableRow>
 
           {
@@ -101,14 +110,15 @@ export const NutrientTable = ({ title, kcal, nutrients, RDI = [], color }) => {
                   </TableCell>
 
                   <TableCell>{nutrient.Varde}</TableCell>
-                  <TableCell>{value_100Kcal}</TableCell>
+                  <TableCell mobile>{value_100Kcal}</TableCell>
                   <TableCell>{nutrient.Enhet}</TableCell>
                   <TableCell>{RDI[index]}</TableCell>
 
                   {!isNaN(PercRDI) &&
                     <TableCell
                       color={pickColor(PercRDI, colorsArr)}
-                      weight={pickWeight(PercRDI)}>
+                      weight={pickWeight(PercRDI)}
+                      mobile>
                       {PercRDI}&nbsp;%
                     </TableCell>}
 

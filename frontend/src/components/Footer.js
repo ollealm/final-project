@@ -18,9 +18,9 @@ const FooterContainer = styled.footer`
 export const Footer = () => {
   return (
     <FooterContainer>
-      <p>Nutrient Search</p>
-      <p>&copy; Olle Alm</p>
+      <p>Nutrients</p>
       <p>2020</p>
+      <p>&copy; Olle Alm</p>
     </FooterContainer>
   )
 }

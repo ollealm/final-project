@@ -4,7 +4,10 @@ import styled from 'styled-components';
 const CatergoriesWrapper = styled.div`
   position: ${props => props.small ? "absolute" : "static"};
   margin-top: ${props => props.small ? "0" : "30px"};
-  right: -120px;
+  right: calc(-10% - 70px);
+  @media (max-width: 1019px) {
+    right: 140px;
+  }
   top: 40%;
   z-index: 2;
   transform: ${props => props.small ? "translate(0, -50%)" : ""};

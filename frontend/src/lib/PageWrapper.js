@@ -7,5 +7,8 @@ export const PageWrapper = styled.section`
   justify-content: flex-start;
   margin: auto;
   width: 80%;
+  /* width: 100%; */
+  padding: 0 10%;
+  overflow: hidden;
   min-height: calc(100vh - 250px);
 `

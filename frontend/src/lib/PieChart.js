@@ -62,7 +62,7 @@ const PieChartStyle = styled.div`
     transition: .3s;
     visibility: ${props => props.small ? "hidden" : "visible"};
     opacity: ${props => props.small ? "0" : "1"};
-    @media (max-width: 768px) {
+    @media (max-width: 567px) {
       display: none;
     }
   }

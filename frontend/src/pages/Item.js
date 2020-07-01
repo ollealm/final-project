@@ -33,6 +33,9 @@ const InfoWrapper = styled.div`
   /* width: 50%; */
   margin-right: 1em;
   flex-grow: 1;
+  @media (max-width: 768px) {
+    margin-right: 0em;
+  }
 `
 const ItemText = styled.div`
   position: relative;
@@ -77,13 +80,13 @@ const ChartWrapper = styled.div`
   display: flex;
   flex-flow: column;
   width: 50%;
-  min-width: 500px;
+  /* min-width: 500px; */
   flex-grow: 1;
 `
 
 const ChartGroup = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-flow: row wrap;
   justify-content: space-around;
   box-sizing: border-box;
   padding: 1em;
@@ -156,7 +159,7 @@ export const Item = () => {
       dispatch(ui.actions.setLoading(true))
       fetch(url)
         .then((res) => {
-          setStatusCode(res.status) //dispach?
+          setStatusCode(res.status)
           return res.json();
         })
         .then(data => {

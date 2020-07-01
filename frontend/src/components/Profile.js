@@ -43,9 +43,11 @@ export const Profile = () => {
   const [chart, setChart] = useState('')
   const dispatch = useDispatch()
 
+  const [sort, setSort] = useState("")
+
   const userData = useSelector((store) => store.user.userData);
   const savedItems = useSelector((store) => store.user.savedItems);
-
+  console.log(savedItems)
   useEffect(() => {
     dispatch(getSavedItems())
   }, [])
@@ -53,6 +55,29 @@ export const Profile = () => {
   const handleChangeChart = event => {
     setChart(event.target.value)
   };
+
+  const handleChangeSort = event => {
+    setSort(event.target.value)
+    console.log("sort", sort)
+  };
+
+  // sort on any key path
+  const compareValues = (key, reverse) => {
+    console.log("compare", key)
+    let sortOrder = reverse ? -1 : 1
+    let path = key.split(".")
+
+    return (a, b) => {
+      let x = a
+      let y = b
+      path.forEach(key => {
+        x = x[key]
+        y = y[key]
+      })
+      return sortOrder * ((x < y) ? -1 : ((x > y) ? 1 : 0))
+    }
+  }
+
 
   return (
     <ProfileWrapper>
@@ -70,11 +95,13 @@ export const Profile = () => {
         </FlexContainer>
         <FlexContainer>
           <Select
-          // onChange={handleChangeSort}
+            onChange={handleChangeSort}
           >
-            <option key="number" value="">Order</option>
-            <option key="name" value="name">Name</option>
-            <option key="group" value="group">Group</option>
+            <option key="order" value="">Order</option>
+            <option key="number" value="itemNumber">Number</option>
+            <option key="name" value="item.name">Name</option>
+            <option key="group" value="item.group">Group</option>
+            <option key="price" value="price">Price</option>
           </Select>
 
           <Select onChange={handleChangeChart}>
@@ -85,7 +112,7 @@ export const Profile = () => {
         </FlexContainer>
       </ProfileSettings>
       <CardWrapper>
-        {savedItems.map((item, index) => (
+        {savedItems.slice().sort(compareValues(sort)).map((item, index) => (
           <ItemsCard
             {...item.item}
             id={item._id}
