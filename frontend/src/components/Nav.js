@@ -2,8 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
+import { BurgerMenu } from 'lib/BurgerMenu';
 
 const Navigation = styled.nav`
+  position: relative;
+
   height: 50px;
   width: 80%;
   margin: auto;
@@ -26,11 +29,31 @@ const NavLinks = styled.ul`
   align-items: center;
   list-style: none;
   @media (max-width: 768px) {
-    /* display: none; */
+    position: relative;
+    display: none;
     flex-direction: column;
     align-items: flex-end;
     height: 100px;
+    margin-top: 50px;
+    padding-top: 30px;
     width: auto;
+    z-index: 20;
+    &:hover {
+      display: flex;
+    }
+    &::before {
+    content: "";
+    background: hsla(552,70%,70%,1);
+    background: white;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 100%;
+    height: 100%;
+    filter: blur(15px);
+    padding: 10px;
+    border-radius: 30%;
+  }
   }
 `
 
@@ -66,7 +89,10 @@ export const Nav = () => {
 
   return (
     <Navigation>
-      <h1>Nutrients</h1>
+      <StyledLink to="/">
+        <h1>Nutrients</h1>
+      </StyledLink>
+      <BurgerMenu />
       <NavLinks>
         <StyledLink to="/about">
           <li>About</li>

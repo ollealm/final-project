@@ -25,20 +25,23 @@ const CardWrapper = styled.div`
   color: black;  
   border-radius: 5px;
   
+  
+  
   &::before {
-      content: "";
-      z-index: -1;
-      background: hsla(${props => props.color}, 70%, 70%, 1);
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%) scale(0.98, 0.93);
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      border-radius: 30%;
-      filter: blur(15px);
-      transition: 0.5s ease all 0.1s;
+    content: "";
+    z-index: -1;
+    background: hsla(${props => props.color}, 70%, 70%, 1);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0) scale(0.98, 0.93);
+    /* using 3d removes flickering in safari */
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    border-radius: 30%;
+    filter: blur(15px);
+    transition: 0.5s ease all 0.1s;
     }
   &:hover {
     & h2 {
